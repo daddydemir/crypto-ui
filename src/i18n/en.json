@@ -1,0 +1,16 @@
+{
+  "sidebar": {
+    "analyses": "Analyses",
+    "coins": "Coins",
+    "alarms": "Alarms",
+    "settings": "Settings",
+    "technical": {
+      "rsi": "RSI",
+      "ma": "Moving Average"
+    }
+  },
+  "topbar": {
+    "search": "Search...",
+    "language": "Language"
+  }
+}

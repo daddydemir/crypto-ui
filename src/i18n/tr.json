@@ -1,0 +1,16 @@
+{
+  "sidebar": {
+    "analyses": "Analizler",
+    "coins": "Coinler",
+    "alarms": "Alarmlar",
+    "settings": "Ayarlar",
+    "technical": {
+      "rsi": "RSI",
+      "ma": "Hareketli Ortalama"
+    }
+  },
+  "topbar": {
+    "search": "Ara...",
+    "language": "Dil"
+  }
+}
