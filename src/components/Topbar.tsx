@@ -5,16 +5,28 @@ import { useTranslation } from "react-i18next";
 import { Globe } from "lucide-react";
 
 const Topbar: React.FC = () => {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        const saved = localStorage.getItem("darkMode");
+        return saved === "true";
+    });
     const { t, i18n } = useTranslation();
     const [open, setOpen] = useState(false);
 
     const changeLang = (lang: string) => {
         i18n.changeLanguage(lang);
+        localStorage.setItem("language", lang);
         setOpen(false);
     };
 
     useEffect(() => {
+        const savedLang = localStorage.getItem("language");
+        if (savedLang) {
+            i18n.changeLanguage(savedLang);
+        }
+    }, [i18n]);
+
+    useEffect(() => {
+        localStorage.setItem("darkMode", darkMode.toString());
         if (darkMode) {
             document.documentElement.classList.add("dark");
         } else {
