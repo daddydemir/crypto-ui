@@ -12,5 +12,13 @@
   "topbar": {
     "search": "Ara...",
     "language": "Dil"
+  },
+  "coins": {
+    "clearFilter": "Sıralamayı Temizle",
+    "coin": "Coin",
+    "price": "Fiyat",
+    "change24h": "24s",
+    "change7d": "7g",
+    "top100": "En İyi 100 Coin"
   }
 }

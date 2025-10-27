@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "@/components/AppLayout.tsx";
+import CoinsPage from "@/pages/coins/CoinsPage.tsx";
 
 const RSIPage = () => <div>RSI Sayfası</div>;
 const MAPage = () => <div>MA Sayfası</div>;
-const CoinsPage = () => <div>Coinler</div>;
 const AlarmsPage = () => <div>Alarmlar</div>;
 const SettingsPage = () => <div>Ayarlar</div>;
 

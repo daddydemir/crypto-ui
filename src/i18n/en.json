@@ -12,5 +12,13 @@
   "topbar": {
     "search": "Search...",
     "language": "Language"
+  },
+  "coins": {
+    "clearFilter": "Clear Filter",
+    "coin": "Coin",
+    "price": "Price",
+    "change24h": "24h",
+    "change7d": "7d",
+    "top100": "Top 100 Coins"
   }
 }
