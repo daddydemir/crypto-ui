@@ -1,5 +1,6 @@
 export interface RSICoin {
     coin_id: string
+    name: string
     rsi: number
 }
 

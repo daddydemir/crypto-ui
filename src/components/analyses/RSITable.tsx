@@ -146,8 +146,15 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                     <tbody>
                     {sortedCoins.map((coin, index) => (
                         <tr key={`${coin.coin_id}-${index}`} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-                            <td className="p-3 font-semibold text-gray-900 dark:text-gray-100">
-                                {formatCoinName(coin.coin_id)}
+                            <td className="p-3">
+                                <div className="flex flex-col">
+                                    <span className="font-semibold text-gray-900 dark:text-gray-100">
+                                        {coin.name}
+                                    </span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        {formatCoinName(coin.coin_id)}
+                                    </span>
+                                </div>
                             </td>
                             <td className="p-3">
                                 <div className="flex items-center gap-2">
