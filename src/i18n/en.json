@@ -20,5 +20,19 @@
     "change24h": "24h",
     "change7d": "7d",
     "top100": "Top 100 Coins"
+  },
+  "rsi": {
+    "title": "RSI Analysis",
+    "description": "Relative Strength Index (RSI) analysis for top cryptocurrencies. RSI ≥70 indicates overbought, RSI ≤30 indicates oversold.",
+    "coin": "Coin",
+    "rsiValue": "RSI Value",
+    "status": "Status",
+    "all": "All",
+    "overbought": "Overbought",
+    "oversold": "Oversold",
+    "neutral": "Neutral",
+    "clearFilters": "Clear Filters",
+    "showingCoins": "Showing coins",
+    "loading": "Loading RSI data..."
   }
 }

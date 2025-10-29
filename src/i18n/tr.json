@@ -20,5 +20,19 @@
     "change24h": "24s",
     "change7d": "7g",
     "top100": "En İyi 100 Coin"
+  },
+  "rsi": {
+    "title": "RSI Analizi",
+    "description": "En popüler kripto paralar için Göreceli Güç Endeksi (RSI) analizi. RSI ≥70 aşırı alım, RSI ≤30 aşırı satım anlamına gelir.",
+    "coin": "Coin",
+    "rsiValue": "RSI Değeri",
+    "status": "Durum",
+    "all": "Tümü",
+    "overbought": "Aşırı Alım",
+    "oversold": "Aşırı Satım",
+    "neutral": "Nötr",
+    "clearFilters": "Filtreleri Temizle",
+    "showingCoins": "Gösterilen coin",
+    "loading": "RSI verileri yükleniyor..."
   }
 }
