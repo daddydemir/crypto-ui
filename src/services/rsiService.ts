@@ -4,6 +4,11 @@ export interface RSICoin {
     rsi: number
 }
 
+export interface RSIHistoryPoint {
+    rsi: number
+    date: string
+}
+
 
 export async function getRSITopCoins(): Promise<RSICoin[]> {
     try {
@@ -15,6 +20,20 @@ export async function getRSITopCoins(): Promise<RSICoin[]> {
         return await response.json()
     } catch (error) {
         console.error('Error fetching RSI coins:', error)
+        return []
+    }
+}
+
+export async function getRSIHistory(coinId: string): Promise<RSIHistoryPoint[]> {
+    try {
+        const response = await fetch(`https://cryptoapi.daddydemir.dev/api/v1/coins/${coinId}/rsi/history?days=-1`)
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        return await response.json()
+    } catch (error) {
+        console.error('Error fetching RSI history:', error)
         return []
     }
 }

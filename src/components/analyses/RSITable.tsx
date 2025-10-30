@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { type RSICoin, getRSIStatus, getRSIColor, getRSIBgColor } from "@/services/rsiService"
 import { ChevronUp, ChevronDown, ChevronsUpDown, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
 interface RSITableProps {
     coins: RSICoin[]
@@ -13,6 +14,7 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
     const [sortOrder, setSortOrder] = useState<SortOrder>(null)
     const [filterStatus, setFilterStatus] = useState<'all' | 'overbought' | 'oversold' | 'neutral'>('all')
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     const handleSort = () => {
         if (sortOrder === null) {
@@ -145,7 +147,11 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                     </thead>
                     <tbody>
                     {sortedCoins.map((coin, index) => (
-                        <tr key={`${coin.coin_id}-${index}`} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                        <tr 
+                            key={`${coin.coin_id}-${index}`} 
+                            className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
+                            onClick={() => navigate(`/coins/${coin.name.toLowerCase()}`)}
+                        >
                             <td className="p-3">
                                 <div className="flex flex-col">
                                     <span className="font-semibold text-gray-900 dark:text-gray-100">

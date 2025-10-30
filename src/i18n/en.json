@@ -33,6 +33,33 @@
     "neutral": "Neutral",
     "clearFilters": "Clear Filters",
     "showingCoins": "Showing coins",
-    "loading": "Loading RSI data..."
+    "loading": "Loading RSI data...",
+    "currentRSI": "Current RSI",
+    "change": "Change",
+    "highest": "Highest",
+    "lowest": "Lowest",
+    "average": "Average",
+    "history": "History",
+    "chart": "Chart",
+    "dataPoints": "data points showing",
+    "timeRange": {
+      "7d": "7 Days",
+      "30d": "30 Days",
+      "90d": "90 Days",
+      "1y": "1 Year",
+      "all": "All"
+    },
+    "legend": {
+      "overbought": "Overbought (≥70)",
+      "normal": "Normal (30-70)",
+      "oversold": "Oversold (≤30)"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "history": "History",
+    "chart": "Chart",
+    "noData": "No data available",
+    "loading": "Loading..."
   }
 }

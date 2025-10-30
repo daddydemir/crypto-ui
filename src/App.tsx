@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "@/components/AppLayout.tsx";
 import CoinsPage from "@/pages/coins/CoinsPage.tsx";
 import RSIPage from "@/pages/analyses/RSIPage.tsx";
+import CoinDetailPage from "@/pages/coins/CoinDetailPage.tsx";
 
 
 const MAPage = () => <div>MA Sayfası</div>;
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/coins" element={<CoinsPage />} />
                     <Route path="/alarms" element={<AlarmsPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="/coins/:coinId" element={<CoinDetailPage />} />
                 </Routes>
             </AppLayout>
         </BrowserRouter>
