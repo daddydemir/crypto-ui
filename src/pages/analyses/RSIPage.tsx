@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from "react"
-import { type RSICoin, getRSITopCoins } from "@/services/rsiService"
+import React from "react"
+import { getRSITopCoins } from "@/services/rsiService"
 import RSITable from "@/components/analyses/RSITable"
 import { useTranslation } from "react-i18next"
 import { TrendingUp, TrendingDown, Activity } from "lucide-react"
+import { useCachedData } from "@/hooks/useCachedData"
+import RefreshButton from "@/components/common/RefreshButton"
 
 const RSIPage: React.FC = () => {
-    const [coins, setCoins] = useState<RSICoin[]>([])
-    const [loading, setLoading] = useState(true)
     const { t } = useTranslation()
+    const { data: coins, loading, refreshing, refresh, lastUpdateText } = useCachedData({
+        cacheKey: 'rsi-coins',
+        fetchFn: getRSITopCoins
+    })
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            const data = await getRSITopCoins()
-            setCoins(data)
-            setLoading(false)
-        }
-        
-        fetchData()
-    }, [])
-
-    const validCoins = coins.filter(c => c.rsi !== 0)
+    const validCoins = coins?.filter(c => c.rsi !== 0) || []
     const overboughtCount = validCoins.filter(c => c.rsi >= 70).length
     const oversoldCount = validCoins.filter(c => c.rsi <= 30).length
     const neutralCount = validCoins.filter(c => c.rsi > 30 && c.rsi < 70).length
@@ -39,8 +32,17 @@ const RSIPage: React.FC = () => {
     return (
         <div className="p-6">
             <div className="mb-6">
-                <h1 className="text-2xl font-bold mb-2">{t("rsi.title")}</h1>
-                <p className="text-gray-600 dark:text-gray-400">{t("rsi.description")}</p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold mb-2">{t("rsi.title")}</h1>
+                        <p className="text-gray-600 dark:text-gray-400">{t("rsi.description")}</p>
+                    </div>
+                    <RefreshButton
+                        onRefresh={refresh}
+                        refreshing={refreshing}
+                        lastUpdateText={lastUpdateText}
+                    />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -75,7 +77,7 @@ const RSIPage: React.FC = () => {
                 </div>
             </div>
 
-            <RSITable coins={coins} />
+            <RSITable coins={coins || []} />
         </div>
     )
 }

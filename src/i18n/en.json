@@ -19,7 +19,8 @@
     "price": "Price",
     "change24h": "24h",
     "change7d": "7d",
-    "top100": "Top 100 Coins"
+    "top100": "Top 100 Coins",
+    "totalCoins": "Total {{count}} coins"
   },
   "rsi": {
     "title": "RSI Analysis",
@@ -60,6 +61,13 @@
     "history": "History",
     "chart": "Chart",
     "noData": "No data available",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
+    "lastUpdate": "Last update",
+    "neverUpdated": "Never updated",
+    "justNow": "Just now",
+    "oneMinuteAgo": "1 minute ago",
+    "minutesAgo": "{{minutes}} minutes ago"
   }
 }

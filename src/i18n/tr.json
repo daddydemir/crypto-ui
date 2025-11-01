@@ -19,7 +19,8 @@
     "price": "Fiyat",
     "change24h": "24s",
     "change7d": "7g",
-    "top100": "En İyi 100 Coin"
+    "top100": "En İyi 100 Coin",
+    "totalCoins": "Toplam {{count}} coin"
   },
   "rsi": {
     "title": "RSI Analizi",
@@ -60,6 +61,13 @@
     "history": "Geçmiş",
     "chart": "Grafik",
     "noData": "Veri bulunamadı",
-    "loading": "Yükleniyor..."
+    "loading": "Yükleniyor...",
+    "refresh": "Yenile",
+    "refreshing": "Yenileniyor...",
+    "lastUpdate": "Son güncelleme",
+    "neverUpdated": "Hiç güncellenmedi",
+    "justNow": "Az önce",
+    "oneMinuteAgo": "1 dakika önce",
+    "minutesAgo": "{{minutes}} dakika önce"
   }
 }

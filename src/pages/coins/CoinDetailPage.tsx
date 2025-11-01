@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { getRSIHistory, type RSIHistoryPoint } from "@/services/rsiService"
+import { getRSIHistory } from "@/services/rsiService"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Brush } from "recharts"
 import { ArrowLeft, TrendingUp, TrendingDown, Calendar } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useCachedData } from "@/hooks/useCachedData"
+import RefreshButton from "@/components/common/RefreshButton"
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -11,37 +13,24 @@ const CoinDetailPage: React.FC = () => {
     const { coinId } = useParams<{ coinId: string }>()
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const [data, setData] = useState<RSIHistoryPoint[]>([])
-    const [loading, setLoading] = useState(true)
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
 
-    useEffect(() => {
-        if (coinId) {
-            loadRSIHistory()
-        }
-    }, [coinId])
+    const { data, loading, refreshing, refresh, lastUpdateText } = useCachedData({
+        cacheKey: `coin-detail-${coinId}`,
+        fetchFn: () => getRSIHistory(coinId!)
+    })
 
-    const loadRSIHistory = async () => {
-        setLoading(true)
-        if (coinId) {
-            const history = await getRSIHistory(coinId)
-            setData(history)
-        }
-        setLoading(false)
-    }
-
-    // Zaman aralığına göre veriyi filtrele ve örnekle
     const filteredData = useMemo(() => {
-        if (data.length === 0) return []
+        if (!data || data.length === 0) return []
 
         const now = new Date()
         let cutoffDate = new Date()
-        let sampleRate = 1 // Her kaç veriyi göstereceğiz
+        let sampleRate = 1
 
         switch (timeRange) {
             case '7d':
                 cutoffDate.setDate(now.getDate() - 7)
-                sampleRate = 1 // Her veriyi göster
+                sampleRate = 1
                 break
             case '30d':
                 cutoffDate.setDate(now.getDate() - 30)
@@ -49,22 +38,20 @@ const CoinDetailPage: React.FC = () => {
                 break
             case '90d':
                 cutoffDate.setDate(now.getDate() - 90)
-                sampleRate = 2 // Her 2 veriyi göster
+                sampleRate = 2
                 break
             case '1y':
                 cutoffDate.setFullYear(now.getFullYear() - 1)
-                sampleRate = 7 // Haftalık göster
+                sampleRate = 7
                 break
             case 'all':
-                cutoffDate = new Date(0) // Başlangıç
-                sampleRate = Math.ceil(data.length / 200) // Max 200 nokta göster
+                cutoffDate = new Date(0)
+                sampleRate = Math.ceil(data.length / 200)
                 break
         }
 
-        // Tarihe göre filtrele
         const filtered = data.filter(item => new Date(item.date) >= cutoffDate)
 
-        // Örnekleme yap (performans için)
         if (sampleRate > 1) {
             return filtered.filter((_, index) => index % sampleRate === 0)
         }
@@ -83,7 +70,6 @@ const CoinDetailPage: React.FC = () => {
     const previousRSI = filteredData.length > 1 ? filteredData[filteredData.length - 2].rsi : 0
     const rsiChange = currentRSI - previousRSI
 
-    // İstatistikler
     const stats = useMemo(() => {
         if (filteredData.length === 0) return { max: 0, min: 0, avg: 0 }
 
@@ -97,10 +83,7 @@ const CoinDetailPage: React.FC = () => {
 
     const formatXAxis = (dateStr: string) => {
         const date = new Date(dateStr)
-        if (timeRange === '7d') {
-            return date.toLocaleDateString('tr-TR', { month: 'short', day: 'numeric' })
-        }
-        if (timeRange === '30d') {
+        if (timeRange === '7d' || timeRange === '30d') {
             return date.toLocaleDateString('tr-TR', { month: 'short', day: 'numeric' })
         }
         return date.toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' })
@@ -142,15 +125,24 @@ const CoinDetailPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
                 <div className="mb-6">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition mb-4"
-                    >
-                        <ArrowLeft className="w-5 h-5" />
-                        {t("common.back", "Back")}
-                    </button>
+                    <div className="flex items-center justify-between mb-4">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition"
+                        >
+                            <ArrowLeft className="w-5 h-5" />
+                            {t("common.back", "Back")}
+                        </button>
+                        
+                        <RefreshButton
+                            onRefresh={refresh}
+                            refreshing={refreshing}
+                            disabled={loading}
+                            lastUpdateText={lastUpdateText}
+                        />
+                    </div>
+                    
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                         {coinId && formatCoinName(coinId)}
                     </h1>
