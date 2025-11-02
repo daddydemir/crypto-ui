@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import {useCacheContext} from '@/contexts/CacheContext'
 
 interface UseCachedDataOptions<T> {
@@ -27,6 +28,7 @@ export function useCachedData<T>({
                                      onSuccess,
                                      onError
                                  }: UseCachedDataOptions<T>): UseCachedDataReturn<T> {
+    const { t } = useTranslation()
     const { getCache, setCache, getLastFetchTime, isCacheValid } = useCacheContext()
 
     const [data, setData] = useState<T | null>(() => getCache<T>(cacheKey))
@@ -34,11 +36,13 @@ export function useCachedData<T>({
     const [refreshing, setRefreshing] = useState(false)
     const [error, setError] = useState<Error | null>(null)
     const [lastUpdateText, setLastUpdateText] = useState('')
+    const isFetchingRef = useRef(false)
+    const lastCacheKeyRef = useRef(cacheKey)
 
     const updateLastUpdateText = useCallback(() => {
         const lastFetch = getLastFetchTime(cacheKey)
         if (!lastFetch) {
-            setLastUpdateText('Never updated')
+            setLastUpdateText(t('common.neverUpdated', 'Never updated'))
             return
         }
 
@@ -47,13 +51,13 @@ export function useCachedData<T>({
         const minutes = Math.floor(diff / 60000)
 
         if (minutes < 1) {
-            setLastUpdateText('Just now')
+            setLastUpdateText(t('common.justNow', 'Just now'))
         } else if (minutes === 1) {
-            setLastUpdateText('1 minute ago')
+            setLastUpdateText(t('common.oneMinuteAgo', '1 minute ago'))
         } else {
-            setLastUpdateText(`${minutes} minutes ago`)
+            setLastUpdateText(t('common.minutesAgo', '{{minutes}} minutes ago', { minutes }))
         }
-    }, [cacheKey, getLastFetchTime])
+    }, [cacheKey, getLastFetchTime, t])
 
     useEffect(() => {
         updateLastUpdateText()
@@ -61,23 +65,70 @@ export function useCachedData<T>({
         return () => clearInterval(interval)
     }, [updateLastUpdateText])
 
-    const fetchData = useCallback(async (forceRefresh = false) => {
-        try {
-            if (!forceRefresh && isCacheValid(cacheKey, cacheDuration)) {
-                const cachedData = getCache<T>(cacheKey)
-                if (cachedData) {
-                    setData(cachedData)
-                    setLoading(false)
-                    return
-                }
+    useEffect(() => {
+        if (isFetchingRef.current && lastCacheKeyRef.current === cacheKey) {
+            return
+        }
+
+        const fetchData = async (forceRefresh = false) => {
+            if (isFetchingRef.current) {
+                return
             }
 
-            const isRefreshing = data !== null
-            if (isRefreshing) {
-                setRefreshing(true)
-            } else {
-                setLoading(true)
+            try {
+                if (!forceRefresh && isCacheValid(cacheKey, cacheDuration)) {
+                    const cachedData = getCache<T>(cacheKey)
+                    if (cachedData) {
+                        setData(cachedData)
+                        setLoading(false)
+                        return
+                    }
+                }
+
+                isFetchingRef.current = true
+                lastCacheKeyRef.current = cacheKey
+
+                const isRefreshing = data !== null
+                if (isRefreshing) {
+                    setRefreshing(true)
+                } else {
+                    setLoading(true)
+                }
+
+                const result = await fetchFn()
+                setData(result)
+                setCache(cacheKey, result)
+                setError(null)
+
+                if (onSuccess) {
+                    onSuccess(result)
+                }
+
+                updateLastUpdateText()
+            } catch (err) {
+                const error = err instanceof Error ? err : new Error('Unknown error')
+                setError(error)
+                if (onError) {
+                    onError(error)
+                }
+            } finally {
+                setLoading(false)
+                setRefreshing(false)
+                isFetchingRef.current = false
             }
+        }
+
+        fetchData(false)
+    }, [cacheKey])
+
+    const refresh = useCallback(async () => {
+        if (isFetchingRef.current) {
+            return
+        }
+
+        try {
+            isFetchingRef.current = true
+            setRefreshing(true)
 
             const result = await fetchFn()
             setData(result)
@@ -96,18 +147,10 @@ export function useCachedData<T>({
                 onError(error)
             }
         } finally {
-            setLoading(false)
             setRefreshing(false)
+            isFetchingRef.current = false
         }
-    }, [cacheKey, cacheDuration, isCacheValid, getCache, setCache, fetchFn, onSuccess, onError, data, updateLastUpdateText])
-
-    useEffect(() => {
-        fetchData(false)
-    }, [])
-
-    const refresh = useCallback(async () => {
-        await fetchData(true)
-    }, [fetchData])
+    }, [cacheKey, fetchFn, setCache, onSuccess, onError, updateLastUpdateText])
 
     return {
         data,

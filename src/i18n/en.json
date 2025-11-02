@@ -56,6 +56,14 @@
       "oversold": "Oversold (≤30)"
     }
   },
+  "movingAverages": {
+    "title": "Moving Averages",
+    "description": "View moving average trends for different cryptocurrencies",
+    "selectCrypto": "Select Cryptocurrency",
+    "chartDescription": "7-day, 25-day, and 99-day moving averages",
+    "noData": "No moving average data available for this coin",
+    "errorLoading": "Failed to load moving averages data"
+  },
   "common": {
     "back": "Back",
     "history": "History",
@@ -68,6 +76,11 @@
     "neverUpdated": "Never updated",
     "justNow": "Just now",
     "oneMinuteAgo": "1 minute ago",
-    "minutesAgo": "{{minutes}} minutes ago"
+    "minutesAgo": "{{minutes}} minutes ago",
+    "loadingCoins": "Loading coins...",
+    "current": "Current",
+    "days": "Days",
+    "year": "Year",
+    "all": "All"
   }
 }

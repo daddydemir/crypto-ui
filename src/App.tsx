@@ -4,9 +4,9 @@ import CoinsPage from "@/pages/coins/CoinsPage.tsx";
 import RSIPage from "@/pages/analyses/RSIPage.tsx";
 import CoinDetailPage from "@/pages/coins/CoinDetailPage.tsx";
 import { CacheProvider } from "@/contexts/CacheContext";
+import MovingAveragePage from './pages/analyses/MovingAveragePage';
 
 
-const MAPage = () => <div>MA Sayfası</div>;
 const AlarmsPage = () => <div>Alarmlar</div>;
 const SettingsPage = () => <div>Ayarlar</div>;
 
@@ -17,7 +17,7 @@ function App() {
                 <AppLayout>
                     <Routes>
                         <Route path="/analyses/rsi" element={<RSIPage />} />
-                        <Route path="/analyses/ma" element={<MAPage />} />
+                        <Route path="/analyses/ma" element={<MovingAveragePage />} />
                         <Route path="/coins" element={<CoinsPage />} />
                         <Route path="/alarms" element={<AlarmsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />

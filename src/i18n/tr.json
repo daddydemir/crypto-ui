@@ -56,6 +56,14 @@
       "oversold": "Aşırı Satım (≤30)"
     }
   },
+  "movingAverages": {
+    "title": "Hareketli Ortalamalar",
+    "description": "Farklı kripto paralar için hareketli ortalama trendlerini görüntüleyin",
+    "selectCrypto": "Kripto Para Seçin",
+    "chartDescription": "7 günlük, 25 günlük ve 99 günlük hareketli ortalamalar",
+    "noData": "Bu coin için hareketli ortalama verisi mevcut değil",
+    "errorLoading": "Hareketli ortalama verileri yüklenemedi"
+  },
   "common": {
     "back": "Geri",
     "history": "Geçmiş",
@@ -68,6 +76,11 @@
     "neverUpdated": "Hiç güncellenmedi",
     "justNow": "Az önce",
     "oneMinuteAgo": "1 dakika önce",
-    "minutesAgo": "{{minutes}} dakika önce"
+    "minutesAgo": "{{minutes}} dakika önce",
+    "loadingCoins": "Coinler yükleniyor...",
+    "current": "Güncel",
+    "days": "Gün",
+    "year": "Yıl",
+    "all": "Tümü"
   }
 }
