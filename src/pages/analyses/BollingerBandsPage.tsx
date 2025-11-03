@@ -2,14 +2,14 @@ import React, { useMemo, useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Brush } from "recharts"
 import { TrendingUp, TrendingDown, Calendar } from "lucide-react"
-import { getMovingAverages, type MovingAveragePoint } from "@/services/movingAverageService"
+import { getBollingerBands, type BollingerBandsPoint } from "@/services/bollingerBandsService.ts"
 import { getTopCoins } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
-const MovingAveragePage: React.FC = () => {
+const BollingerBandsPage: React.FC = () => {
     const { t } = useTranslation()
     const [selectedCoinId, setSelectedCoinId] = useState<string>()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
@@ -25,9 +25,9 @@ const MovingAveragePage: React.FC = () => {
         }
     }, [coins, selectedCoinId])
 
-    const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<MovingAveragePoint[]>({
-        cacheKey: `moving-averages-${selectedCoinId}`,
-        fetchFn: () => selectedCoinId ? getMovingAverages(selectedCoinId) : Promise.resolve([])
+    const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<BollingerBandsPoint[]>({
+        cacheKey: `bollinger-bands-${selectedCoinId}`,
+        fetchFn: () => selectedCoinId ? getBollingerBands(selectedCoinId) : Promise.resolve([])
     })
 
     const filteredData = useMemo(() => {
@@ -60,7 +60,7 @@ const MovingAveragePage: React.FC = () => {
                 break
         }
 
-        const filtered = data.filter(item => new Date(item.date) >= cutoffDate)
+        const filtered = data.filter(item => new Date(item.Date) >= cutoffDate)
 
         if (sampleRate > 1) {
             return filtered.filter((_, index) => index % sampleRate === 0)
@@ -71,23 +71,30 @@ const MovingAveragePage: React.FC = () => {
 
     const selectedCoin = coins?.find(c => c.id === selectedCoinId)
 
+    const formatPrice = (value: number): string => {
+        if (value >= 1) {
+            return value.toFixed(2)
+        }
+        return value.toFixed(6)
+    }
+
     const stats = useMemo(() => {
         if (filteredData.length === 0) return { 
-            ma7Current: 0, ma7Change: 0,
-            ma25Current: 0, ma25Change: 0,
-            ma99Current: 0, ma99Change: 0
+            upperBandCurrent: 0, upperBandChange: 0,
+            ma20Current: 0, ma20Change: 0,
+            lowerBandCurrent: 0, lowerBandChange: 0
         }
 
         const latest = filteredData[filteredData.length - 1]
         const previous = filteredData.length > 1 ? filteredData[filteredData.length - 2] : latest
 
         return {
-            ma7Current: latest.ma7,
-            ma7Change: latest.ma7 - previous.ma7,
-            ma25Current: latest.ma25,
-            ma25Change: latest.ma25 - previous.ma25,
-            ma99Current: latest.ma99,
-            ma99Change: latest.ma99 - previous.ma99
+            upperBandCurrent: latest.UpperBand,
+            upperBandChange: latest.UpperBand - previous.UpperBand,
+            ma20Current: latest.MA20,
+            ma20Change: latest.MA20 - previous.MA20,
+            lowerBandCurrent: latest.LowerBand,
+            lowerBandChange: latest.LowerBand - previous.LowerBand
         }
     }, [filteredData])
 
@@ -105,21 +112,21 @@ const MovingAveragePage: React.FC = () => {
             return (
                 <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                        {new Date(data.date).toLocaleDateString('tr-TR', {
+                        {new Date(data.Date).toLocaleDateString('tr-TR', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         })}
                     </p>
                     <div className="space-y-1">
+                        <p className="text-sm font-semibold text-red-600 dark:text-red-400">
+                            Upper Band: ${formatPrice(data.UpperBand)}
+                        </p>
                         <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                            MA 7: ${data.ma7.toFixed(2)}
+                            MA 20: ${formatPrice(data.MA20)}
                         </p>
                         <p className="text-sm font-semibold text-green-600 dark:text-green-400">
-                            MA 25: ${data.ma25.toFixed(2)}
-                        </p>
-                        <p className="text-sm font-semibold text-orange-600 dark:text-orange-400">
-                            MA 99: ${data.ma99.toFixed(2)}
+                            Lower Band: ${formatPrice(data.LowerBand)}
                         </p>
                     </div>
                 </div>
@@ -143,13 +150,13 @@ const MovingAveragePage: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {t('movingAverages.title', 'Moving Averages')}
+                                {t('bollingerBands.title', 'Bollinger Bands')}
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                {t('movingAverages.description', 'View moving average trends for different cryptocurrencies')}
+                                {t('bollingerBands.description', 'View Bollinger Bands analysis for different cryptocurrencies')}
                             </p>
                         </div>
-                        
+                    
                         {selectedCoinId && (
                             <RefreshButton
                                 onRefresh={refresh}
@@ -164,12 +171,12 @@ const MovingAveragePage: React.FC = () => {
                 {/* Coin Selection */}
                 <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800 mb-6">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            {t('common.selectCrypto', 'Select Cryptocurrency')}
-                        </label>
-                        {coinsLoading ? (
-                            <div className="w-full md:w-96 px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
-                                {t('common.loadingCoins', 'Loading coins...')}
-                            </div>
+                        {t('common.selectCrypto', 'Select Cryptocurrency')}
+                    </label>
+                    {coinsLoading ? (
+                        <div className="w-full md:w-96 px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                            {t('common.loadingCoins', 'Loading coins...')}
+                        </div>
                     ) : (
                         <select
                             value={selectedCoinId}
@@ -188,7 +195,7 @@ const MovingAveragePage: React.FC = () => {
                 {error && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
                         <p className="text-red-600 dark:text-red-400">
-                            {error.message || t('movingAverages.errorLoading', 'Failed to load moving averages data')}
+                            {error.message || t('bollingerBands.errorLoading', 'Failed to load Bollinger Bands data')}
                         </p>
                     </div>
                 )}
@@ -201,57 +208,57 @@ const MovingAveragePage: React.FC = () => {
                     <>
                         {/* Stats Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
-                                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                                        MA 7 ({t('common.current', 'Current')})
-                                    </div>
-                                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                                    ${stats.ma7Current.toFixed(2)}
+                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                    Upper Band ({t('common.current', 'Current')})
+                                </div>
+                                <div className="text-3xl font-bold text-red-600 dark:text-red-400">
+                                    ${formatPrice(stats.upperBandCurrent)}
                                 </div>
                                 <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma7Change > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    stats.ma7Change < 0 ? 'text-red-600 dark:text-red-400' : 
+                                    stats.upperBandChange > 0 ? 'text-green-600 dark:text-green-400' : 
+                                    stats.upperBandChange < 0 ? 'text-red-600 dark:text-red-400' : 
                                     'text-gray-600 dark:text-gray-400'
                                 }`}>
-                                    {stats.ma7Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     stats.ma7Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
-                                    {stats.ma7Change > 0 ? '+' : ''}${stats.ma7Change.toFixed(2)}
+                                    {stats.upperBandChange > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                     stats.upperBandChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.upperBandChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.upperBandChange))}
                                 </div>
                             </div>
 
                             <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                                    MA 25 ({t('common.current', 'Current')})
+                                    MA 20 ({t('common.current', 'Current')})
+                                </div>
+                                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                                    ${formatPrice(stats.ma20Current)}
+                                </div>
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${
+                                    stats.ma20Change > 0 ? 'text-green-600 dark:text-green-400' : 
+                                    stats.ma20Change < 0 ? 'text-red-600 dark:text-red-400' : 
+                                    'text-gray-600 dark:text-gray-400'
+                                }`}>
+                                    {stats.ma20Change > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                     stats.ma20Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.ma20Change > 0 ? '+' : ''}${formatPrice(Math.abs(stats.ma20Change))}
+                                </div>
+                            </div>
+
+                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                    Lower Band ({t('common.current', 'Current')})
                                 </div>
                                 <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                                    ${stats.ma25Current.toFixed(2)}
+                                    ${formatPrice(stats.lowerBandCurrent)}
                                 </div>
                                 <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma25Change > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    stats.ma25Change < 0 ? 'text-red-600 dark:text-red-400' : 
+                                    stats.lowerBandChange > 0 ? 'text-green-600 dark:text-green-400' : 
+                                    stats.lowerBandChange < 0 ? 'text-red-600 dark:text-red-400' : 
                                     'text-gray-600 dark:text-gray-400'
                                 }`}>
-                                    {stats.ma25Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     stats.ma25Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
-                                    {stats.ma25Change > 0 ? '+' : ''}${stats.ma25Change.toFixed(2)}
-                                </div>
-                            </div>
-
-                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
-                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                                    MA 99 ({t('common.current', 'Current')})
-                                </div>
-                                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                                    ${stats.ma99Current.toFixed(2)}
-                                </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma99Change > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    stats.ma99Change < 0 ? 'text-red-600 dark:text-red-400' : 
-                                    'text-gray-600 dark:text-gray-400'
-                                }`}>
-                                    {stats.ma99Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     stats.ma99Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
-                                    {stats.ma99Change > 0 ? '+' : ''}${stats.ma99Change.toFixed(2)}
+                                    {stats.lowerBandChange > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                     stats.lowerBandChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.lowerBandChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.lowerBandChange))}
                                 </div>
                             </div>
                         </div>
@@ -261,13 +268,13 @@ const MovingAveragePage: React.FC = () => {
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                                 <div>
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                        {selectedCoin?.symbol.toUpperCase()} {t('movingAverages.title', 'Moving Averages')}
+                                        {selectedCoin?.symbol.toUpperCase()} {t('bollingerBands.title', 'Bollinger Bands')}
                                     </h2>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        {t('movingAverages.chartDescription', '7-day, 25-day, and 99-day moving averages')}
+                                        {t('bollingerBands.chartDescription', 'Upper band, MA20, and lower band')}
                                     </p>
                                 </div>
-                                
+                            
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-5 h-5 text-gray-400" />
                                     <div className="flex gap-1 flex-wrap">
@@ -293,7 +300,7 @@ const MovingAveragePage: React.FC = () => {
                                     <LineChart data={filteredData}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                         <XAxis
-                                            dataKey="date"
+                                            dataKey="Date"
                                             tickFormatter={formatXAxis}
                                             stroke="#9CA3AF"
                                             style={{ fontSize: '12px' }}
@@ -301,7 +308,7 @@ const MovingAveragePage: React.FC = () => {
                                         <YAxis
                                             stroke="#9CA3AF"
                                             style={{ fontSize: '12px' }}
-                                            tickFormatter={(value) => `$${value.toFixed(0)}`}
+                                            tickFormatter={(value) => `$${value.toFixed(2)}`}
                                         />
                                         <Tooltip content={<CustomTooltip />} />
                                         <Legend 
@@ -309,7 +316,7 @@ const MovingAveragePage: React.FC = () => {
                                         />
                                         {filteredData.length > 50 && (
                                             <Brush 
-                                                dataKey="date" 
+                                                dataKey="Date" 
                                                 height={30} 
                                                 stroke="#3B82F6"
                                                 tickFormatter={formatXAxis}
@@ -317,28 +324,28 @@ const MovingAveragePage: React.FC = () => {
                                         )}
                                         <Line
                                             type="monotone"
-                                            dataKey="ma7"
+                                            dataKey="UpperBand"
+                                            stroke="#EF4444"
+                                            strokeWidth={2}
+                                            name="Upper Band"
+                                            dot={false}
+                                            activeDot={{ r: 6 }}
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="MA20"
                                             stroke="#3B82F6"
                                             strokeWidth={2}
-                                            name="MA 7"
+                                            name="MA 20"
                                             dot={false}
                                             activeDot={{ r: 6 }}
                                         />
                                         <Line
                                             type="monotone"
-                                            dataKey="ma25"
+                                            dataKey="LowerBand"
                                             stroke="#10B981"
                                             strokeWidth={2}
-                                            name="MA 25"
-                                            dot={false}
-                                            activeDot={{ r: 6 }}
-                                        />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="ma99"
-                                            stroke="#F97316"
-                                            strokeWidth={2}
-                                            name="MA 99"
+                                            name="Lower Band"
                                             dot={false}
                                             activeDot={{ r: 6 }}
                                         />
@@ -347,7 +354,7 @@ const MovingAveragePage: React.FC = () => {
                             ) : (
                                 <div className="flex items-center justify-center h-96">
                                     <p className="text-gray-500 dark:text-gray-400">
-                                        {t('movingAverages.noData', 'No moving average data available for this coin')}
+                                        {t('common.noData', 'No Bollinger Bands data available for this coin')}
                                     </p>
                                 </div>
                             )}
@@ -359,4 +366,4 @@ const MovingAveragePage: React.FC = () => {
     )
 }
 
-export default MovingAveragePage
+export default BollingerBandsPage

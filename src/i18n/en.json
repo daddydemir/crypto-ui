@@ -64,6 +64,12 @@
     "noData": "No moving average data available for this coin",
     "errorLoading": "Failed to load moving averages data"
   },
+  "bollingerBands": {
+    "title": "Bollinger Bands",
+    "description": "View Bollinger Bands analysis for different cryptocurrencies",
+    "errorLoading": "Failed to load Bollinger Bands data",
+    "chartDescription": "Upper band, MA20, and Lower band"
+  },
   "common": {
     "back": "Back",
     "history": "History",
@@ -81,6 +87,7 @@
     "current": "Current",
     "days": "Days",
     "year": "Year",
-    "all": "All"
+    "all": "All",
+    "selectCrypto": "Select Cryptocurrency"
   }
 }

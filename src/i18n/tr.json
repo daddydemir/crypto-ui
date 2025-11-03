@@ -64,6 +64,12 @@
     "noData": "Bu coin için hareketli ortalama verisi mevcut değil",
     "errorLoading": "Hareketli ortalama verileri yüklenemedi"
   },
+  "bollingerBands": {
+    "title": "Bollinger Bantları",
+    "description": "Farklı kripto paralar için Bollinger Bantları analizini görüntüleyin",
+    "errorLoading": "Bollinger Bantları verisi yüklenemedi",
+    "chartDescription": "Üst bant, MA20 ve Alt bant"
+  },
   "common": {
     "back": "Geri",
     "history": "Geçmiş",
@@ -81,6 +87,7 @@
     "current": "Güncel",
     "days": "Gün",
     "year": "Yıl",
-    "all": "Tümü"
+    "all": "Tümü",
+    "selectCrypto": "Kripto Para Seçin"
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {ChevronDown, ChevronRight, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin} from "lucide-react";
+import {ChevronDown, ChevronRight, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin,} from "lucide-react";
 import {useTranslation} from "react-i18next";
 
 interface MenuItem {
@@ -28,6 +28,7 @@ const Sidebar: React.FC = () => {
             children: [
                 { name: t("sidebar.technical.rsi"), path: "/analyses/rsi" },
                 { name: t("sidebar.technical.ma"), path: "/analyses/ma" },
+                { name: 'Bollinger Bands', path: '/analyses/bollinger-bands'},
             ],
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },

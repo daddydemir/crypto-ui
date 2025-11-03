@@ -5,6 +5,7 @@ import RSIPage from "@/pages/analyses/RSIPage.tsx";
 import CoinDetailPage from "@/pages/coins/CoinDetailPage.tsx";
 import { CacheProvider } from "@/contexts/CacheContext";
 import MovingAveragePage from './pages/analyses/MovingAveragePage';
+import BollingerBandsPage from '@/pages/analyses/BollingerBandsPage';
 
 
 const AlarmsPage = () => <div>Alarmlar</div>;
@@ -18,6 +19,7 @@ function App() {
                     <Routes>
                         <Route path="/analyses/rsi" element={<RSIPage />} />
                         <Route path="/analyses/ma" element={<MovingAveragePage />} />
+                        <Route path="/analyses/bollinger-bands" element={<BollingerBandsPage />} />
                         <Route path="/coins" element={<CoinsPage />} />
                         <Route path="/alarms" element={<AlarmsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
