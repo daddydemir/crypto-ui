@@ -6,7 +6,7 @@ import { TrendingUp, TrendingDown, Calendar } from "lucide-react"
 import { getTopCoins } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
-import {getMovingAverages, type MovingAveragePoint} from "@/pages/analyses/exponentialMAService.ts";
+import {getMovingAverages, type MovingAveragePoint} from "@/services/exponentialMAService.ts";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
