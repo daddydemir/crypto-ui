@@ -6,7 +6,8 @@
     "settings": "Settings",
     "technical": {
       "rsi": "RSI",
-      "ma": "Moving Average"
+      "ma": "Moving Average",
+      "ema": "Exponential MA"
     }
   },
   "topbar": {
@@ -63,6 +64,14 @@
     "chartDescription": "7-day, 25-day, and 99-day moving averages",
     "noData": "No moving average data available for this coin",
     "errorLoading": "Failed to load moving averages data"
+  },
+  "exponentialMovingAverages": {
+    "title": "Exponential Moving Averages",
+    "description" : "View exponential moving average trends for different cryptocurrencies",
+    "selectCrypto": "Select Cryptocurrency",
+    "chartDescription": "7-day, 25-day, and 99-day exponential moving averages",
+    "noData": "No exponential moving average data available for this coin",
+    "errorLoading": "Failed to load exponential moving averages data"
   },
   "bollingerBands": {
     "title": "Bollinger Bands",

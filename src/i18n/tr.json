@@ -6,7 +6,8 @@
     "settings": "Ayarlar",
     "technical": {
       "rsi": "RSI",
-      "ma": "Hareketli Ortalama"
+      "ma": "Hareketli Ortalama",
+      "ema": "Üstel Hareketli Ortalama"
     }
   },
   "topbar": {
@@ -63,6 +64,14 @@
     "chartDescription": "7 günlük, 25 günlük ve 99 günlük hareketli ortalamalar",
     "noData": "Bu coin için hareketli ortalama verisi mevcut değil",
     "errorLoading": "Hareketli ortalama verileri yüklenemedi"
+  },
+  "exponentialMovingAverages": {
+    "title": "Üstel Hareketli Ortalamalar",
+    "description" : "Farklı kripto paralar için üstel hareketli ortalama trendlerini görüntüleyin",
+    "selectCrypto": "Kripto Para Seçin",
+    "chartDescription": "7 günlük, 25 günlük ve 99 günlük üstel hareketli ortalamalar",
+    "noData": "Bu coin için üstel hareketli ortalama verisi mevcut değil",
+    "errorLoading": "Üstel hareketli ortalama verileri yüklenemedi"
   },
   "bollingerBands": {
     "title": "Bollinger Bantları",

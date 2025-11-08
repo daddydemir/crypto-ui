@@ -28,6 +28,7 @@ const Sidebar: React.FC = () => {
             children: [
                 { name: t("sidebar.technical.rsi"), path: "/analyses/rsi" },
                 { name: t("sidebar.technical.ma"), path: "/analyses/ma" },
+                { name: t("sidebar.technical.ema"), path: "/analyses/ema" },
                 { name: 'Bollinger Bands', path: '/analyses/bollinger-bands'},
             ],
         },
