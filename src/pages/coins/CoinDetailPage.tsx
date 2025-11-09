@@ -2,10 +2,12 @@ import React, { useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { getRSIHistory } from "@/services/rsiService"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Brush } from "recharts"
-import { ArrowLeft, TrendingUp, TrendingDown, Calendar } from "lucide-react"
+import {ArrowLeft, TrendingUp, TrendingDown, Calendar, Maximize2} from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
+import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
+import {mapRsiToChartPoints} from "@/components/charts/types.ts";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -14,6 +16,7 @@ const CoinDetailPage: React.FC = () => {
     const navigate = useNavigate()
     const { t } = useTranslation()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
+    const [showFullScreenChart, setShowFullScreenChart] = useState(false)
 
     const { data, loading, refreshing, refresh, lastUpdateText } = useCachedData({
         cacheKey: `coin-detail-${coinId}`,
@@ -124,6 +127,14 @@ const CoinDetailPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
+            {showFullScreenChart && data && coinId && (
+                <FullScreenChart
+                    data={mapRsiToChartPoints(data)}
+                    timeRange={timeRange}
+                    coinSymbol={coinId}
+                    onClose={() => setShowFullScreenChart(false)}
+                />
+            )}
             <div className="max-w-7xl mx-auto">
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
@@ -233,6 +244,13 @@ const CoinDetailPage: React.FC = () => {
                                             {btn.label}
                                         </button>
                                     ))}
+                                    <button
+                                        onClick={() => setShowFullScreenChart(true)}
+                                        className="top-4 right-4 p-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition z-10"
+                                        title={t('common.fullScreen', 'Full Screen')}
+                                    >
+                                        <Maximize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                    </button>
                                 </div>
                             </div>
 
