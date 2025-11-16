@@ -20,6 +20,9 @@
     "price": "Fiyat",
     "change24h": "24s",
     "change7d": "7g",
+    "change30d": "30g",
+    "arithmetic7d": "Aritmetik 7g",
+    "arithmetic30d": "Aritmetik 30g",
     "top100": "En İyi 100 Coin",
     "totalCoins": "Toplam {{count}} coin"
   },

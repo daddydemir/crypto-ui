@@ -20,6 +20,9 @@
     "price": "Price",
     "change24h": "24h",
     "change7d": "7d",
+    "change30d": "30d",
+    "arithmetic7d": "Arithmetic 7d",
+    "arithmetic30d": "Arithmetic 30d",
     "top100": "Top 100 Coins",
     "totalCoins": "Total {{count}} coins"
   },

@@ -8,7 +8,7 @@ interface CoinTableProps {
     coins: Coin[]
 }
 
-type SortField = "change24h" | "change7d" | null
+type SortField = "change24h" | "change7d" | "change30d" | "arithmeticChange7d" | "arithmeticChange30d" | null
 type SortOrder = "asc" | "desc"
 
 const CoinTable: React.FC<CoinTableProps> = ({ coins }) => {
@@ -90,6 +90,24 @@ const CoinTable: React.FC<CoinTableProps> = ({ coins }) => {
                             <div className="flex items-center gap-1">
                                 {t("coins.change7d")}
                                 <SortIcon field="change7d" />
+                            </div>
+                        </th>
+                        <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("change30d")}>
+                            <div className="flex items-center gap-1">
+                                {t("coins.change30d")}
+                                <SortIcon field="change30d" />
+                            </div>
+                        </th>
+                        <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("arithmeticChange7d")}>
+                            <div className="flex items-center gap-1">
+                                {t("coins.arithmetic7d")}
+                                <SortIcon field="arithmeticChange7d" />
+                            </div>
+                        </th>
+                        <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("arithmeticChange30d")}>
+                            <div className="flex items-center gap-1">
+                                {t("coins.arithmetic30d")}
+                                <SortIcon field="arithmeticChange30d" />
                             </div>
                         </th>
                     </tr>

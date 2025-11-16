@@ -39,6 +39,18 @@ const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
                 {coin.change7d > 0 ? "+" : ""}
                 {coin.change7d}%
             </td>
+            <td className={`p-3 ${getChangeColor(coin.change30d)}`}>
+                {coin.change30d > 0 ? "+" : ""}
+                {coin.change30d}%
+            </td>
+            <td className={`p-3 ${getChangeColor(coin.arithmeticChange7d)}`}>
+                {coin.arithmeticChange7d > 0 ? "+" : ""}
+                {coin.arithmeticChange7d}%
+            </td>
+            <td className={`p-3 ${getChangeColor(coin.arithmeticChange30d)}`}>
+                {coin.arithmeticChange30d > 0 ? "+" : ""}
+                {coin.arithmeticChange30d}%
+            </td>
         </tr>
     )
 }
