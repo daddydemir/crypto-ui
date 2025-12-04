@@ -100,6 +100,37 @@
     "days": "Gün",
     "year": "Yıl",
     "all": "Tümü",
-    "selectCrypto": "Kripto Para Seçin"
+    "selectCrypto": "Kripto Para Seçin",
+    "error": "Bir hata oluştu",
+    "retry": "Tekrar Dene",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "saving": "Kaydediliyor...",
+    "confirm": "Onayla"
+  },
+  "alarms": {
+    "title": "Fiyat Alarmları",
+    "totalAlerts": "Toplam {{count}} alarm",
+    "createNew": "Yeni Alarm",
+    "createAlert": "Alarm Oluştur",
+    "editAlert": "Alarm Düzenle",
+    "coin": "Coin",
+    "coinSymbol": "Coin Sembolü",
+    "targetPrice": "Hedef Fiyat",
+    "direction": "Yön",
+    "status": "Durum",
+    "createdAt": "Oluşturulma",
+    "actions": "İşlemler",
+    "above": "Üstünde",
+    "below": "Altında",
+    "active": "Aktif",
+    "inactive": "Pasif",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "confirmDelete": "Bu alarmı silmek istediğinizden emin misiniz?",
+    "noAlerts": "Alarm bulunamadı",
+    "noAlertsDescription": "Bildirim almak için ilk fiyat alarmınızı oluşturun",
+    "deleteAlertTitle": "Alarmı Sil",
+    "deleteAlertMessage": "Bu alarmı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
   }
 }

@@ -100,6 +100,37 @@
     "days": "Days",
     "year": "Year",
     "all": "All",
-    "selectCrypto": "Select Cryptocurrency"
+    "selectCrypto": "Select Cryptocurrency",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "confirm": "Confirm"
+  },
+  "alarms": {
+    "title": "Price Alerts",
+    "totalAlerts": "Total {{count}} alerts",
+    "createNew": "New Alert",
+    "createAlert": "Create Alert",
+    "editAlert": "Edit Alert",
+    "coin": "Coin",
+    "coinSymbol": "Coin Symbol",
+    "targetPrice": "Target Price",
+    "direction": "Direction",
+    "status": "Status",
+    "createdAt": "Created At",
+    "actions": "Actions",
+    "above": "Above",
+    "below": "Below",
+    "active": "Active",
+    "inactive": "Inactive",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this alert?",
+    "noAlerts": "No alerts found",
+    "noAlertsDescription": "Create your first price alert to get notified",
+    "deleteAlertTitle": "Delete Alert",
+    "deleteAlertMessage": "Are you sure you want to delete this alert? This action cannot be undone."
   }
 }

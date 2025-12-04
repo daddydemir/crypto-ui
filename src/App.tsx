@@ -7,9 +7,9 @@ import { CacheProvider } from "@/contexts/CacheContext";
 import MovingAveragePage from './pages/analyses/MovingAveragePage';
 import BollingerBandsPage from '@/pages/analyses/BollingerBandsPage';
 import ExponentialMAPage from "@/pages/analyses/ExponentialMAPage.tsx";
+import AlarmsPage from "@/pages/alarms/AlarmsPage.tsx";
 
 
-const AlarmsPage = () => <div>Alarmlar</div>;
 const SettingsPage = () => <div>Ayarlar</div>;
 
 function App() {

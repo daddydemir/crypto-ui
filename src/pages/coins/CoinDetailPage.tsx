@@ -13,14 +13,15 @@ type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
 const CoinDetailPage: React.FC = () => {
     const { coinId } = useParams<{ coinId: string }>()
+    const decodedCoinId = decodeURIComponent(coinId || '');
     const navigate = useNavigate()
     const { t } = useTranslation()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
     const [showFullScreenChart, setShowFullScreenChart] = useState(false)
 
     const { data, loading, refreshing, refresh, lastUpdateText } = useCachedData({
-        cacheKey: `coin-detail-${coinId}`,
-        fetchFn: () => getRSIHistory(coinId!)
+        cacheKey: `coin-detail-${decodedCoinId}`,
+        fetchFn: () => getRSIHistory(decodedCoinId!)
     })
 
     const filteredData = useMemo(() => {
@@ -62,8 +63,8 @@ const CoinDetailPage: React.FC = () => {
         return filtered
     }, [data, timeRange])
 
-    const formatCoinName = (coinId: string) => {
-        return coinId
+    const formatCoinName = (decodedCoinId: string) => {
+        return decodedCoinId
             .split('-')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ')
@@ -127,11 +128,11 @@ const CoinDetailPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
-            {showFullScreenChart && data && coinId && (
+            {showFullScreenChart && data && decodedCoinId && (
                 <FullScreenChart
                     data={mapRsiToChartPoints(data)}
                     timeRange={timeRange}
-                    coinSymbol={coinId}
+                    coinSymbol={decodedCoinId}
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
@@ -155,7 +156,7 @@ const CoinDetailPage: React.FC = () => {
                     </div>
                     
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                        {coinId && formatCoinName(coinId)}
+                        {decodedCoinId && formatCoinName(decodedCoinId)}
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">
                         RSI {t("common.history", "History")}
