@@ -27,7 +27,7 @@
     "totalCoins": "Toplam {{count}} coin"
   },
   "rsi": {
-    "title": "RSI Analizi",
+    "title": "Göreli Güç Endeksi",
     "description": "En popüler kripto paralar için Göreceli Güç Endeksi (RSI) analizi. RSI ≥70 aşırı alım, RSI ≤30 aşırı satım anlamına gelir.",
     "loading": "RSI verileri yükleniyor...",
     "coin": "Coin",

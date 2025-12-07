@@ -147,6 +147,7 @@ const ExponentialMAPage: React.FC = () => {
                     data={mapExponentialMAToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={selectedCoin.symbol}
+                    analyseType = 'exponentialMovingAverages'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}

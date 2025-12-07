@@ -133,6 +133,7 @@ const CoinDetailPage: React.FC = () => {
                     data={mapRsiToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={decodedCoinId}
+                    analyseType= 'rsi'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}

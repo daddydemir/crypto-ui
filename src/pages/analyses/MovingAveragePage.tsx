@@ -146,6 +146,7 @@ const MovingAveragePage: React.FC = () => {
                     data={mapMovingAverageToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={selectedCoin.symbol}
+                    analyseType='movingAverages'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}

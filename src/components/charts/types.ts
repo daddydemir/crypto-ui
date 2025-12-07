@@ -9,6 +9,7 @@ export interface FullScreenChartProps {
     data: ChartPoint[]
     timeRange: TimeRange
     coinSymbol: string
+    analyseType: string
     onClose: () => void
 }
 

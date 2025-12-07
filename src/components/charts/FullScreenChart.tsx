@@ -8,6 +8,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                                                              data,
                                                              timeRange,
                                                              coinSymbol,
+                                                             analyseType,
                                                              onClose
                                                          }) => {
     const { t } = useTranslation()
@@ -66,10 +67,10 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                        {coinSymbol.toUpperCase()} {t('exponentialMovingAverages.title', 'Moving Averages')}
+                        {coinSymbol.toUpperCase()} - {t(`${analyseType}.title`, 'Moving Averages')}
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
-                        {t('exponentialMovingAverages.fullScreenDescription', 'Full screen chart view with ApexCharts')}
+                        {t(`${analyseType}.description`, 'Full screen chart view with ApexCharts')}
                     </p>
                 </div>
 

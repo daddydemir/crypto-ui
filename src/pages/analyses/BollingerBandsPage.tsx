@@ -153,6 +153,7 @@ const BollingerBandsPage: React.FC = () => {
                     data={mapBollingerToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={selectedCoin.symbol}
+                    analyseType= 'bollingerBands'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
