@@ -8,7 +8,7 @@ export interface BollingerBandsPoint {
 }
 
 export async function getBollingerBands(coinId: string): Promise<BollingerBandsPoint[]> {
-    const response = await fetch(`${API_BASE_URL}/coins/${coinId}/bollinger-bands?days=-1`);
+    const response = await fetch(`${API_BASE_URL}/coins/${coinId}/bollinger-bands`);
 
     if (!response.ok) {
         throw new Error('Failed to fetch Bollinger Bands');
