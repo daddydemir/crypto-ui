@@ -17,3 +17,21 @@ export async function getMovingAverages(coinId: string): Promise<MovingAveragePo
 
     return response.json();
 }
+
+export interface MovingAverageSignal {
+    id: string;
+    name: string;
+    symbol: string;
+    price: number;
+    points: MovingAveragePoint[];
+}
+
+export async function getMovingAverageSignals(): Promise<MovingAverageSignal[]> {
+    const response = await fetch(`${API_BASE_URL}/coins/moving-averages`);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch Moving Averages signals');
+    }
+
+    return response.json();
+}

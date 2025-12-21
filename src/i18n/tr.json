@@ -66,11 +66,20 @@
     "selectCrypto": "Kripto Para Seçin",
     "chartDescription": "7 günlük, 25 günlük ve 99 günlük hareketli ortalamalar",
     "noData": "Bu coin için hareketli ortalama verisi mevcut değil",
+    "signals": {
+      "title": "Hareketli Ortalama Sinyalleri",
+      "description": "Boğa veya Ayı trendine sahip coinler",
+      "noSignals": "Şu anda sinyal bulunamadı.",
+      "all": "Hepsi",
+      "bullish": "Yükseliş",
+      "bearish": "Düşüş",
+      "mixed": "Karışık"
+    },
     "errorLoading": "Hareketli ortalama verileri yüklenemedi"
   },
   "exponentialMovingAverages": {
     "title": "Üstel Hareketli Ortalamalar",
-    "description" : "Farklı kripto paralar için üstel hareketli ortalama trendlerini görüntüleyin",
+    "description": "Farklı kripto paralar için üstel hareketli ortalama trendlerini görüntüleyin",
     "selectCrypto": "Kripto Para Seçin",
     "chartDescription": "7 günlük, 25 günlük ve 99 günlük üstel hareketli ortalamalar",
     "noData": "Bu coin için üstel hareketli ortalama verisi mevcut değil",
@@ -80,7 +89,24 @@
     "title": "Bollinger Bantları",
     "description": "Farklı kripto paralar için Bollinger Bantları analizini görüntüleyin",
     "errorLoading": "Bollinger Bantları verisi yüklenemedi",
-    "chartDescription": "Üst bant, MA20 ve Alt bant"
+    "chartDescription": "Üst bant, MA20 ve Alt bant",
+    "signals": {
+      "title": "Bollinger Bant Sinyalleri",
+      "description": "Bollinger Bantlarını kıran coinler",
+      "noSignals": "Şu anda sinyal bulunamadı.",
+      "filter": {
+        "all": "Hepsi",
+        "above": "Üstünde",
+        "below": "Altında",
+        "inside": "İçinde"
+      },
+      "aboveUpper": "Üst Bant Üstünde",
+      "belowLower": "Alt Bant Altı",
+      "inside": "Bant İçi",
+      "upper": "Üst",
+      "lower": "Alt",
+      "ma20": "MA20"
+    }
   },
   "common": {
     "back": "Geri",

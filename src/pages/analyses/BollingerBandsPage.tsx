@@ -1,13 +1,13 @@
 import React, { useMemo, useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Brush } from "recharts"
-import {TrendingUp, TrendingDown, Calendar, Maximize2} from "lucide-react"
-import { getBollingerBands, type BollingerBandsPoint } from "@/services/bollingerBandsService.ts"
+import { TrendingUp, TrendingDown, Calendar, Maximize2 } from "lucide-react"
+import { getBollingerBands, getBollingerBandSignals, type BollingerBandsPoint, type BollingerBandSignal } from "@/services/bollingerBandsService.ts"
 import { getTopCoins } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
 import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
-import {mapBollingerToChartPoints} from "@/components/charts/types.ts";
+import { mapBollingerToChartPoints } from "@/components/charts/types.ts";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -16,6 +16,7 @@ const BollingerBandsPage: React.FC = () => {
     const [selectedCoinId, setSelectedCoinId] = useState<string>()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
     const [showFullScreenChart, setShowFullScreenChart] = useState(false)
+    const [signalFilter, setSignalFilter] = useState<'all' | 'above' | 'below' | 'inside'>('all')
 
     const { data: coins, loading: coinsLoading } = useCachedData({
         cacheKey: 'top-coins',
@@ -31,6 +32,11 @@ const BollingerBandsPage: React.FC = () => {
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<BollingerBandsPoint[]>({
         cacheKey: `bollinger-bands-${selectedCoinId}`,
         fetchFn: () => selectedCoinId ? getBollingerBands(selectedCoinId) : Promise.resolve([])
+    })
+
+    const { data: signals, loading: signalsLoading, refresh: refreshSignals, lastUpdateText: signalsLastUpdate } = useCachedData<BollingerBandSignal[]>({
+        cacheKey: 'bollinger-band-signals',
+        fetchFn: getBollingerBandSignals
     })
 
     const filteredData = useMemo(() => {
@@ -82,7 +88,7 @@ const BollingerBandsPage: React.FC = () => {
     }
 
     const stats = useMemo(() => {
-        if (filteredData.length === 0) return { 
+        if (filteredData.length === 0) return {
             upperBandCurrent: 0, upperBandChange: 0,
             ma20Current: 0, ma20Change: 0,
             lowerBandCurrent: 0, lowerBandChange: 0
@@ -153,7 +159,7 @@ const BollingerBandsPage: React.FC = () => {
                     data={mapBollingerToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={selectedCoin.symbol}
-                    analyseType= 'bollingerBands'
+                    analyseType='bollingerBands'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
@@ -168,7 +174,7 @@ const BollingerBandsPage: React.FC = () => {
                                 {t('bollingerBands.description', 'View Bollinger Bands analysis for different cryptocurrencies')}
                             </p>
                         </div>
-                    
+
                         {selectedCoinId && (
                             <RefreshButton
                                 onRefresh={refresh}
@@ -227,13 +233,12 @@ const BollingerBandsPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-red-600 dark:text-red-400">
                                     ${formatPrice(stats.upperBandCurrent)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.upperBandChange > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    stats.upperBandChange < 0 ? 'text-red-600 dark:text-red-400' : 
-                                    'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.upperBandChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.upperBandChange < 0 ? 'text-red-600 dark:text-red-400' :
+                                        'text-gray-600 dark:text-gray-400'
+                                    }`}>
                                     {stats.upperBandChange > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     stats.upperBandChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                        stats.upperBandChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {stats.upperBandChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.upperBandChange))}
                                 </div>
                             </div>
@@ -245,13 +250,12 @@ const BollingerBandsPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                                     ${formatPrice(stats.ma20Current)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma20Change > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    stats.ma20Change < 0 ? 'text-red-600 dark:text-red-400' : 
-                                    'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma20Change > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.ma20Change < 0 ? 'text-red-600 dark:text-red-400' :
+                                        'text-gray-600 dark:text-gray-400'
+                                    }`}>
                                     {stats.ma20Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     stats.ma20Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                        stats.ma20Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {stats.ma20Change > 0 ? '+' : ''}${formatPrice(Math.abs(stats.ma20Change))}
                                 </div>
                             </div>
@@ -263,20 +267,19 @@ const BollingerBandsPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                                     ${formatPrice(stats.lowerBandCurrent)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.lowerBandChange > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    stats.lowerBandChange < 0 ? 'text-red-600 dark:text-red-400' : 
-                                    'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.lowerBandChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.lowerBandChange < 0 ? 'text-red-600 dark:text-red-400' :
+                                        'text-gray-600 dark:text-gray-400'
+                                    }`}>
                                     {stats.lowerBandChange > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     stats.lowerBandChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                        stats.lowerBandChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {stats.lowerBandChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.lowerBandChange))}
                                 </div>
                             </div>
                         </div>
 
                         {/* Chart */}
-                        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800 mb-6">
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                                 <div>
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -286,7 +289,7 @@ const BollingerBandsPage: React.FC = () => {
                                         {t('bollingerBands.chartDescription', 'Upper band, MA20, and lower band')}
                                     </p>
                                 </div>
-                            
+
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-5 h-5 text-gray-400" />
                                     <div className="flex gap-1 flex-wrap">
@@ -294,11 +297,10 @@ const BollingerBandsPage: React.FC = () => {
                                             <button
                                                 key={btn.value}
                                                 onClick={() => setTimeRange(btn.value)}
-                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                                                    timeRange === btn.value
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                                }`}
+                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${timeRange === btn.value
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                                                    }`}
                                             >
                                                 {btn.label}
                                             </button>
@@ -330,13 +332,13 @@ const BollingerBandsPage: React.FC = () => {
                                             tickFormatter={(value) => `$${value.toFixed(2)}`}
                                         />
                                         <Tooltip content={<CustomTooltip />} />
-                                        <Legend 
+                                        <Legend
                                             wrapperStyle={{ fontSize: '14px', paddingTop: '20px' }}
                                         />
                                         {filteredData.length > 50 && (
-                                            <Brush 
-                                                dataKey="Date" 
-                                                height={30} 
+                                            <Brush
+                                                dataKey="Date"
+                                                height={30}
                                                 stroke="#3B82F6"
                                                 tickFormatter={formatXAxis}
                                             />
@@ -375,6 +377,102 @@ const BollingerBandsPage: React.FC = () => {
                                     <p className="text-gray-500 dark:text-gray-400">
                                         {t('common.noData', 'No Bollinger Bands data available for this coin')}
                                     </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Signals Section */}
+                        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                            <div className="flex items-center justify-between mb-4">
+                                <div>
+                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                        {t('bollingerBands.signals.title', 'Bollinger Band Signals')}
+                                    </h2>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        {t('bollingerBands.signals.description', 'Coins breaking out of Bollinger Bands')}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                                        {(['all', 'above', 'below', 'inside'] as const).map((filter) => (
+                                            <button
+                                                key={filter}
+                                                onClick={() => setSignalFilter(filter)}
+                                                className={`px-3 py-1 text-xs font-medium rounded-md transition ${signalFilter === filter
+                                                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm'
+                                                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                                                    }`}
+                                            >
+                                                {t(`bollingerBands.signals.filter.${filter}`, filter.charAt(0).toUpperCase() + filter.slice(1))}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <RefreshButton
+                                        onRefresh={refreshSignals}
+                                        refreshing={false}
+                                        lastUpdateText={signalsLastUpdate}
+                                    />
+                                </div>
+                            </div>
+
+                            {signalsLoading ? (
+                                <div className="flex items-center justify-center h-24">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                                </div>
+                            ) : signals && signals.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {signals.filter(signal => {
+                                        if (signalFilter === 'all') return true;
+                                        if (signalFilter === 'above') return signal.price > signal.point.UpperBand;
+                                        if (signalFilter === 'below') return signal.price < signal.point.LowerBand;
+                                        if (signalFilter === 'inside') return signal.price <= signal.point.UpperBand && signal.price >= signal.point.LowerBand;
+                                        return true;
+                                    }).map((signal) => (
+                                        <div
+                                            key={signal.id}
+                                            onClick={() => setSelectedCoinId(signal.id)}
+                                            className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition"
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-900 dark:text-gray-100">{signal.name} ({signal.symbol})</h3>
+                                                    <p className="text-sm text-gray-500">${formatPrice(signal.price)}</p>
+                                                </div>
+                                                {signal.price > signal.point.UpperBand ? (
+                                                    <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded-full">
+                                                        {t('bollingerBands.signals.aboveUpper', 'Above Upper')}
+                                                    </span>
+                                                ) : signal.price < signal.point.LowerBand ? (
+                                                    <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                                                        {t('bollingerBands.signals.belowLower', 'Below Lower')}
+                                                    </span>
+                                                ) : (
+                                                    <span className="px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400 rounded-full">
+                                                        {t('bollingerBands.signals.inside', 'Inside')}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="grid grid-cols-3 gap-2 text-xs mt-3">
+                                                <div>
+                                                    <p className="text-gray-500">{t('bollingerBands.signals.upper', 'Upper')}</p>
+                                                    <p className="font-medium text-red-600 dark:text-red-400">${formatPrice(signal.point.UpperBand)}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-gray-500">{t('bollingerBands.signals.ma20', 'MA20')}</p>
+                                                    <p className="font-medium text-blue-600 dark:text-blue-400">${formatPrice(signal.point.MA20)}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-gray-500">{t('bollingerBands.signals.lower', 'Lower')}</p>
+                                                    <p className="font-medium text-green-600 dark:text-green-400">${formatPrice(signal.point.LowerBand)}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                                    {t('bollingerBands.signals.noSignals', 'No signals found at the moment.')}
                                 </div>
                             )}
                         </div>

@@ -66,11 +66,20 @@
     "selectCrypto": "Select Cryptocurrency",
     "chartDescription": "7-day, 25-day, and 99-day moving averages",
     "noData": "No moving average data available for this coin",
+    "signals": {
+      "title": "Moving Average Signals",
+      "description": "Coins with Bullish or Bearish moving average trends",
+      "noSignals": "No signals found at the moment.",
+      "all": "All",
+      "bullish": "Bullish",
+      "bearish": "Bearish",
+      "mixed": "Mixed"
+    },
     "errorLoading": "Failed to load moving averages data"
   },
   "exponentialMovingAverages": {
     "title": "Exponential Moving Averages",
-    "description" : "View exponential moving average trends for different cryptocurrencies",
+    "description": "View exponential moving average trends for different cryptocurrencies",
     "selectCrypto": "Select Cryptocurrency",
     "chartDescription": "7-day, 25-day, and 99-day exponential moving averages",
     "noData": "No exponential moving average data available for this coin",
@@ -80,7 +89,24 @@
     "title": "Bollinger Bands",
     "description": "View Bollinger Bands analysis for different cryptocurrencies",
     "errorLoading": "Failed to load Bollinger Bands data",
-    "chartDescription": "Upper band, MA20, and Lower band"
+    "chartDescription": "Upper band, MA20, and Lower band",
+    "signals": {
+      "title": "Bollinger Band Signals",
+      "description": "Coins breaking out of Bollinger Bands",
+      "noSignals": "No signals found at the moment.",
+      "filter": {
+        "all": "All",
+        "above": "Above",
+        "below": "Below",
+        "inside": "Inside"
+      },
+      "aboveUpper": "Above Upper",
+      "belowLower": "Below Lower",
+      "inside": "Inside",
+      "upper": "Upper",
+      "lower": "Lower",
+      "ma20": "MA20"
+    }
   },
   "common": {
     "back": "Back",

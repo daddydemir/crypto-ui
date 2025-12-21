@@ -16,3 +16,21 @@ export async function getBollingerBands(coinId: string): Promise<BollingerBandsP
 
     return response.json();
 }
+
+export interface BollingerBandSignal {
+    id: string;
+    name: string;
+    symbol: string;
+    price: number;
+    point: BollingerBandsPoint;
+}
+
+export async function getBollingerBandSignals(): Promise<BollingerBandSignal[]> {
+    const response = await fetch(`${API_BASE_URL}/coins/bollinger-bands`);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch Bollinger Bands signals');
+    }
+
+    return response.json();
+}
