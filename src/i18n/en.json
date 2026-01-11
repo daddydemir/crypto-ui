@@ -9,7 +9,8 @@
       "ma": "Moving Average",
       "ema": "Exponential MA",
       "bb": "Bollinger Bands",
-      "dc": "Donchian Channels"
+      "dc": "Donchian Channels",
+      "atr": "ATR"
     }
   },
   "topbar": {
@@ -136,6 +137,17 @@
       "middle": "Middle",
       "lower": "Lower"
     }
+  },
+  "atr": {
+    "title": "Average True Range",
+    "description": "View ATR volatility analysis for different cryptocurrencies",
+    "errorLoading": "Failed to load ATR data",
+    "chartDescription": "ATR measures market volatility",
+    "current": "Current ATR",
+    "highest": "Highest",
+    "lowest": "Lowest",
+    "average": "Average",
+    "range": "Range"
   },
   "common": {
     "back": "Back",

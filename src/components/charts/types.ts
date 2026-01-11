@@ -3,6 +3,7 @@ import type {MovingAveragePoint} from "@/services/movingAverageService.ts";
 import type {MovingAveragePoint as EMA} from "@/services/exponentialMAService.ts";
 import type {RSIHistoryPoint} from "@/services/rsiService.ts";
 import type {DonchianChannelsPoint} from "@/services/donchianChannelsService.ts";
+import type {ATRPoint} from "@/services/atrService.ts";
 
 export type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -171,6 +172,36 @@ export function mapDonchianToChartPoints(
 
         const point: ChartPoint = {
             date: p.Date,
+            series
+        }
+
+        if (y !== undefined) point.y = y
+        return point
+    })
+}
+
+export function mapATRToChartPoints(
+    data: ATRPoint[],
+    options?: { includeY?: boolean | ((p: ATRPoint) => number | null) }
+): ChartPoint[] {
+    if (!data || data.length === 0) return []
+
+    return data.map((p) => {
+        const series: Record<string, number | null> = {
+            atr: p.Point ?? null
+        }
+
+        let y: number | null | undefined
+        if (options?.includeY !== undefined) {
+            if (typeof options.includeY === 'function') {
+                y = options.includeY(p)
+            } else if (options.includeY === true) {
+                y = p.Point ?? null
+            }
+        }
+
+        const point: ChartPoint = {
+            date: p.Time,
             series
         }
 

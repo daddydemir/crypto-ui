@@ -9,7 +9,8 @@
       "ma": "Hareketli Ortalama",
       "ema": "Üstel Hareketli Ortalama",
       "bb": "Bollinger Bantları",
-      "dc": "Dochian Kanalları"
+      "dc": "Dochian Kanalları",
+      "atr": "ATR"
     }
   },
   "topbar": {
@@ -136,6 +137,17 @@
       "middle": "Orta",
       "lower": "Alt"
     }
+  },
+  "atr": {
+    "title": "Ortalama Gerçek Aralık",
+    "description": "Farklı kripto paralar için ATR volatilite analizini görüntüleyin",
+    "errorLoading": "ATR verisi yüklenemedi",
+    "chartDescription": "ATR piyasa volatilitesini ölçer",
+    "current": "Güncel ATR",
+    "highest": "En Yüksek",
+    "lowest": "En Düşük",
+    "average": "Ortalama",
+    "range": "Aralık"
   },
   "common": {
     "back": "Geri",
