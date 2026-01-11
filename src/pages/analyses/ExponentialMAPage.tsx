@@ -6,9 +6,9 @@ import { TrendingUp, TrendingDown, Calendar, Maximize2 } from "lucide-react"
 import { getTopCoins } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
-import {getMovingAverages, type MovingAveragePoint} from "@/services/exponentialMAService.ts";
+import { getMovingAverages, type MovingAveragePoint } from "@/services/exponentialMAService.ts";
 import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
-import {mapExponentialMAToChartPoints} from "@/components/charts/types.ts";
+import { mapExponentialMAToChartPoints } from "@/components/charts/types.ts";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -52,15 +52,15 @@ const ExponentialMAPage: React.FC = () => {
                 break
             case '90d':
                 cutoffDate.setDate(now.getDate() - 90)
-                sampleRate = 2
+                sampleRate = 1
                 break
             case '1y':
                 cutoffDate.setFullYear(now.getFullYear() - 1)
-                sampleRate = 7
+                sampleRate = 1
                 break
             case 'all':
                 cutoffDate = new Date(0)
-                sampleRate = Math.ceil(data.length / 200)
+                sampleRate = Math.ceil(data.length / 1000)
                 break
         }
 
@@ -159,7 +159,7 @@ const ExponentialMAPage: React.FC = () => {
                     data={mapExponentialMAToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={selectedCoin.symbol}
-                    analyseType = 'exponentialMovingAverages'
+                    analyseType='exponentialMovingAverages'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
@@ -234,11 +234,10 @@ const ExponentialMAPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                                     ${stats.ma7Current.toFixed(2)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma7Change > 0 ? 'text-green-600 dark:text-green-400' :
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma7Change > 0 ? 'text-green-600 dark:text-green-400' :
                                         stats.ma7Change < 0 ? 'text-red-600 dark:text-red-400' :
                                             'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                    }`}>
                                     {stats.ma7Change > 0 ? <TrendingUp className="w-4 h-4" /> :
                                         stats.ma7Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {stats.ma7Change > 0 ? '+' : ''}${stats.ma7Change.toFixed(2)}
@@ -252,11 +251,10 @@ const ExponentialMAPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                                     ${stats.ma25Current.toFixed(2)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma25Change > 0 ? 'text-green-600 dark:text-green-400' :
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma25Change > 0 ? 'text-green-600 dark:text-green-400' :
                                         stats.ma25Change < 0 ? 'text-red-600 dark:text-red-400' :
                                             'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                    }`}>
                                     {stats.ma25Change > 0 ? <TrendingUp className="w-4 h-4" /> :
                                         stats.ma25Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {stats.ma25Change > 0 ? '+' : ''}${stats.ma25Change.toFixed(2)}
@@ -270,11 +268,10 @@ const ExponentialMAPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                                     ${stats.ma99Current.toFixed(2)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    stats.ma99Change > 0 ? 'text-green-600 dark:text-green-400' :
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma99Change > 0 ? 'text-green-600 dark:text-green-400' :
                                         stats.ma99Change < 0 ? 'text-red-600 dark:text-red-400' :
                                             'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                    }`}>
                                     {stats.ma99Change > 0 ? <TrendingUp className="w-4 h-4" /> :
                                         stats.ma99Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {stats.ma99Change > 0 ? '+' : ''}${stats.ma99Change.toFixed(2)}
@@ -301,11 +298,10 @@ const ExponentialMAPage: React.FC = () => {
                                             <button
                                                 key={btn.value}
                                                 onClick={() => setTimeRange(btn.value)}
-                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                                                    timeRange === btn.value
+                                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${timeRange === btn.value
                                                         ? 'bg-blue-500 text-white'
                                                         : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                                }`}
+                                                    }`}
                                             >
                                                 {btn.label}
                                             </button>

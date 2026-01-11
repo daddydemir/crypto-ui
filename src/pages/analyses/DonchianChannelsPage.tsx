@@ -53,15 +53,15 @@ const DonchianChannelsPage: React.FC = () => {
                 break
             case '90d':
                 cutoffDate.setDate(now.getDate() - 90)
-                sampleRate = 2
+                sampleRate = 1
                 break
             case '1y':
                 cutoffDate.setFullYear(now.getFullYear() - 1)
-                sampleRate = 7
+                sampleRate = 1
                 break
             case 'all':
                 cutoffDate = new Date(0)
-                sampleRate = Math.ceil(data.length / 200)
+                sampleRate = Math.ceil(data.length / 1000)
                 break
         }
 
