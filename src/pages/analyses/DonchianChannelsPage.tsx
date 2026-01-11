@@ -2,21 +2,20 @@ import React, { useMemo, useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Brush } from "recharts"
 import { TrendingUp, TrendingDown, Calendar, Maximize2 } from "lucide-react"
-import { getMovingAverages, getMovingAverageSignals, type MovingAveragePoint, type MovingAverageSignal } from "@/services/movingAverageService"
+import { getDonchianChannels, type DonchianChannelsPoint } from "@/services/donchianChannelsService.ts"
 import { getTopCoins } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
 import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
-import { mapMovingAverageToChartPoints } from "@/components/charts/types.ts";
+import { mapDonchianToChartPoints } from "@/components/charts/types.ts";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
-const MovingAveragePage: React.FC = () => {
+const DonchianChannelsPage: React.FC = () => {
     const { t } = useTranslation()
-    const [showFullScreenChart, setShowFullScreenChart] = useState(false)
     const [selectedCoinId, setSelectedCoinId] = useState<string>()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
-    const [signalFilter, setSignalFilter] = useState<'all' | 'bullish' | 'bearish' | 'mixed'>('all')
+    const [showFullScreenChart, setShowFullScreenChart] = useState(false)
 
     const { data: coins, loading: coinsLoading } = useCachedData({
         cacheKey: 'top-coins',
@@ -29,14 +28,11 @@ const MovingAveragePage: React.FC = () => {
         }
     }, [coins, selectedCoinId])
 
-    const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<MovingAveragePoint[]>({
-        cacheKey: `moving-averages-${selectedCoinId}`,
-        fetchFn: () => selectedCoinId ? getMovingAverages(selectedCoinId) : Promise.resolve([])
-    })
+    const selectedCoin = coins?.find(c => c.id === selectedCoinId)
 
-    const { data: signals, loading: signalsLoading, refresh: refreshSignals, lastUpdateText: signalsLastUpdate } = useCachedData<MovingAverageSignal[]>({
-        cacheKey: 'moving-average-signals',
-        fetchFn: getMovingAverageSignals
+    const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<DonchianChannelsPoint[]>({
+        cacheKey: `donchian-channels-${selectedCoin?.symbol}`,
+        fetchFn: () => selectedCoin?.symbol ? getDonchianChannels(selectedCoin.symbol) : Promise.resolve([])
     })
 
     const filteredData = useMemo(() => {
@@ -69,7 +65,7 @@ const MovingAveragePage: React.FC = () => {
                 break
         }
 
-        const filtered = data.filter(item => new Date(item.date) >= cutoffDate)
+        const filtered = data.filter(item => new Date(item.Date) >= cutoffDate)
 
         if (sampleRate > 1) {
             return filtered.filter((_, index) => index % sampleRate === 0)
@@ -77,8 +73,6 @@ const MovingAveragePage: React.FC = () => {
 
         return filtered
     }, [data, timeRange])
-
-    const selectedCoin = coins?.find(c => c.id === selectedCoinId)
 
     const formatPrice = (value: number): string => {
         if (value >= 1) {
@@ -89,28 +83,31 @@ const MovingAveragePage: React.FC = () => {
 
     const stats = useMemo(() => {
         if (filteredData.length === 0) return {
-            ma7Current: 0, ma7Change: 0,
-            ma25Current: 0, ma25Change: 0,
-            ma99Current: 0, ma99Change: 0
+            upperCurrent: 0, upperChange: 0,
+            middleCurrent: 0, middleChange: 0,
+            lowerCurrent: 0, lowerChange: 0,
+            priceCurrent: 0, priceChange: 0
         }
 
         const latest = filteredData[filteredData.length - 1]
         const previous = filteredData.length > 1 ? filteredData[filteredData.length - 2] : latest
 
         return {
-            ma7Current: latest.ma7,
-            ma7Change: latest.ma7 - previous.ma7,
-            ma25Current: latest.ma25,
-            ma25Change: latest.ma25 - previous.ma25,
-            ma99Current: latest.ma99,
-            ma99Change: latest.ma99 - previous.ma99
+            upperCurrent: latest.Upper,
+            upperChange: latest.Upper - previous.Upper,
+            middleCurrent: latest.Middle,
+            middleChange: latest.Middle - previous.Middle,
+            lowerCurrent: latest.Lower,
+            lowerChange: latest.Lower - previous.Lower,
+            priceCurrent: latest.Price,
+            priceChange: latest.Price - previous.Price
         }
     }, [filteredData])
 
     const yAxisDomain = useMemo(() => {
         if (filteredData.length === 0) return ['auto', 'auto']
 
-        const allValues = filteredData.flatMap(d => [d.ma7, d.ma25, d.ma99])
+        const allValues = filteredData.flatMap(d => [d.Upper, d.Middle, d.Lower, d.Price])
         const minValue = Math.min(...allValues)
         const maxValue = Math.max(...allValues)
 
@@ -133,21 +130,24 @@ const MovingAveragePage: React.FC = () => {
             return (
                 <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                        {new Date(data.date).toLocaleDateString('tr-TR', {
+                        {new Date(data.Date).toLocaleDateString('tr-TR', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         })}
                     </p>
                     <div className="space-y-1">
+                        <p className="text-sm font-semibold text-red-600 dark:text-red-400">
+                            Upper: ${formatPrice(data.Upper)}
+                        </p>
                         <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                            MA 7: ${data.ma7.toFixed(2)}
+                            Middle: ${formatPrice(data.Middle)}
                         </p>
                         <p className="text-sm font-semibold text-green-600 dark:text-green-400">
-                            MA 25: ${data.ma25.toFixed(2)}
+                            Lower: ${formatPrice(data.Lower)}
                         </p>
-                        <p className="text-sm font-semibold text-orange-600 dark:text-orange-400">
-                            MA 99: ${data.ma99.toFixed(2)}
+                        <p className="text-sm font-semibold text-purple-600 dark:text-purple-400">
+                            Price: ${formatPrice(data.Price)}
                         </p>
                     </div>
                 </div>
@@ -168,10 +168,10 @@ const MovingAveragePage: React.FC = () => {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
             {showFullScreenChart && data && selectedCoin && (
                 <FullScreenChart
-                    data={mapMovingAverageToChartPoints(data)}
+                    data={mapDonchianToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={selectedCoin.symbol}
-                    analyseType='movingAverages'
+                    analyseType='donchianChannels'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
@@ -180,10 +180,10 @@ const MovingAveragePage: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {t('movingAverages.title', 'Moving Averages')}
+                                {t('donchianChannels.title', 'Donchian Channels')}
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                {t('movingAverages.description', 'View moving average trends for different cryptocurrencies')}
+                                {t('donchianChannels.description', 'View Donchian Channels analysis for different cryptocurrencies')}
                             </p>
                         </div>
 
@@ -225,7 +225,7 @@ const MovingAveragePage: React.FC = () => {
                 {error && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
                         <p className="text-red-600 dark:text-red-400">
-                            {error.message || t('movingAverages.errorLoading', 'Failed to load moving averages data')}
+                            {error.message || t('donchianChannels.errorLoading', 'Failed to load Donchian Channels data')}
                         </p>
                     </div>
                 )}
@@ -237,55 +237,72 @@ const MovingAveragePage: React.FC = () => {
                 ) : (
                     <>
                         {/* Stats Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                                    MA 7 ({t('common.current', 'Current')})
+                                    Upper Channel
                                 </div>
-                                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                                    ${stats.ma7Current.toFixed(2)}
+                                <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                                    ${formatPrice(stats.upperCurrent)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma7Change > 0 ? 'text-green-600 dark:text-green-400' :
-                                    stats.ma7Change < 0 ? 'text-red-600 dark:text-red-400' :
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.upperChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.upperChange < 0 ? 'text-red-600 dark:text-red-400' :
                                         'text-gray-600 dark:text-gray-400'
                                     }`}>
-                                    {stats.ma7Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                        stats.ma7Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
-                                    {stats.ma7Change > 0 ? '+' : ''}${stats.ma7Change.toFixed(2)}
+                                    {stats.upperChange > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                        stats.upperChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.upperChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.upperChange))}
                                 </div>
                             </div>
 
                             <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                                    MA 25 ({t('common.current', 'Current')})
+                                    Middle Line
                                 </div>
-                                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                                    ${stats.ma25Current.toFixed(2)}
+                                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                                    ${formatPrice(stats.middleCurrent)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma25Change > 0 ? 'text-green-600 dark:text-green-400' :
-                                    stats.ma25Change < 0 ? 'text-red-600 dark:text-red-400' :
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.middleChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.middleChange < 0 ? 'text-red-600 dark:text-red-400' :
                                         'text-gray-600 dark:text-gray-400'
                                     }`}>
-                                    {stats.ma25Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                        stats.ma25Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
-                                    {stats.ma25Change > 0 ? '+' : ''}${stats.ma25Change.toFixed(2)}
+                                    {stats.middleChange > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                        stats.middleChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.middleChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.middleChange))}
                                 </div>
                             </div>
 
                             <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                                    MA 99 ({t('common.current', 'Current')})
+                                    Lower Channel
                                 </div>
-                                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                                    ${stats.ma99Current.toFixed(2)}
+                                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                                    ${formatPrice(stats.lowerCurrent)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.ma99Change > 0 ? 'text-green-600 dark:text-green-400' :
-                                    stats.ma99Change < 0 ? 'text-red-600 dark:text-red-400' :
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.lowerChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.lowerChange < 0 ? 'text-red-600 dark:text-red-400' :
                                         'text-gray-600 dark:text-gray-400'
                                     }`}>
-                                    {stats.ma99Change > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                        stats.ma99Change < 0 ? <TrendingDown className="w-4 h-4" /> : null}
-                                    {stats.ma99Change > 0 ? '+' : ''}${stats.ma99Change.toFixed(2)}
+                                    {stats.lowerChange > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                        stats.lowerChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.lowerChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.lowerChange))}
+                                </div>
+                            </div>
+
+                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                    Current Price
+                                </div>
+                                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                                    ${formatPrice(stats.priceCurrent)}
+                                </div>
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${stats.priceChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                    stats.priceChange < 0 ? 'text-red-600 dark:text-red-400' :
+                                        'text-gray-600 dark:text-gray-400'
+                                    }`}>
+                                    {stats.priceChange > 0 ? <TrendingUp className="w-4 h-4" /> :
+                                        stats.priceChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                    {stats.priceChange > 0 ? '+' : ''}${formatPrice(Math.abs(stats.priceChange))}
                                 </div>
                             </div>
                         </div>
@@ -295,10 +312,10 @@ const MovingAveragePage: React.FC = () => {
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                                 <div>
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                        {selectedCoin?.symbol.toUpperCase()} {t('movingAverages.title', 'Moving Averages')}
+                                        {selectedCoin?.symbol.toUpperCase()} {t('donchianChannels.title', 'Donchian Channels')}
                                     </h2>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        {t('movingAverages.chartDescription', '7-day, 25-day, and 99-day moving averages')}
+                                        {t('donchianChannels.chartDescription', 'Upper channel, middle line, lower channel and price')}
                                     </p>
                                 </div>
 
@@ -319,7 +336,7 @@ const MovingAveragePage: React.FC = () => {
                                         ))}
                                         <button
                                             onClick={() => setShowFullScreenChart(true)}
-                                            className="top-4 right-4 p-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition z-10"
+                                            className="p-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition"
                                             title={t('common.fullScreen', 'Full Screen')}
                                         >
                                             <Maximize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -333,7 +350,7 @@ const MovingAveragePage: React.FC = () => {
                                     <LineChart data={filteredData}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                         <XAxis
-                                            dataKey="date"
+                                            dataKey="Date"
                                             tickFormatter={formatXAxis}
                                             stroke="#9CA3AF"
                                             style={{ fontSize: '12px' }}
@@ -341,7 +358,7 @@ const MovingAveragePage: React.FC = () => {
                                         <YAxis
                                             stroke="#9CA3AF"
                                             style={{ fontSize: '12px' }}
-                                            tickFormatter={(value) => `$${value.toFixed(0)}`}
+                                            tickFormatter={(value) => `$${value.toFixed(2)}`}
                                             domain={yAxisDomain}
                                         />
                                         <Tooltip content={<CustomTooltip />} />
@@ -350,7 +367,7 @@ const MovingAveragePage: React.FC = () => {
                                         />
                                         {filteredData.length > 50 && (
                                             <Brush
-                                                dataKey="date"
+                                                dataKey="Date"
                                                 height={30}
                                                 stroke="#3B82F6"
                                                 tickFormatter={formatXAxis}
@@ -358,28 +375,37 @@ const MovingAveragePage: React.FC = () => {
                                         )}
                                         <Line
                                             type="monotone"
-                                            dataKey="ma7"
+                                            dataKey="Upper"
+                                            stroke="#EF4444"
+                                            strokeWidth={2}
+                                            name="Upper Channel"
+                                            dot={false}
+                                            activeDot={{ r: 6 }}
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="Middle"
                                             stroke="#3B82F6"
                                             strokeWidth={2}
-                                            name="MA 7"
+                                            name="Middle Line"
                                             dot={false}
                                             activeDot={{ r: 6 }}
                                         />
                                         <Line
                                             type="monotone"
-                                            dataKey="ma25"
+                                            dataKey="Lower"
                                             stroke="#10B981"
                                             strokeWidth={2}
-                                            name="MA 25"
+                                            name="Lower Channel"
                                             dot={false}
                                             activeDot={{ r: 6 }}
                                         />
                                         <Line
                                             type="monotone"
-                                            dataKey="ma99"
-                                            stroke="#F97316"
+                                            dataKey="Price"
+                                            stroke="#8B5CF6"
                                             strokeWidth={2}
-                                            name="MA 99"
+                                            name="Price"
                                             dot={false}
                                             activeDot={{ r: 6 }}
                                         />
@@ -388,117 +414,8 @@ const MovingAveragePage: React.FC = () => {
                             ) : (
                                 <div className="flex items-center justify-center h-96">
                                     <p className="text-gray-500 dark:text-gray-400">
-                                        {t('movingAverages.noData', 'No moving average data available for this coin')}
+                                        {t('common.noData', 'No Donchian Channels data available for this coin')}
                                     </p>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Signals Section */}
-                        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
-                            <div className="flex items-center justify-between mb-4">
-                                <div>
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                        {t('movingAverages.signals.title', 'Moving Average Signals')}
-                                    </h2>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        {t('movingAverages.signals.description', 'Coins with Bullish or Bearish moving average trends')}
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-                                        {(['all', 'bullish', 'bearish', 'mixed'] as const).map((filter) => (
-                                            <button
-                                                key={filter}
-                                                onClick={() => setSignalFilter(filter)}
-                                                className={`px-3 py-1 text-xs font-medium rounded-md transition ${signalFilter === filter
-                                                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm'
-                                                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                                                    }`}
-                                            >
-                                                {t(`movingAverages.signals.${filter === 'all' ? 'all' : filter}`, filter.charAt(0).toUpperCase() + filter.slice(1))}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <RefreshButton
-                                        onRefresh={refreshSignals}
-                                        refreshing={false}
-                                        lastUpdateText={signalsLastUpdate}
-                                    />
-                                </div>
-                            </div>
-
-                            {signalsLoading ? (
-                                <div className="flex items-center justify-center h-24">
-                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                                </div>
-                            ) : signals && signals.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {signals.filter(signal => {
-                                        if (signalFilter === 'all') return true;
-                                        const latest = signal.points[signal.points.length - 1];
-                                        const isBullish = latest.ma7 > latest.ma25 && latest.ma25 > latest.ma99;
-                                        const isBearish = latest.ma7 < latest.ma25 && latest.ma25 < latest.ma99;
-
-                                        if (signalFilter === 'bullish') return isBullish;
-                                        if (signalFilter === 'bearish') return isBearish;
-                                        if (signalFilter === 'mixed') return !isBullish && !isBearish;
-                                        return true;
-                                    }).map((signal) => {
-                                        const latest = signal.points[signal.points.length - 1];
-                                        // Trend Logic: 
-                                        // Bullish: MA7 > MA25 > MA99
-                                        // Bearish: MA7 < MA25 < MA99
-                                        const isBullish = latest.ma7 > latest.ma25 && latest.ma25 > latest.ma99;
-                                        const isBearish = latest.ma7 < latest.ma25 && latest.ma25 < latest.ma99;
-
-                                        return (
-                                            <div
-                                                key={signal.id}
-                                                onClick={() => setSelectedCoinId(signal.id)}
-                                                className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition"
-                                            >
-                                                <div className="flex justify-between items-start mb-2">
-                                                    <div>
-                                                        <h3 className="font-semibold text-gray-900 dark:text-gray-100">{signal.name} ({signal.symbol})</h3>
-                                                        <p className="text-sm text-gray-500">${formatPrice(signal.price)}</p>
-                                                    </div>
-                                                    {isBullish ? (
-                                                        <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                                                            {t('movingAverages.signals.bullish', 'Bullish Trend')}
-                                                        </span>
-                                                    ) : isBearish ? (
-                                                        <span className="px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded-full">
-                                                            {t('movingAverages.signals.bearish', 'Bearish Trend')}
-                                                        </span>
-                                                    ) : (
-                                                        <span className="px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400 rounded-full">
-                                                            {t('movingAverages.signals.mixed', 'Mixed')}
-                                                        </span>
-                                                    )}
-                                                </div>
-
-                                                <div className="grid grid-cols-3 gap-2 text-xs mt-3">
-                                                    <div>
-                                                        <p className="text-gray-500">MA7</p>
-                                                        <p className="font-medium text-blue-600 dark:text-blue-400">${formatPrice(latest.ma7)}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-gray-500">MA25</p>
-                                                        <p className="font-medium text-green-600 dark:text-green-400">${formatPrice(latest.ma25)}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-gray-500">MA99</p>
-                                                        <p className="font-medium text-orange-600 dark:text-orange-400">${formatPrice(latest.ma99)}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ) : (
-                                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                                    {t('movingAverages.signals.noSignals', 'No signals found at the moment.')}
                                 </div>
                             )}
                         </div>
@@ -509,4 +426,4 @@ const MovingAveragePage: React.FC = () => {
     )
 }
 
-export default MovingAveragePage
+export default DonchianChannelsPage

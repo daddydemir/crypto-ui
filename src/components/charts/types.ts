@@ -2,6 +2,7 @@ import type {BollingerBandsPoint} from "@/services/bollingerBandsService.ts";
 import type {MovingAveragePoint} from "@/services/movingAverageService.ts";
 import type {MovingAveragePoint as EMA} from "@/services/exponentialMAService.ts";
 import type {RSIHistoryPoint} from "@/services/rsiService.ts";
+import type {DonchianChannelsPoint} from "@/services/donchianChannelsService.ts";
 
 export type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -139,6 +140,37 @@ export function mapRsiToChartPoints(
 
         const point: ChartPoint = {
             date: p.date,
+            series
+        }
+
+        if (y !== undefined) point.y = y
+        return point
+    })
+}
+
+export function mapDonchianToChartPoints(
+    data: DonchianChannelsPoint[],
+    options?: { includeY?: 'Upper' | 'Middle' | 'Lower' | 'Price' | ((p: DonchianChannelsPoint) => number | null) }
+): ChartPoint[] {
+    return data.map((p) => {
+        const series = {
+            Upper: p.Upper,
+            Middle: p.Middle,
+            Lower: p.Lower,
+            Price: p.Price
+        } as Record<string, number | null>
+
+        let y: number | null | undefined
+        if (options?.includeY) {
+            if (typeof options.includeY === 'function') {
+                y = options.includeY(p)
+            } else {
+                y = series[options.includeY] ?? null
+            }
+        }
+
+        const point: ChartPoint = {
+            date: p.Date,
             series
         }
 

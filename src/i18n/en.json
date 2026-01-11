@@ -7,7 +7,9 @@
     "technical": {
       "rsi": "RSI",
       "ma": "Moving Average",
-      "ema": "Exponential MA"
+      "ema": "Exponential MA",
+      "bb": "Bollinger Bands",
+      "dc": "Donchian Channels"
     }
   },
   "topbar": {
@@ -106,6 +108,33 @@
       "upper": "Upper",
       "lower": "Lower",
       "ma20": "MA20"
+    }
+  },
+  "donchianChannels": {
+    "title": "Donchian Channels",
+    "description": "View Donchian Channels analysis for different cryptocurrencies",
+    "errorLoading": "Failed to load Donchian Channels data",
+    "chartDescription": "Upper channel, middle line, lower channel and price",
+    "upperChannel": "Upper Channel",
+    "middleLine": "Middle Line",
+    "lowerChannel": "Lower Channel",
+    "currentPrice": "Current Price",
+    "signals": {
+      "title": "Donchian Channel Signals",
+      "description": "Coins breaking out of Donchian Channels",
+      "noSignals": "No signals found at the moment.",
+      "filter": {
+        "all": "All",
+        "above": "Above Upper",
+        "below": "Below Lower",
+        "inside": "Inside Channel"
+      },
+      "aboveUpper": "Above Upper",
+      "belowLower": "Below Lower",
+      "inside": "Inside Channel",
+      "upper": "Upper",
+      "middle": "Middle",
+      "lower": "Lower"
     }
   },
   "common": {

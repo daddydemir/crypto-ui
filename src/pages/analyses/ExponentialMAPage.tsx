@@ -95,6 +95,18 @@ const ExponentialMAPage: React.FC = () => {
         }
     }, [filteredData])
 
+    const yAxisDomain = useMemo(() => {
+        if (filteredData.length === 0) return ['auto', 'auto']
+
+        const allValues = filteredData.flatMap(d => [d.ma7, d.ma25, d.ma99])
+        const minValue = Math.min(...allValues)
+        const maxValue = Math.max(...allValues)
+
+        // Add 2% padding for better visualization
+        const padding = (maxValue - minValue) * 0.02
+        return [minValue - padding, maxValue + padding]
+    }, [filteredData])
+
     const formatXAxis = (dateStr: string) => {
         const date = new Date(dateStr)
         if (timeRange === '7d' || timeRange === '30d') {
@@ -323,6 +335,7 @@ const ExponentialMAPage: React.FC = () => {
                                             stroke="#9CA3AF"
                                             style={{ fontSize: '12px' }}
                                             tickFormatter={(value) => `$${value.toFixed(0)}`}
+                                            domain={yAxisDomain}
                                         />
                                         <Tooltip content={<CustomTooltip />} />
                                         <Legend

@@ -8,6 +8,7 @@ import MovingAveragePage from './pages/analyses/MovingAveragePage';
 import BollingerBandsPage from '@/pages/analyses/BollingerBandsPage';
 import ExponentialMAPage from "@/pages/analyses/ExponentialMAPage.tsx";
 import AlarmsPage from "@/pages/alarms/AlarmsPage.tsx";
+import DonchianChannelsPage from '@/pages/analyses/DonchianChannelsPage';
 
 
 const SettingsPage = () => <div>Ayarlar</div>;
@@ -22,6 +23,7 @@ function App() {
                         <Route path="/analyses/ma" element={<MovingAveragePage />} />
                         <Route path="/analyses/ema" element={<ExponentialMAPage />} />
                         <Route path="/analyses/bollinger-bands" element={<BollingerBandsPage />} />
+                        <Route path="/analyses/donchian-channels" element={<DonchianChannelsPage />} />
                         <Route path="/coins" element={<CoinsPage />} />
                         <Route path="/alarms" element={<AlarmsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />

@@ -7,7 +7,9 @@
     "technical": {
       "rsi": "RSI",
       "ma": "Hareketli Ortalama",
-      "ema": "Üstel Hareketli Ortalama"
+      "ema": "Üstel Hareketli Ortalama",
+      "bb": "Bollinger Bantları",
+      "dc": "Dochian Kanalları"
     }
   },
   "topbar": {
@@ -106,6 +108,33 @@
       "upper": "Üst",
       "lower": "Alt",
       "ma20": "MA20"
+    }
+  },
+  "donchianChannels": {
+    "title": "Donchian Kanalları",
+    "description": "Farklı kripto paralar için Donchian Kanalları analizini görüntüleyin",
+    "errorLoading": "Donchian Kanalları verisi yüklenemedi",
+    "chartDescription": "Üst kanal, orta çizgi, alt kanal ve fiyat",
+    "upperChannel": "Üst Kanal",
+    "middleLine": "Orta Çizgi",
+    "lowerChannel": "Alt Kanal",
+    "currentPrice": "Güncel Fiyat",
+    "signals": {
+      "title": "Donchian Kanal Sinyalleri",
+      "description": "Donchian Kanallarını kıran coinler",
+      "noSignals": "Şu anda sinyal bulunamadı.",
+      "filter": {
+        "all": "Hepsi",
+        "above": "Üst Kanal Üstünde",
+        "below": "Alt Kanal Altında",
+        "inside": "Kanal İçinde"
+      },
+      "aboveUpper": "Üst Kanal Üstünde",
+      "belowLower": "Alt Kanal Altında",
+      "inside": "Kanal İçi",
+      "upper": "Üst",
+      "middle": "Orta",
+      "lower": "Alt"
     }
   },
   "common": {
