@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {ChevronDown, ChevronRight, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin,} from "lucide-react";
-import {useTranslation} from "react-i18next";
+import { ChevronDown, ChevronRight, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface MenuItem {
     id: string;
@@ -29,9 +29,10 @@ const Sidebar: React.FC = () => {
                 { name: t("sidebar.technical.rsi"), path: "/analyses/rsi" },
                 { name: t("sidebar.technical.ma"), path: "/analyses/ma" },
                 { name: t("sidebar.technical.ema"), path: "/analyses/ema" },
-                { name: t("sidebar.technical.bb"), path: '/analyses/bollinger-bands'},
-                { name: t("sidebar.technical.dc"), path: '/analyses/donchian-channels'},
-                { name: t("sidebar.technical.atr"), path: '/analyses/atr'},
+                { name: t("sidebar.technical.bb"), path: '/analyses/bollinger-bands' },
+                { name: t("sidebar.technical.dc"), path: '/analyses/donchian-channels' },
+                { name: t("sidebar.technical.atr"), path: '/analyses/atr' },
+                { name: t("sidebar.technical.macd"), path: '/analyses/macd' },
             ],
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
@@ -56,9 +57,8 @@ const Sidebar: React.FC = () => {
                         return (
                             <div key={menu.id}>
                                 <div
-                                    className={`flex items-center justify-between p-2 cursor-pointer rounded-md ${
-                                        isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`}
+                                    className={`flex items-center justify-between p-2 cursor-pointer rounded-md ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        }`}
                                     onClick={() => toggleMenu(menu.id)}
                                 >
                                     <div className="flex items-center space-x-2">
@@ -78,11 +78,10 @@ const Sidebar: React.FC = () => {
                                             <Link
                                                 key={child.path}
                                                 to={child.path}
-                                                className={`block p-2 text-sm rounded-md transition-colors ${
-                                                    location.pathname === child.path
+                                                className={`block p-2 text-sm rounded-md transition-colors ${location.pathname === child.path
                                                         ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                         : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
-                                                }`}
+                                                    }`}
                                             >
                                                 {child.name}
                                             </Link>
@@ -97,11 +96,10 @@ const Sidebar: React.FC = () => {
                         <Link
                             key={menu.id}
                             to={menu.path!}
-                            className={`flex items-center space-x-2 p-2 rounded-md ${
-                                isActive
+                            className={`flex items-center space-x-2 p-2 rounded-md ${isActive
                                     ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                     : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
-                            }`}
+                                }`}
                         >
                             <menu.icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                             <span>{menu.title}</span>

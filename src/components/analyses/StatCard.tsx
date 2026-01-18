@@ -6,7 +6,7 @@ interface StatCardProps {
     value: string | number
     change?: number
     changeValue?: string
-    color: 'blue' | 'green' | 'orange' | 'red'
+    color: 'blue' | 'green' | 'orange' | 'red' | 'purple'
     icon?: ReactNode
 }
 
@@ -30,6 +30,11 @@ const colorClasses = {
         text: 'text-red-600 dark:text-red-400',
         bg: 'bg-red-50 dark:bg-red-900/20',
         border: 'border-red-200 dark:border-red-800'
+    },
+    purple: {
+        text: 'text-purple-600 dark:text-purple-400',
+        bg: 'bg-purple-50 dark:bg-purple-900/20',
+        border: 'border-purple-200 dark:border-purple-800'
     }
 }
 

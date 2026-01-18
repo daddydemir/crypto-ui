@@ -10,7 +10,8 @@
       "ema": "Üstel Hareketli Ortalama",
       "bb": "Bollinger Bantları",
       "dc": "Dochian Kanalları",
-      "atr": "ATR"
+      "atr": "ATR",
+      "macd": "MACD"
     }
   },
   "topbar": {
@@ -148,6 +149,22 @@
     "lowest": "En Düşük",
     "average": "Ortalama",
     "range": "Aralık"
+  },
+  "macd": {
+    "title": "MACD",
+    "description": "Farklı kripto paralar için Hareketli Ortalama Yakınsama Sapma analizini görüntüleyin",
+    "errorLoading": "MACD verisi yüklenemedi",
+    "chartDescription": "MACD çizgisi, Sinyal çizgisi ve Histogram",
+    "signal": "Sinyal",
+    "histogram": "Histogram",
+    "signals": {
+      "title": "MACD Sinyalleri",
+      "description": "Yükseliş veya düşüş MACD kesişimi olan coinler",
+      "noSignals": "Şu anda sinyal bulunamadı.",
+      "all": "Hepsi",
+      "bullish": "Yükseliş",
+      "bearish": "Düşüş"
+    }
   },
   "common": {
     "back": "Geri",

@@ -10,7 +10,8 @@
       "ema": "Exponential MA",
       "bb": "Bollinger Bands",
       "dc": "Donchian Channels",
-      "atr": "ATR"
+      "atr": "ATR",
+      "macd": "MACD"
     }
   },
   "topbar": {
@@ -148,6 +149,22 @@
     "lowest": "Lowest",
     "average": "Average",
     "range": "Range"
+  },
+  "macd": {
+    "title": "MACD",
+    "description": "Moving Average Convergence Divergence analysis for different cryptocurrencies",
+    "errorLoading": "Failed to load MACD data",
+    "chartDescription": "MACD line, Signal line, and Histogram",
+    "signal": "Signal",
+    "histogram": "Histogram",
+    "signals": {
+      "title": "MACD Signals",
+      "description": "Coins with bullish or bearish MACD crossovers",
+      "noSignals": "No signals found at the moment.",
+      "all": "All",
+      "bullish": "Bullish",
+      "bearish": "Bearish"
+    }
   },
   "common": {
     "back": "Back",
