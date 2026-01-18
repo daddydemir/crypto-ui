@@ -1,37 +1,33 @@
-import React, { useMemo, useState, useEffect } from "react"
+import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Brush } from "recharts"
 import { TrendingUp, TrendingDown, Calendar, Maximize2 } from "lucide-react"
+
 import { getMovingAverages, getMovingAverageSignals, type MovingAveragePoint, type MovingAverageSignal } from "@/services/movingAverageService"
-import { getTopCoins } from "@/services/coinService"
+import { getTopCoins, type Coin } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
-import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
-import { mapMovingAverageToChartPoints } from "@/components/charts/types.ts";
+import FullScreenChart from "@/components/charts/FullScreenChart.tsx"
+import { mapMovingAverageToChartPoints } from "@/components/charts/types.ts"
+import CoinSelector from "@/components/common/CoinSelector"
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
 const MovingAveragePage: React.FC = () => {
     const { t } = useTranslation()
     const [showFullScreenChart, setShowFullScreenChart] = useState(false)
-    const [selectedCoinId, setSelectedCoinId] = useState<string>()
+    const [selectedCoin, setSelectedCoin] = useState<Coin>()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
     const [signalFilter, setSignalFilter] = useState<'all' | 'bullish' | 'bearish' | 'mixed'>('all')
 
-    const { data: coins, loading: coinsLoading } = useCachedData({
+    const { data: coins } = useCachedData({
         cacheKey: 'top-coins',
         fetchFn: getTopCoins
     })
 
-    useEffect(() => {
-        if (coins && coins.length > 0 && !selectedCoinId) {
-            setSelectedCoinId(coins[0].id)
-        }
-    }, [coins, selectedCoinId])
-
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<MovingAveragePoint[]>({
-        cacheKey: `moving-averages-${selectedCoinId}`,
-        fetchFn: () => selectedCoinId ? getMovingAverages(selectedCoinId) : Promise.resolve([])
+        cacheKey: `moving-averages-${selectedCoin?.id}`,
+        fetchFn: () => selectedCoin?.id ? getMovingAverages(selectedCoin.id) : Promise.resolve([])
     })
 
     const { data: signals, loading: signalsLoading, refresh: refreshSignals, lastUpdateText: signalsLastUpdate } = useCachedData<MovingAverageSignal[]>({
@@ -77,8 +73,6 @@ const MovingAveragePage: React.FC = () => {
 
         return filtered
     }, [data, timeRange])
-
-    const selectedCoin = coins?.find(c => c.id === selectedCoinId)
 
     const formatPrice = (value: number): string => {
         if (value >= 1) {
@@ -187,7 +181,7 @@ const MovingAveragePage: React.FC = () => {
                             </p>
                         </div>
 
-                        {selectedCoinId && (
+                        {selectedCoin && (
                             <RefreshButton
                                 onRefresh={refresh}
                                 refreshing={refreshing}
@@ -198,29 +192,10 @@ const MovingAveragePage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Coin Selection */}
-                <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800 mb-6">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t('common.selectCrypto', 'Select Cryptocurrency')}
-                    </label>
-                    {coinsLoading ? (
-                        <div className="w-full md:w-96 px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
-                            {t('common.loadingCoins', 'Loading coins...')}
-                        </div>
-                    ) : (
-                        <select
-                            value={selectedCoinId}
-                            onChange={(e) => setSelectedCoinId(e.target.value)}
-                            className="w-full md:w-96 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                        >
-                            {coins?.map((coin) => (
-                                <option key={coin.id} value={coin.id}>
-                                    {coin.symbol.toUpperCase()} - {coin.name}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-                </div>
+                <CoinSelector
+                    value={selectedCoin?.id}
+                    onChange={setSelectedCoin}
+                />
 
                 {error && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
@@ -455,7 +430,10 @@ const MovingAveragePage: React.FC = () => {
                                         return (
                                             <div
                                                 key={signal.id}
-                                                onClick={() => setSelectedCoinId(signal.id)}
+                                                onClick={() => {
+                                                    const coin = coins?.find(c => c.id === signal.id)
+                                                    if (coin) setSelectedCoin(coin)
+                                                }}
                                                 className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition"
                                             >
                                                 <div className="flex justify-between items-start mb-2">
