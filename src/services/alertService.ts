@@ -1,3 +1,5 @@
+import { http } from './api/httpClient'
+
 export interface Alert {
     ID: number
     Coin: string
@@ -20,12 +22,7 @@ export interface UpdateAlertDto {
 
 export async function getAlerts(): Promise<Alert[]> {
     try {
-        const response = await fetch('https://cryptoapi.daddydemir.dev/api/v1/alerts')
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        return await response.json()
+        return await http.get<Alert[]>('/alerts')
     } catch (error) {
         console.error('Error fetching alerts:', error)
         return []
@@ -34,18 +31,7 @@ export async function getAlerts(): Promise<Alert[]> {
 
 export async function createAlert(alert: CreateAlertDto): Promise<Alert | null> {
     try {
-        const response = await fetch('https://cryptoapi.daddydemir.dev/api/v1/alerts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(alert),
-        })
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        return await response.json()
+        return await http.post<Alert>('/alerts', alert)
     } catch (error) {
         console.error('Error creating alert:', error)
         return null
@@ -54,18 +40,7 @@ export async function createAlert(alert: CreateAlertDto): Promise<Alert | null> 
 
 export async function updateAlert(id: number, alert: UpdateAlertDto): Promise<Alert | null> {
     try {
-        const response = await fetch(`https://cryptoapi.daddydemir.dev/api/v1/alerts/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(alert),
-        })
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        return await response.json()
+        return await http.put<Alert>(`/alerts/${id}`, alert)
     } catch (error) {
         console.error('Error updating alert:', error)
         return null
@@ -74,18 +49,7 @@ export async function updateAlert(id: number, alert: UpdateAlertDto): Promise<Al
 
 export async function updateAlertStatus(id: number, isActive: boolean): Promise<Alert | null> {
     try {
-        const response = await fetch(`https://cryptoapi.daddydemir.dev/api/v1/alerts/${id}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ isActive }),
-        })
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        return await response.json()
+        return await http.put<Alert>(`/alerts/${id}/status`, { isActive })
     } catch (error) {
         console.error('Error updating alert status:', error)
         return null
@@ -94,11 +58,8 @@ export async function updateAlertStatus(id: number, isActive: boolean): Promise<
 
 export async function deleteAlert(id: number): Promise<boolean> {
     try {
-        const response = await fetch(`https://cryptoapi.daddydemir.dev/api/v1/alerts/${id}`, {
-            method: 'DELETE',
-        })
-
-        return response.ok
+        await http.delete<void>(`/alerts/${id}`)
+        return true
     } catch (error) {
         console.error('Error deleting alert:', error)
         return false

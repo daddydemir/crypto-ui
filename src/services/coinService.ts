@@ -1,3 +1,5 @@
+import { http } from './api/httpClient'
+
 export interface Coin {
     id: string
     name: string
@@ -12,12 +14,7 @@ export interface Coin {
 
 export async function getTopCoins(): Promise<Coin[]> {
     try {
-        const response = await fetch('https://cryptoapi.daddydemir.dev/api/v1/topCoins')
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        return await response.json()
+        return await http.get<Coin[]>('/topCoins')
     } catch (error) {
         console.error('Error fetching top coins:', error)
         return []

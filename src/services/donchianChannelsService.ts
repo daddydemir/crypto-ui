@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://cryptoapi.daddydemir.dev/api/v1';
+import { http } from './api/httpClient';
 
 export interface DonchianChannelsPoint {
     Upper: number;
@@ -9,13 +9,7 @@ export interface DonchianChannelsPoint {
 }
 
 export async function getDonchianChannels(coinSymbol: string): Promise<DonchianChannelsPoint[]> {
-    const response = await fetch(`${API_BASE_URL}/donchian/coin/${coinSymbol.toLowerCase()}`);
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch Donchian Channels');
-    }
-
-    return response.json();
+    return http.get<DonchianChannelsPoint[]>(`/donchian/coin/${coinSymbol.toLowerCase()}`);
 }
 
 export interface DonchianChannelSignal {
@@ -27,11 +21,5 @@ export interface DonchianChannelSignal {
 }
 
 export async function getDonchianChannelSignals(): Promise<DonchianChannelSignal[]> {
-    const response = await fetch(`${API_BASE_URL}/donchian/signals`);
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch Donchian Channel signals');
-    }
-
-    return response.json();
+    return http.get<DonchianChannelSignal[]>('/donchian/signals');
 }

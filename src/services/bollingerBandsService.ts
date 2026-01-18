@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://cryptoapi.daddydemir.dev/api/v1';
+import { http } from './api/httpClient';
 
 export interface BollingerBandsPoint {
     Date: string;
@@ -8,13 +8,7 @@ export interface BollingerBandsPoint {
 }
 
 export async function getBollingerBands(coinId: string): Promise<BollingerBandsPoint[]> {
-    const response = await fetch(`${API_BASE_URL}/coins/${coinId}/bollinger-bands`);
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch Bollinger Bands');
-    }
-
-    return response.json();
+    return http.get<BollingerBandsPoint[]>(`/coins/${coinId}/bollinger-bands`);
 }
 
 export interface BollingerBandSignal {
@@ -26,11 +20,5 @@ export interface BollingerBandSignal {
 }
 
 export async function getBollingerBandSignals(): Promise<BollingerBandSignal[]> {
-    const response = await fetch(`${API_BASE_URL}/coins/bollinger-bands`);
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch Bollinger Bands signals');
-    }
-
-    return response.json();
+    return http.get<BollingerBandSignal[]>('/coins/bollinger-bands');
 }
