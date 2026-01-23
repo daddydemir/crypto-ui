@@ -5,6 +5,7 @@ export interface MovingAveragePoint {
     ma7: number;
     ma25: number;
     ma99: number;
+    price: number;
 }
 
 export async function getMovingAverages(coinId: string): Promise<MovingAveragePoint[]> {

@@ -5,6 +5,7 @@ export interface BollingerBandsPoint {
     MA20: number;
     UpperBand: number;
     LowerBand: number;
+    Price: number;
 }
 
 export async function getBollingerBands(coinId: string): Promise<BollingerBandsPoint[]> {

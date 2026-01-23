@@ -91,6 +91,9 @@ const MovingAveragePage: React.FC = () => {
                         })}
                     </p>
                     <div className="space-y-1">
+                        <p className="text-sm font-semibold text-amber-500 dark:text-amber-400">
+                            Price: ${formatPrice(data.price)}
+                        </p>
                         <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
                             MA 7: ${data.ma7.toFixed(2)}
                         </p>
@@ -110,7 +113,8 @@ const MovingAveragePage: React.FC = () => {
     const chartLines = [
         { dataKey: 'ma7', name: 'MA 7', color: '#3B82F6' },
         { dataKey: 'ma25', name: 'MA 25', color: '#10B981' },
-        { dataKey: 'ma99', name: 'MA 99', color: '#F97316' }
+        { dataKey: 'ma99', name: 'MA 99', color: '#F97316' },
+        { dataKey: 'price', name: 'Price', color: '#F59E0B' }
     ]
 
     return (

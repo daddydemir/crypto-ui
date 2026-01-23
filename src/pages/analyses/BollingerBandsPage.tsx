@@ -90,6 +90,9 @@ const BollingerBandsPage: React.FC = () => {
                         })}
                     </p>
                     <div className="space-y-1">
+                        <p className="text-sm font-semibold text-amber-500 dark:text-amber-400">
+                            Price: ${formatPrice(data.Price)}
+                        </p>
                         <p className="text-sm font-semibold text-red-600 dark:text-red-400">
                             Upper Band: ${formatPrice(data.UpperBand)}
                         </p>
@@ -109,7 +112,8 @@ const BollingerBandsPage: React.FC = () => {
     const chartLines = [
         { dataKey: 'UpperBand', name: 'Upper Band', color: '#EF4444' },
         { dataKey: 'MA20', name: 'MA 20', color: '#3B82F6' },
-        { dataKey: 'LowerBand', name: 'Lower Band', color: '#10B981' }
+        { dataKey: 'LowerBand', name: 'Lower Band', color: '#10B981' },
+        { dataKey: 'Price', name: 'Price', color: '#F59E0B' }
     ]
 
     return (

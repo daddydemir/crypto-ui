@@ -25,13 +25,14 @@ export interface ChartPoint {
 
 export function mapBollingerToChartPoints(
     data: BollingerBandsPoint[],
-    options?: { includeY?: 'MA20' | 'UpperBand' | 'LowerBand' | ((p: BollingerBandsPoint) => number | null) }
+    options?: { includeY?: 'MA20' | 'UpperBand' | 'LowerBand' | 'Price' | ((p: BollingerBandsPoint) => number | null) }
 ): ChartPoint[] {
     return data.map((p) => {
         const series = {
             MA20: p.MA20,
             UpperBand: p.UpperBand,
-            LowerBand: p.LowerBand
+            LowerBand: p.LowerBand,
+            Price: p.Price
         } as Record<string, number | null>
 
         let y: number | null | undefined
@@ -53,7 +54,7 @@ export function mapBollingerToChartPoints(
     })
 }
 
-type IncludeYOption = 'ma7' | 'ma25' | 'ma99' | ((p: MovingAveragePoint) => number | null)
+type IncludeYOption = 'ma7' | 'ma25' | 'ma99' | 'price' | ((p: MovingAveragePoint) => number | null)
 
 export function mapMovingAverageToChartPoints(
     data: MovingAveragePoint[],
@@ -65,7 +66,8 @@ export function mapMovingAverageToChartPoints(
         const series: Record<string, number | null> = {
             ma7: p.ma7 ?? null,
             ma25: p.ma25 ?? null,
-            ma99: p.ma99 ?? null
+            ma99: p.ma99 ?? null,
+            price: p.price ?? null
         }
 
         let y: number | null | undefined
@@ -98,7 +100,8 @@ export function mapExponentialMAToChartPoints(
         const series: Record<string, number | null> = {
             ma7: p.ma7 ?? null,
             ma25: p.ma25 ?? null,
-            ma99: p.ma99 ?? null
+            ma99: p.ma99 ?? null,
+            price: p.price ?? null
         }
 
         let y: number | null | undefined
