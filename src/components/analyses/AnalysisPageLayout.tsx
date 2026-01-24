@@ -6,6 +6,7 @@ import { type Coin } from '@/services/coinService'
 
 interface AnalysisPageLayoutProps {
     title: string
+    headerContent?: ReactNode
     description: string
     selectedCoin?: Coin
     onCoinChange: (coin: Coin | undefined) => void
@@ -20,6 +21,7 @@ interface AnalysisPageLayoutProps {
 
 const AnalysisPageLayout: React.FC<AnalysisPageLayoutProps> = ({
     title,
+    headerContent,
     description,
     selectedCoin,
     onCoinChange,
@@ -40,9 +42,12 @@ const AnalysisPageLayout: React.FC<AnalysisPageLayoutProps> = ({
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {title}
-                            </h1>
+                            <div className="flex items-center gap-3">
+                                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                    {title}
+                                </h1>
+                                {headerContent}
+                            </div>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">
                                 {description}
                             </p>

@@ -62,7 +62,8 @@
       "overbought": "Aşırı Alım (≥70)",
       "normal": "Normal (30-70)",
       "oversold": "Aşırı Satım (≤30)"
-    }
+    },
+    "detail": "Detay"
   },
   "movingAverages": {
     "title": "Hareketli Ortalamalar",
@@ -216,5 +217,409 @@
     "noAlertsDescription": "Bildirim almak için ilk fiyat alarmınızı oluşturun",
     "deleteAlertTitle": "Alarmı Sil",
     "deleteAlertMessage": "Bu alarmı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+  },
+  "indicators": {
+    "detail": "Detay",
+    "rsi": {
+      "title": "RSI (Relative Strength Index)",
+      "description": "RSI, bir varlığın aşırı alım veya aşırı satım bölgesinde olup olmadığını gösteren momentum göstergesidir. 0-100 arasında değer alır ve genellikle 14 periyotluk hesaplama kullanılır.",
+      "interpretation": {
+        "title": "Yorumlama",
+        "levels": [
+          {
+            "value": "70 ve üzeri",
+            "meaning": "Aşırı alım bölgesi - Fiyat düşüş riski taşıyor, kar realizasyonu düşünülebilir"
+          },
+          {
+            "value": "30 ve altı",
+            "meaning": "Aşırı satım bölgesi - Fiyat yükseliş için fırsat sunabilir, alım fırsatı olabilir"
+          },
+          {
+            "value": "50 seviyesi",
+            "meaning": "Nötr bölge - Trendin gücünü gösterir"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "RSI 30'un altından yukarı doğru keserse",
+            "RSI dipten dönüş yaparken fiyat yeni dip yapmışsa (pozitif uyumsuzluk)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "RSI 70'in üzerinden aşağı doğru keserse",
+            "RSI tepeden dönerken fiyat yeni tepe yapmışsa (negatif uyumsuzluk)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "Güçlü trendlerde RSI uzun süre aşırı alım/satım bölgesinde kalabilir",
+          "Tek başına kullanmak yerine diğer göstergelerle desteklemek önemlidir",
+          "Farklı zaman dilimlerinde farklı sonuçlar verebilir",
+          "Yan trend piyasalarda daha güvenilir sinyaller verir"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "RSI'yı hacim ve trend çizgileriyle birlikte kullanmak, sinyal güvenilirliğini artırır. Özellikle uyumsuzluk (divergence) sinyalleri trend dönüşlerini önceden haber verebilir."
+      }
+    },
+    "moving_average": {
+      "title": "Hareketli Ortalamalar (Moving Average)",
+      "description": "Hareketli ortalamalar, belirli bir süre içindeki fiyatların ortalamasını alarak trend yönünü ve destek/direnç seviyelerini belirlemeye yardımcı olur. Bu uygulamada 7, 25 ve 99 günlük periyotlar kullanılmaktadır.",
+      "interpretation": {
+        "title": "Yorumlama",
+        "levels": [
+          {
+            "value": "7 Günlük MA",
+            "meaning": "Kısa vadeli trend - Günlük alım satım için hızlı sinyaller verir"
+          },
+          {
+            "value": "25 Günlük MA",
+            "meaning": "Orta vadeli trend - Haftalık/aylık trend yönünü gösterir"
+          },
+          {
+            "value": "99 Günlük MA",
+            "meaning": "Uzun vadeli trend - Büyük resim ve ana trend yönünü belirler"
+          },
+          {
+            "value": "Fiyat tüm MA'ların üzerinde",
+            "meaning": "Güçlü yükseliş trendi - Tüm dönemlerde alıcılar baskın"
+          },
+          {
+            "value": "Fiyat tüm MA'ların altında",
+            "meaning": "Güçlü düşüş trendi - Tüm dönemlerde satıcılar baskın"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "7 günlük MA, 25 günlük MA'yı yukarı keser (kısa vadeli alım)",
+            "25 günlük MA, 99 günlük MA'yı yukarı keser (orta/uzun vadeli güçlü alım - Golden Cross)",
+            "Fiyat, 7 veya 25 günlük MA'dan destek bulup yukarı döner",
+            "Tüm MA'lar yukarı yönlü sıralanır (7 > 25 > 99)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "7 günlük MA, 25 günlük MA'yı aşağı keser (kısa vadeli satım)",
+            "25 günlük MA, 99 günlük MA'yı aşağı keser (orta/uzun vadeli güçlü satım - Death Cross)",
+            "Fiyat, 7 veya 25 günlük MA'dan direnç bulup aşağı döner",
+            "Tüm MA'lar aşağı yönlü sıralanır (7 < 25 < 99)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "Yatay (sideways) piyasalarda özellikle 7 günlük MA çok fazla yanlış sinyal verebilir",
+          "MA'lar gecikmeli göstergelerdir, fiyat hareketlerini geç yansıtırlar",
+          "7 günlük MA volatiliteye en duyarlı, 99 günlük en istikrarlıdır",
+          "Volatilite yüksek olduğunda kısa vadeli MA'lar dalgalı olabilir"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "99 günlük MA'yı ana trend yönü için, 25 günlük MA'yı giriş zamanlaması için, 7 günlük MA'yı ise kısa vadeli momentum için kullanın. Tüm MA'ların aynı yönde sıralanması (7>25>99 veya 7<25<99) en güçlü trend sinyallerini verir."
+      }
+    },
+    "ema": {
+      "title": "Üstel Hareketli Ortalamalar (EMA - Exponential Moving Average)",
+      "description": "EMA, son fiyatlara daha fazla ağırlık vererek hesaplanan hareketli ortalamadır. Basit hareketli ortalamaya (SMA) göre fiyat değişimlerine daha hızlı tepki verir. Bu uygulamada 7, 25 ve 99 günlük periyotlar kullanılmaktadır.",
+      "interpretation": {
+        "levels": [
+          {
+            "value": "7 Günlük EMA",
+            "meaning": "Kısa vadeli trend - Çok hızlı tepki, günlük alım satım için ideal"
+          },
+          {
+            "value": "25 Günlük EMA",
+            "meaning": "Orta vadeli trend - Dengeli hız, swing trading için uygun"
+          },
+          {
+            "value": "99 Günlük EMA",
+            "meaning": "Uzun vadeli trend - Ana trend yönünü gösterir, güçlü destek/direnç"
+          },
+          {
+            "value": "Fiyat tüm EMA'ların üzerinde",
+            "meaning": "Güçlü yükseliş trendi - Momentum alıcı tarafında"
+          },
+          {
+            "value": "Fiyat tüm EMA'ların altında",
+            "meaning": "Güçlü düşüş trendi - Momentum satıcı tarafında"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "7 günlük EMA, 25 günlük EMA'yı yukarı keser (kısa vadeli alım)",
+            "25 günlük EMA, 99 günlük EMA'yı yukarı keser (güçlü yükseliş - Golden Cross)",
+            "Fiyat, EMA'lardan destek bulup yukarı döner (özellikle 25 veya 99 günlük)",
+            "Tüm EMA'lar yukarı yönlü sıralanır (7 > 25 > 99) ve aralarındaki mesafe açılır"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "7 günlük EMA, 25 günlük EMA'yı aşağı keser (kısa vadeli satım)",
+            "25 günlük EMA, 99 günlük EMA'yı aşağı keser (güçlü düşüş - Death Cross)",
+            "Fiyat, EMA'lardan direnç bulup aşağı döner",
+            "Tüm EMA'lar aşağı yönlü sıralanır (7 < 25 < 99) ve aralarındaki mesafe açılır"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "SMA'ya göre daha hızlı tepki verdiği için yanlış sinyal riski daha yüksektir",
+          "Yatay piyasalarda 7 günlük EMA çok fazla gürültü (noise) yaratabilir",
+          "Ani fiyat hareketlerinde aşırı duyarlı olabilir",
+          "Kısa vadeli EMA'lar, volatil piyasalarda whipsaw (kırbaç) sinyalleri verebilir"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "EMA, SMA'dan daha hızlı sinyal verdiği için trend değişimlerini erken yakalamak isteyenler için uygundur. 99 günlük EMA'yı ana trend filtresi olarak kullanın - fiyat 99 EMA üzerindeyken sadece alım, altındayken sadece satım pozisyonları düşünün. EMA'lar arasındaki mesafe, trend gücünü gösterir."
+      }
+    },
+    "bollinger_bands": {
+      "title": "Bollinger Bantları (Bollinger Bands)",
+      "description": "Bollinger Bantları, bir hareketli ortalama etrafında standart sapma kullanılarak oluşturulan üst ve alt bantlardan oluşur. Fiyat volatilitesini ölçer ve aşırı alım/satım bölgelerini belirlemeye yardımcı olur. Genellikle 20 periyotluk MA ve 2 standart sapma ile hesaplanır.",
+      "interpretation": {
+        "levels": [
+          {
+            "value": "Üst Bant",
+            "meaning": "Aşırı alım bölgesi - Fiyat üst banda yaklaştığında satış baskısı gelebilir"
+          },
+          {
+            "value": "Alt Bant",
+            "meaning": "Aşırı satım bölgesi - Fiyat alt banda yaklaştığında alım fırsatı olabilir"
+          },
+          {
+            "value": "Orta Bant (MA)",
+            "meaning": "Ortalama fiyat seviyesi - Destek ve direnç görevi görür"
+          },
+          {
+            "value": "Bantlar daraldığında",
+            "meaning": "Düşük volatilite - Büyük fiyat hareketi yaklaşıyor olabilir (squeeze)"
+          },
+          {
+            "value": "Bantlar genişlediğinde",
+            "meaning": "Yüksek volatilite - Güçlü trend hareketi devam ediyor"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "Fiyat alt banda dokunur veya altına iner sonra geri döner",
+            "Fiyat alt bantta destek bulur ve orta banda doğru hareket eder",
+            "Bantlar daraldıktan sonra fiyat üst banda doğru kırılım yapar",
+            "Fiyat orta banttan (MA) destek bulur yükseliş trendinde"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "Fiyat üst banda dokunur veya üstüne çıkar sonra geri döner",
+            "Fiyat üst bantta direnç bulur ve orta banda doğru hareket eder",
+            "Bantlar daraldıktan sonra fiyat alt banda doğru kırılım yapar",
+            "Fiyat orta banttan (MA) direnç bulur düşüş trendinde"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "Fiyat güçlü trendlerde uzun süre üst veya alt bantta kalabilir (band walking)",
+          "Bantlara dokunmak tek başına alım/satım sinyali değildir, doğrulama gerekir",
+          "Yan trend piyasalarda daha güvenilir, güçlü trendlerde yanıltıcı olabilir",
+          "Volatilite patlaması öncesinde bantlar genellikle daralır ama yönü göstermez"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "Bollinger Bantlarını RSI ile birlikte kullanın: fiyat alt bantta + RSI 30 altında = güçlü alım sinyali. 'Squeeze' (bantların daralması) sonrası hacim artışıyla birlikte kırılım, güçlü trend başlangıcını işaret edebilir. %b göstergesi (fiyatın bantlar içindeki konumu) ek bilgi sağlar."
+      }
+    },
+    "macd": {
+      "title": "MACD (Moving Average Convergence Divergence)",
+      "description": "MACD, iki üstel hareketli ortalama (EMA) arasındaki farkı gösteren momentum göstergesidir. MACD çizgisi, Signal çizgisi ve Histogram olmak üzere üç bileşenden oluşur. Genellikle 12, 26 ve 9 periyotları kullanılır (MACD: 12-26 EMA farkı, Signal: MACD'nin 9 günlük EMA'sı).",
+      "interpretation": {
+        "levels": [
+          {
+            "value": "MACD Çizgisi",
+            "meaning": "Kısa ve uzun vadeli EMA'lar arasındaki fark - Momentum yönünü gösterir"
+          },
+          {
+            "value": "Signal Çizgisi",
+            "meaning": "MACD'nin hareketli ortalaması - Alım/satım sinyallerini tetikler"
+          },
+          {
+            "value": "Histogram",
+            "meaning": "MACD ile Signal arasındaki fark - Momentum gücünü görselleştirir"
+          },
+          {
+            "value": "Sıfır çizgisi üzerinde",
+            "meaning": "Yükseliş momentum'u - Kısa vadeli EMA, uzun vadelinin üzerinde"
+          },
+          {
+            "value": "Sıfır çizgisi altında",
+            "meaning": "Düşüş momentum'u - Kısa vadeli EMA, uzun vadelinin altında"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "MACD çizgisi, Signal çizgisini aşağıdan yukarı keser (Bullish Crossover)",
+            "MACD sıfır çizgisini aşağıdan yukarı keser (güçlü yükseliş sinyali)",
+            "Histogram negatiften pozitife döner ve büyümeye başlar",
+            "Fiyat yeni dip yaparken MACD yapmaz (Bullish Divergence - pozitif uyumsuzluk)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "MACD çizgisi, Signal çizgisini yukarıdan aşağı keser (Bearish Crossover)",
+            "MACD sıfır çizgisini yukarıdan aşağı keser (güçlü düşüş sinyali)",
+            "Histogram pozitiften negatife döner ve küçülmeye başlar",
+            "Fiyat yeni tepe yaparken MACD yapmaz (Bearish Divergence - negatif uyumsuzluk)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "Yatay (sideways) piyasalarda çok fazla yanlış sinyal verebilir",
+          "Gecikmeli bir göstergedir, hızlı fiyat değişimlerinde geç sinyal verir",
+          "Kesişmeler tek başına yeterli değildir, trend yönüyle uyumlu olmalıdır",
+          "Histogram'un büyüklüğü momentum gücünü gösterir ama mutlak değer değildir"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "MACD'yi trend yönünü belirlemek için kullanın ve diğer göstergelerle doğrulayın. Divergence (uyumsuzluk) sinyalleri trend dönüşlerinin en güçlü habercilerindendir. Histogram'un büyümesi veya küçülmesi, momentum değişimini MACD kesişmesinden önce gösterebilir. Güçlü trendlerde MACD kesişmelerini beklemek yerine, histogram yön değişimlerini takip edin."
+      }
+    },
+    "donchian_channels": {
+      "title": "Donchian Kanalları (Donchian Channels)",
+      "description": "Donchian Kanalları, belirli bir periyot içindeki en yüksek ve en düşük fiyatları kullanarak oluşturulan üst bant, alt bant ve orta çizgiden oluşur. Trend yönünü, kırılım noktalarını ve volatiliteyi belirlemeye yardımcı olur. Genellikle 20 periyot kullanılır.",
+      "interpretation": {
+        "levels": [
+          {
+            "value": "Üst Bant",
+            "meaning": "Belirli periyottaki en yüksek fiyat - Direnç seviyesi"
+          },
+          {
+            "value": "Alt Bant",
+            "meaning": "Belirli periyottaki en düşük fiyat - Destek seviyesi"
+          },
+          {
+            "value": "Orta Çizgi",
+            "meaning": "Üst ve alt bantın ortası - Trend dengesi ve ortalama fiyat"
+          },
+          {
+            "value": "Fiyat üst bantta",
+            "meaning": "Güçlü yükseliş trendi - Alıcılar baskın"
+          },
+          {
+            "value": "Fiyat alt bantta",
+            "meaning": "Güçlü düşüş trendi - Satıcılar baskın"
+          },
+          {
+            "value": "Kanal genişliği",
+            "meaning": "Volatilite göstergesi - Geniş kanal yüksek, dar kanal düşük volatilite"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "Fiyat üst bandı yukarı kırar (Breakout - kırılım)",
+            "Fiyat alt bantta destek bulur ve orta çizgiye doğru hareket eder",
+            "Dar kanaldan sonra fiyat yukarı yönlü genişleme yapar",
+            "Fiyat orta çizginin üzerine çıkar ve üst banda doğru hareket eder"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "Fiyat alt bandı aşağı kırar (Breakdown - kırılım)",
+            "Fiyat üst bantta direnç bulur ve orta çizgiye doğru geri döner",
+            "Dar kanaldan sonra fiyat aşağı yönlü genişleme yapar",
+            "Fiyat orta çizginin altına düşer ve alt banda doğru hareket eder"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "Yatay piyasalarda yanlış kırılım (false breakout) sinyalleri verebilir",
+          "Kırılımlar tek başına yeterli değildir, hacim ve momentum ile doğrulanmalıdır",
+          "Dar kanallar volatilite patlaması öncesi uyarıdır ama yönü göstermez",
+          "Güçlü trendlerde fiyat uzun süre üst veya alt bantta kalabilir"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "Donchian Kanalları, breakout (kırılım) stratejileri için idealdir. Kanal daraldığında büyük hareket yaklaşıyor demektir - hacim artışıyla birlikte kırılım bekleyin. Orta çizgi, trend yönü için önemli referans noktasıdır: üzerinde kalırsa yükseliş, altında kalırsa düşüş trendi devam eder. ATR veya Bollinger Bands ile birlikte kullanarak kırılımların gücünü doğrulayabilirsiniz."
+      }
+    },
+    "atr": {
+      "title": "ATR (Average True Range)",
+      "description": "ATR, piyasa volatilitesini ölçen bir göstergedir. Belirli bir periyot içindeki gerçek fiyat aralığının ortalamasını hesaplar. Yüksek ATR değeri yüksek volatilite, düşük ATR değeri düşük volatilite anlamına gelir. Genellikle 14 periyot kullanılır.",
+      "interpretation": {
+        "levels": [
+          {
+            "value": "Yüksek ATR",
+            "meaning": "Yüksek volatilite - Fiyat hareketleri geniş, risk ve fırsat artar"
+          },
+          {
+            "value": "Düşük ATR",
+            "meaning": "Düşük volatilite - Fiyat hareketleri dar, konsolidasyon dönemi"
+          },
+          {
+            "value": "ATR yükselişte",
+            "meaning": "Volatilite artıyor - Güçlü trend hareketi veya kırılım gelebilir"
+          },
+          {
+            "value": "ATR düşüşte",
+            "meaning": "Volatilite azalıyor - Piyasa sakinleşiyor, büyük hareket öncesi olabilir"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "ATR düşükten yükselişe geçtiğinde hacimle birlikte alım sinyali aranır",
+            "Düşük ATR sonrası ani yükseliş, güçlü trend başlangıcını işaret edebilir",
+            "ATR ile stop-loss mesafesi belirlenir: fiyatın altında (örn: 2x ATR)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "ATR çok yüksek seviyelere ulaştığında kar realizasyonu düşünülebilir",
+            "ATR zirve yaptıktan sonra düşmeye başlarsa trend zayıflıyor olabilir",
+            "ATR ile stop-loss mesafesi belirlenir: fiyatın üstünde (örn: 2x ATR)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "ATR tek başına alım/satım sinyali vermez, sadece volatilite ölçer",
+          "Yüksek ATR her zaman trend devam edeceği anlamına gelmez",
+          "Düşük ATR uzun süre devam edebilir, sabırsızlık yanlış pozisyonlara yol açabilir",
+          "Farklı varlıkların ATR değerleri karşılaştırılamaz (mutlak değil, göreceli bakılmalıdır)"
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "ATR'yi pozisyon boyutlandırma ve stop-loss belirleme için kullanın. Yüksek ATR'de daha küçük pozisyon, düşük ATR'de daha büyük pozisyon alabilirsiniz. Stop-loss'u 1.5-2x ATR mesafesine koymak, normal fiyat dalgalanmalarından etkilenmemenizi sağlar. Düşük ATR dönemleri genellikle büyük hareketlerin öncüsüdür - bu dönemlerde kırılım stratejilerine hazır olun. "
+      }
+    }
   }
 }

@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Info, TrendingUp, TrendingDown, Activity } from "lucide-react"
+import Modal from "@/components/common/Modal"
 import { getDonchianChannels, type DonchianChannelsPoint } from "@/services/donchianChannelsService.ts"
 import { type Coin } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
@@ -15,6 +17,7 @@ const DonchianChannelsPage: React.FC = () => {
     const [selectedCoin, setSelectedCoin] = useState<Coin>()
     const [timeRange, setTimeRange] = useState<TimeRange>('30d')
     const [showFullScreenChart, setShowFullScreenChart] = useState(false)
+    const [isDetailOpen, setIsDetailOpen] = useState(false)
 
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<DonchianChannelsPoint[]>({
         cacheKey: `donchian-channels-${selectedCoin?.symbol}`,
@@ -121,6 +124,15 @@ const DonchianChannelsPage: React.FC = () => {
 
             <AnalysisPageLayout
                 title={t('donchianChannels.title', 'Donchian Channels')}
+                headerContent={
+                    <button
+                        onClick={() => setIsDetailOpen(true)}
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                    >
+                        <Info className="w-4 h-4" />
+                        {t("indicators.detail", "Detail")}
+                    </button>
+                }
                 description={t('donchianChannels.description', 'View Donchian Channels analysis for different cryptocurrencies')}
                 selectedCoin={selectedCoin}
                 onCoinChange={setSelectedCoin}
@@ -177,6 +189,85 @@ const DonchianChannelsPage: React.FC = () => {
                     tooltipContent={<CustomTooltip />}
                 />
             </AnalysisPageLayout>
+
+            <Modal
+                isOpen={isDetailOpen}
+                onClose={() => setIsDetailOpen(false)}
+                title={t("indicators.donchian_channels.title")}
+            >
+                <div className="space-y-6">
+                    <p className="text-gray-600 dark:text-gray-300">
+                        {t("indicators.donchian_channels.description")}
+                    </p>
+
+                    <div>
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 block">
+                            {t("indicators.rsi.interpretation.title", "Interpretation")}
+                        </h4>
+                        <div className="grid gap-4">
+                            {(t("indicators.donchian_channels.interpretation.levels", { returnObjects: true }) as any[]).map((level, i) => (
+                                <div key={i} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
+                                    <span className="font-medium text-blue-600 dark:text-blue-400 block mb-1">
+                                        {level.value}
+                                    </span>
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                                        {level.meaning}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2 flex items-center gap-2">
+                                <TrendingUp className="w-4 h-4" />
+                                {t("indicators.donchian_channels.interpretation.buy_signals.title")}
+                            </h4>
+                            <ul className="list-disc list-inside space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                {(t("indicators.donchian_channels.interpretation.buy_signals.items", { returnObjects: true }) as string[]).map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-red-700 dark:text-red-400 mb-2 flex items-center gap-2">
+                                <TrendingDown className="w-4 h-4" />
+                                {t("indicators.donchian_channels.interpretation.sell_signals.title")}
+                            </h4>
+                            <ul className="list-disc list-inside space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                {(t("indicators.donchian_channels.interpretation.sell_signals.items", { returnObjects: true }) as string[]).map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-100 dark:border-yellow-900/30">
+                        <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2 flex items-center gap-2">
+                            <Activity className="w-4 h-4" />
+                            {t("indicators.donchian_channels.warnings.title")}
+                        </h4>
+                        <ul className="list-disc list-inside space-y-1 text-sm text-yellow-700 dark:text-yellow-300">
+                            {(t("indicators.donchian_channels.warnings.items", { returnObjects: true }) as string[]).map((item, i) => (
+                                <li key={i}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="flex gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-900/30">
+                        <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-1">
+                                {t("indicators.donchian_channels.tip.title")}
+                            </h4>
+                            <p className="text-sm text-blue-700 dark:text-blue-300">
+                                {t("indicators.donchian_channels.tip.content")}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </>
     )
 }

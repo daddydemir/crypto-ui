@@ -62,7 +62,8 @@
       "overbought": "Overbought (≥70)",
       "normal": "Normal (30-70)",
       "oversold": "Oversold (≤30)"
-    }
+    },
+    "detail": "Detail"
   },
   "movingAverages": {
     "title": "Moving Averages",
@@ -216,5 +217,414 @@
     "noAlertsDescription": "Create your first price alert to get notified",
     "deleteAlertTitle": "Delete Alert",
     "deleteAlertMessage": "Are you sure you want to delete this alert? This action cannot be undone."
+  },
+  "indicators": {
+    "detail": "Detail",
+    "rsi": {
+      "title": "RSI (Relative Strength Index)",
+      "description": "RSI is a momentum indicator that shows whether an asset is in an overbought or oversold zone. It takes a value between 0-100 and a 14-period calculation is generally used.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "70 and above",
+            "meaning": "Overbought zone - Price carries a risk of falling, profit taking can be considered"
+          },
+          {
+            "value": "30 and below",
+            "meaning": "Oversold zone - Price may offer an opportunity for a rise, can be a buying opportunity"
+          },
+          {
+            "value": "Level 50",
+            "meaning": "Neutral zone - Shows the strength of the trend"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "If RSI crosses up from below 30",
+            "If price makes a new low while RSI turns up from the bottom (positive divergence)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "If RSI crosses down from above 70",
+            "If price makes a new high while RSI turns down from the top (negative divergence)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "In strong trends, RSI can stay in the overbought/oversold zone for a long time",
+          "It is important to support it with other indicators instead of using it alone",
+          "May give different results in different time frames",
+          "Gives more reliable signals in sideways markets"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Using RSI with volume and trend lines increases signal reliability. Especially divergence signals can foretell trend reversals."
+      }
+    },
+    "moving_average": {
+      "title": "Moving Averages",
+      "description": "Moving averages help determine trend direction and support/resistance levels by averaging prices over a specific period. This application uses 7, 25, and 99-day periods.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "7-Day MA",
+            "meaning": "Short-term trend - Provides fast signals for daily trading"
+          },
+          {
+            "value": "25-Day MA",
+            "meaning": "Medium-term trend - Shows weekly/monthly trend direction"
+          },
+          {
+            "value": "99-Day MA",
+            "meaning": "Long-term trend - Determines the big picture and main trend direction"
+          },
+          {
+            "value": "Price above all MAs",
+            "meaning": "Strong uptrend - Buyers are dominant in all periods"
+          },
+          {
+            "value": "Price below all MAs",
+            "meaning": "Strong downtrend - Sellers are dominant in all periods"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "7-day MA crosses above 25-day MA (short-term buy)",
+            "25-day MA crosses above 99-day MA (medium/long-term strong buy - Golden Cross)",
+            "Price finds support at 7 or 25-day MA and turns up",
+            "All MAs aligned upwards (7 > 25 > 99)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "7-day MA crosses below 25-day MA (short-term sell)",
+            "25-day MA crosses below 99-day MA (medium/long-term strong sell - Death Cross)",
+            "Price finds resistance at 7 or 25-day MA and turns down",
+            "All MAs aligned downwards (7 < 25 < 99)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "In sideways markets, especially the 7-day MA can give many false signals",
+          "MAs are lagging indicators, they reflect price movements with a delay",
+          "7-day MA is most sensitive to volatility, 99-day is most stable",
+          "Short-term MAs can be choppy when volatility is high"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Use 99-day MA for main trend direction, 25-day MA for entry timing, and 7-day MA for short-term momentum. Alignment of all MAs in the same direction (7>25>99 or 7<25<99) gives the strongest trend signals."
+      }
+    },
+    "ema": {
+      "title": "Exponential Moving Averages (EMA)",
+      "description": "EMA is a moving average calculated by giving more weight to recent prices. It reacts faster to price changes compared to Simple Moving Average (SMA). This application uses 7, 25, and 99-day periods.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "7-Day EMA",
+            "meaning": "Short-term trend - Very fast reaction, ideal for daily trading"
+          },
+          {
+            "value": "25-Day EMA",
+            "meaning": "Medium-term trend - Balanced speed, suitable for swing trading"
+          },
+          {
+            "value": "99-Day EMA",
+            "meaning": "Long-term trend - Shows main trend direction, strong support/resistance"
+          },
+          {
+            "value": "Price above all EMAs",
+            "meaning": "Strong uptrend - Momentum is on the buyer side"
+          },
+          {
+            "value": "Price below all EMAs",
+            "meaning": "Strong downtrend - Momentum is on the seller side"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "7-day EMA crosses above 25-day EMA (short-term buy)",
+            "25-day EMA crosses above 99-day EMA (strong uptrend - Golden Cross)",
+            "Price finds support at EMAs and turns up (especially 25 or 99-day)",
+            "All EMAs aligned upwards (7 > 25 > 99) and distance between them widens"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "7-day EMA crosses below 25-day EMA (short-term sell)",
+            "25-day EMA crosses below 99-day EMA (strong downtrend - Death Cross)",
+            "Price finds resistance at EMAs and turns down",
+            "All EMAs aligned downwards (7 < 25 < 99) and distance between them widens"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "Risk of false signals is higher as it reacts faster than SMA",
+          "In sideways markets, 7-day EMA can create too much noise",
+          "Can be overly sensitive in sudden price movements",
+          "Short-term EMAs can give whipsaw signals in volatile markets"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Since EMA gives faster signals than SMA, it is suitable for those who want to catch trend changes early. Use 99-day EMA as a main trend filter - consider long positions only when price is above 99 EMA, and short only when below. Distance between EMAs shows trend strength."
+      }
+    },
+    "bollinger_bands": {
+      "title": "Bollinger Bands",
+      "description": "Bollinger Bands consist of upper and lower bands created using standard deviation around a moving average. It measures price volatility and helps identify overbought/oversold zones. It is generally calculated with a 20-period MA and 2 standard deviations.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "Upper Band",
+            "meaning": "Overbought zone - Selling pressure may occur when price approaches the upper band"
+          },
+          {
+            "value": "Lower Band",
+            "meaning": "Oversold zone - Buying opportunity may occur when price approaches the lower band"
+          },
+          {
+            "value": "Middle Band (MA)",
+            "meaning": "Average price level - Acts as support and resistance"
+          },
+          {
+            "value": "Bands Contract (Squeeze)",
+            "meaning": "Low volatility - A major price movement may be approaching"
+          },
+          {
+            "value": "Bands Expand",
+            "meaning": "High volatility - Strong trend movement continues"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "Price touches or drops below the lower band and then reverses",
+            "Price finds support at the lower band and moves towards the middle band",
+            "Price breaks out towards the upper band after bands contract",
+            "Price finds support at the middle band (MA) in an uptrend"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "Price touches or rises above the upper band and then reverses",
+            "Price finds resistance at the upper band and moves towards the middle band",
+            "Price breaks out towards the lower band after bands contract",
+            "Price finds resistance at the middle band (MA) in a downtrend"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "Price can stay at the upper or lower band for a long time in strong trends (band walking)",
+          "Touching the bands is not a buy/sell signal by itself, confirmation is required",
+          "More reliable in sideways markets, can be misleading in strong trends",
+          "Bands usually contract before a volatility explosion but do not show the direction"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Use Bollinger Bands with RSI: price at lower band + RSI below 30 = strong buy signal. A breakout with increased volume after a 'Squeeze' (contraction of bands) can signal the start of a strong trend. %b indicator (price position within bands) provides additional information."
+      }
+    },
+    "macd": {
+      "title": "MACD (Moving Average Convergence Divergence)",
+      "description": "MACD is a momentum indicator that shows the difference between two exponential moving averages (EMA). It consists of three components: MACD line, Signal line, and Histogram. Usually 12, 26, and 9 periods are used (MACD: 12-26 EMA difference, Signal: 9-day EMA of MACD).",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "MACD Line",
+            "meaning": "Difference between short and long-term EMA - Shows momentum direction"
+          },
+          {
+            "value": "Signal Line",
+            "meaning": "Moving average of MACD - Triggers buy/sell signals"
+          },
+          {
+            "value": "Histogram",
+            "meaning": "Difference between MACD and Signal - Visualizes momentum strength"
+          },
+          {
+            "value": "Above Zero Line",
+            "meaning": "Bullish momentum - Short-term EMA is above long-term"
+          },
+          {
+            "value": "Below Zero Line",
+            "meaning": "Bearish momentum - Short-term EMA is below long-term"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "MACD line crosses above Signal line (Bullish Crossover)",
+            "MACD crosses above zero line (strong bullish signal)",
+            "Histogram turns from negative to positive and starts growing",
+            "Price makes a new low while MACD does not (Bullish Divergence)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "MACD line crosses below Signal line (Bearish Crossover)",
+            "MACD crosses below zero line (strong bearish signal)",
+            "Histogram turns from positive to negative and starts shrinking",
+            "Price makes a new high while MACD does not (Bearish Divergence)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "May give many false signals in sideways markets",
+          "It is a lagging indicator, gives late signals in fast price changes",
+          "Crossovers are not enough alone, should align with trend direction",
+          "Histogram size shows momentum strength but is not an absolute value"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Use MACD to determine trend direction and confirm with other indicators. Divergence signals are among the strongest predictors of trend reversals. Histogram growth or shrinkage can show momentum change before MACD crossover. In strong trends, instead of waiting for MACD crossovers, follow histogram direction changes."
+      }
+    },
+    "donchian_channels": {
+      "title": "Donchian Channels",
+      "description": "Donchian Channels consist of an upper band, lower band, and a middle line formed by the highest and lowest prices within a specific period. It helps identify trend direction, breakout points, and volatility. Usually, 20 periods are used.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "Upper Band",
+            "meaning": "Highest price in the period - Resistance level"
+          },
+          {
+            "value": "Lower Band",
+            "meaning": "Lowest price in the period - Support level"
+          },
+          {
+            "value": "Middle Line",
+            "meaning": "Midpoint of upper and lower bands - Trend balance and average price"
+          },
+          {
+            "value": "Price at Upper Band",
+            "meaning": "Strong uptrend - Buyers are dominant"
+          },
+          {
+            "value": "Price at Lower Band",
+            "meaning": "Strong downtrend - Sellers are dominant"
+          },
+          {
+            "value": "Channel Width",
+            "meaning": "Volatility indicator - Wide channel means high, narrow channel means low volatility"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "Price breaks above the upper band (Breakout)",
+            "Price finds support at the lower band and moves towards the middle line",
+            "Price expands upwards after a narrow channel",
+            "Price moves above the middle line and heads towards the upper band"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "Price breaks below the lower band (Breakdown)",
+            "Price finds resistance at the upper band and returns towards the middle line",
+            "Price expands downwards after a narrow channel",
+            "Price drops below the middle line and heads towards the lower band"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "May give false breakout signals in sideways markets",
+          "Breakouts are not enough alone, should be confirmed with volume and momentum",
+          "Narrow channels are a warning before volatility explosion but do not show direction",
+          "In strong trends, price can stay at the upper or lower band for a long time"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Donchian Channels are ideal for breakout strategies. When the channel narrows, a big move is approaching - wait for a breakout with increased volume. The middle line is a key reference for trend direction: above is uptrend, below is downtrend. Use with ATR or Bollinger Bands to confirm breakout strength."
+      }
+    },
+    "atr": {
+      "title": "ATR (Average True Range)",
+      "description": "ATR is an indicator that measures market volatility. It calculates the average of the true price range over a specific period. High ATR value means high volatility, low ATR value means low volatility. Usually, 14 periods are used.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "High ATR",
+            "meaning": "High volatility - Price movements are wide, risk and opportunity increase"
+          },
+          {
+            "value": "Low ATR",
+            "meaning": "Low volatility - Price movements are narrow, consolidation period"
+          },
+          {
+            "value": "ATR Rising",
+            "meaning": "Volatility increasing - Strong trend movement or breakout may be coming"
+          },
+          {
+            "value": "ATR Falling",
+            "meaning": "Volatility decreasing - Market calming down, may be before a big move"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "When ATR starts rising from low levels, look for buy signal with volume",
+            "Sudden rise after low ATR can signal the start of a strong trend",
+            "Set stop-loss distance with ATR: below price (e.g., 2x ATR)"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "Consider profit taking when ATR reaches very high levels",
+            "If ATR starts falling after peaking, the trend may be weakening",
+            "Set stop-loss distance with ATR: above price (e.g., 2x ATR)"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "ATR does not give buy/sell signals alone, only measures volatility",
+          "High ATR does not always mean trend will continue",
+          "Low ATR can persist for a long time, impatience can lead to wrong positions",
+          "ATR values of different assets cannot be compared (not absolute, should look relatively)"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Use ATR for position sizing and stop-loss placement. You can take smaller positions in high ATR, larger positions in low ATR. Placing stop-loss at 1.5-2x ATR distance keeps you safe from normal price fluctuations. Low ATR periods are usually precursors to big moves - be ready for breakout strategies in these periods."
+      }
+    }
   }
 }
