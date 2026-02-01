@@ -21,5 +21,5 @@ export interface BollingerBandSignal {
 }
 
 export async function getBollingerBandSignals(): Promise<BollingerBandSignal[]> {
-    return http.get<BollingerBandSignal[]>('/coins/bollinger-bands');
+    return http.get<BollingerBandSignal[]>('/bollinger-bands');
 }
