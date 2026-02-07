@@ -29,7 +29,7 @@ const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
 
     return (
         <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-            <td className="p-3 font-semibold text-gray-900 dark:text-gray-100">{coin.name}</td>
+            <td className="p-3 font-semibold text-gray-900 dark:text-gray-100">{coin.symbol} - {coin.name}</td>
             <td className="p-3 text-gray-900 dark:text-gray-100">{formatPrice(coin.price)}</td>
             <td className={`p-3 ${getChangeColor(coin.change24h)}`}>
                 {coin.change24h > 0 ? "+" : ""}
