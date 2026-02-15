@@ -2,7 +2,10 @@
   "sidebar": {
     "analyses": "Analizler",
     "coins": "Coinler",
-    "alarms": "Alarmlar",
+    "alarms": {
+      "normal": "Alarmlar",
+      "smart": "Akıllı Alarmlar"
+    },
     "settings": "Ayarlar",
     "technical": {
       "rsi": "RSI",

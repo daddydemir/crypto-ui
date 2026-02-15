@@ -11,6 +11,7 @@ import AlarmsPage from "@/pages/alarms/AlarmsPage.tsx";
 import DonchianChannelsPage from '@/pages/analyses/DonchianChannelsPage';
 import ATRPage from '@/pages/analyses/ATRPage';
 import MACDPage from '@/pages/analyses/MACDPage';
+import SmartAlertsPage from "@/pages/alarms/SmartAlertsPage.tsx";
 
 
 const SettingsPage = () => <div>Ayarlar</div>;
@@ -32,6 +33,7 @@ function App() {
                         <Route path="/alarms" element={<AlarmsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
                         <Route path="/coins/:coinId" element={<CoinDetailPage />} />
+                        <Route path="/smart-alerts" element={<SmartAlertsPage />} />
                     </Routes>
                 </AppLayout>
             </CacheProvider>

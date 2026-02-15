@@ -36,7 +36,14 @@ const Sidebar: React.FC = () => {
             ],
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
-        { id: "alarms", title: t("sidebar.alarms"), path: "/alarms", icon: BellIcon },
+        {
+            id: "alarms",
+            title: t("sidebar.alarms.normal"),
+            icon: BellIcon,
+            children: [
+                {name: t("sidebar.alarms.normal"), path: "/alarms"},
+                {name: t("sidebar.alarms.smart"), path: "/smart-alerts"},
+            ]},
         { id: "settings", title: t("sidebar.settings"), path: "/settings", icon: Settings },
     ];
 
