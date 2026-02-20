@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useCallback, useRef, useEffect } from 'react';
 import ReactFlow, {
     Background,
     Controls,
-    MiniMap,
     addEdge,
     useNodesState,
     useEdgesState,
@@ -13,11 +13,11 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-// Components
 import BlockNode from "@/components/smart-alert/BlockNode";
 import BlockSidebar from "@/components/smart-alert/BlockSidebar";
 import ConfigPanel from "@/components/smart-alert/ConfigPanel";
 import SaveButton from "@/components/smart-alert/SaveButton";
+import { type Definition, getMosaics } from "@/services/mosaicService.ts";
 
 const nodeTypes = {
     blockNode: BlockNode,
@@ -29,13 +29,17 @@ const SmartAlerts = () => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
     const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+    const [definitions, setDefinitions] = useState<Definition[]>([]);
+
+    useEffect(() => {
+        getMosaics().then(res => setDefinitions(res));
+    }, []);
 
     const onConnect = useCallback(
         (params: Edge | Connection) => {
             if (params.source === params.target) return; // Prevent self-loops
 
             setEdges((eds) => {
-                // Check for cycles: Can we reach 'source' starting from 'target'?
                 const isCyclic = (target: string, source: string, edges: Edge[]) => {
                     const stack = [target];
                     const visited = new Set();
@@ -230,10 +234,11 @@ const SmartAlerts = () => {
 
                     {/* Config Panel Overlay */}
                     {selectedNode && (
-                        <div className="absolute top-4 right-4 z-20 max-h-[calc(100%-4rem)] w-80 flex flex-col pointer-events-none">
+                        <div className="absolute top-4 right-4 z-20 max-h-[calc(100%-4rem)] w-[360px] flex flex-col pointer-events-none">
                             <div className="pointer-events-auto h-full">
                                 <ConfigPanel
                                     node={selectedNode}
+                                    definitions={definitions}
                                     onClose={() => setSelectedNode(null)}
                                     onSave={onConfigSave}
                                     onDelete={onDeleteBlock}

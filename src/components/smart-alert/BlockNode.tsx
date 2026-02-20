@@ -1,9 +1,11 @@
 import { Handle, Position } from 'reactflow';
 import {
     DollarSign,
-    BarChart3,
-    Activity,
+    Gauge,
     TrendingUp,
+    CandlestickChart,
+    Waves,
+    Columns2,
     Bell,
     Webhook,
     HelpCircle
@@ -18,14 +20,8 @@ const blockConfig = {
         bgClass: 'bg-emerald-500/10',
         borderClass: 'group-hover:border-emerald-500/50'
     },
-    volume_condition: {
-        icon: BarChart3,
-        colorClass: 'text-blue-500',
-        bgClass: 'bg-blue-500/10',
-        borderClass: 'group-hover:border-blue-500/50'
-    },
-    rsi: {
-        icon: Activity,
+    relative_strength_index: {
+        icon: Gauge,
         colorClass: 'text-orange-500',
         bgClass: 'bg-orange-500/10',
         borderClass: 'group-hover:border-orange-500/50'
@@ -36,11 +32,23 @@ const blockConfig = {
         bgClass: 'bg-purple-500/10',
         borderClass: 'group-hover:border-purple-500/50'
     },
-    bollinger_bands: {
-        icon: Activity,
+    exponential_moving_average: {
+        icon: CandlestickChart,
+        colorClass: 'text-indigo-500',
+        bgClass: 'bg-indigo-500/10',
+        borderClass: 'group-hover:border-indigo-500/50'
+    },
+    bollinger_bands_analysis: {
+        icon: Waves,
         colorClass: 'text-pink-500',
         bgClass: 'bg-pink-500/10',
         borderClass: 'group-hover:border-pink-500/50'
+    },
+    donchian_channel_analysis: {
+        icon: Columns2,
+        colorClass: 'text-cyan-500',
+        bgClass: 'bg-cyan-500/10',
+        borderClass: 'group-hover:border-cyan-500/50'
     },
     notification: {
         icon: Bell,

@@ -1,23 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import {
     DollarSign,
-    BarChart3,
-    Activity,
+    Gauge,
     TrendingUp,
+    CandlestickChart,
+    Waves,
+    Columns2,
     Bell,
     Webhook,
     GripVertical,
     Plus,
     X,
 } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button';
 
 const blockTypes = [
     { type: 'price_condition', label: 'Price Alert', icon: DollarSign, category: 'trigger', colorClass: 'text-emerald-500', bgClass: 'bg-emerald-500/10' },
-    { type: 'volume_condition', label: 'Volume Alert', icon: BarChart3, category: 'trigger', colorClass: 'text-blue-500', bgClass: 'bg-blue-500/10' },
-    { type: 'rsi', label: 'RSI', icon: Activity, category: 'indicator', colorClass: 'text-orange-500', bgClass: 'bg-orange-500/10' },
+    { type: 'relative_strength_index', label: 'RSI', icon: Gauge, category: 'indicator', colorClass: 'text-orange-500', bgClass: 'bg-orange-500/10' },
     { type: 'moving_average', label: 'Moving Average', icon: TrendingUp, category: 'indicator', colorClass: 'text-purple-500', bgClass: 'bg-purple-500/10' },
+    { type: 'exponential_moving_average', label: 'Exponential Moving Average', icon: CandlestickChart, category: 'indicator', colorClass: 'text-indigo-500', bgClass: 'bg-indigo-500/10' },
+    { type: 'bollinger_bands_analysis', label: 'Bollinger Bands', icon: Waves, category: 'indicator', colorClass: 'text-pink-500', bgClass: 'bg-pink-500/10' },
+    { type: 'donchian_channel_analysis', label: 'Donchian Channels', icon: Columns2, category: 'indicator', colorClass: 'text-cyan-500', bgClass: 'bg-cyan-500/10' },
     { type: 'notification', label: 'Notification', icon: Bell, category: 'action', colorClass: 'text-red-500', bgClass: 'bg-red-500/10' },
     { type: 'webhook', label: 'Webhook', icon: Webhook, category: 'action', colorClass: 'text-slate-500', bgClass: 'bg-slate-500/10' },
 ];
