@@ -111,26 +111,58 @@ const BlockNode = ({ data, isConnectable }: any) => {
 
             {/* Body */}
             <div className="p-3 text-xs text-muted-foreground space-y-2">
-                {data.config?.symbol ? (
+                {data.config?.symbol && [
+                    'price_condition',
+                    'relative_strength_index',
+                    'moving_average',
+                    'exponential_moving_average',
+                    'bollinger_bands_analysis',
+                    'donchian_channel_analysis'
+                ].includes(data.blockType) ? (
                     <div className="flex items-center justify-between">
                         <span className="font-medium">Symbol</span>
                         <span className="bg-muted px-2 py-0.5 rounded text-foreground font-mono">{data.config.symbol}</span>
                     </div>
                 ) : null}
 
-                {data.config?.price ? (
+                {data.config?.price !== undefined && data.config?.price !== '' && (
                     <div className="flex items-center justify-between">
                         <span className="font-medium">Price</span>
-                        <span className="text-foreground font-mono">${data.config.price}</span>
-                    </div>
-                ) : null}
-
-                {/* Show placeholder if no config displayed */}
-                {!data.config?.symbol && !data.config?.price && (
-                    <div className="text-center italic opacity-40 py-1">
-                        Not configured
+                        <span className="text-foreground font-mono">{data.config.operator || ''} ${data.config.price}</span>
                     </div>
                 )}
+
+                {data.config?.index !== undefined && data.config?.index !== '' && (
+                    <div className="flex items-center justify-between">
+                        <span className="font-medium">RSI Period</span>
+                        <span className="text-foreground font-mono">{data.config.operator || ''} {data.config.index}</span>
+                    </div>
+                )}
+
+                {data.config?.bandwidth !== undefined && data.config?.bandwidth !== '' && (
+                    <div className="flex items-center justify-between">
+                        <span className="font-medium">Bandwidth</span>
+                        <span className="text-foreground font-mono">{data.config.bandwidth_operator || ''} {data.config.bandwidth}%</span>
+                    </div>
+                )}
+
+                {data.config?.comparisons && Array.isArray(data.config.comparisons) && data.config.comparisons.length > 0 && (
+                    <div className="flex items-center justify-between">
+                        <span className="font-medium">Conditions</span>
+                        <span className="text-foreground font-mono">{data.config.comparisons.length} rules</span>
+                    </div>
+                )}
+
+                {/* Show placeholder if no config displayed */}
+                {!data.config?.symbol &&
+                    data.config?.price === undefined &&
+                    data.config?.index === undefined &&
+                    !data.config?.bandwidth &&
+                    (!data.config?.comparisons || data.config.comparisons.length === 0) && (
+                        <div className="text-center italic opacity-40 py-1">
+                            Not configured
+                        </div>
+                    )}
             </div>
 
             {/* Output Handle */}

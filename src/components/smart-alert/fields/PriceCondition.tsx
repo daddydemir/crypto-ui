@@ -1,10 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect } from 'react';
 import { Input } from "@/components/ui/input.tsx";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from "@/components/ui/select.tsx";
 import type { Definition } from "@/services/mosaicService.ts";
 
+const PriceCondition = (props: { renderField: any; config: any; handleChange: any; priceCondition: Definition | undefined; errors: any }) => {
+    // Initial default for operator
+    useEffect(() => {
+        if (!props.config.operator) {
+            props.handleChange('operator', '>');
+        }
+    }, []);
 
-const PriceCondition = (props: { renderField: any; config: any; handleChange: any; priceCondition: Definition | undefined }) => {
+    const handleNumericChange = (key: string, value: string) => {
+        let val = value;
+        if (val.includes('.')) {
+            const [int, dec] = val.split('.');
+            if (dec.length > 6) {
+                val = `${int}.${dec.substring(0, 6)}`;
+            }
+        }
+        props.handleChange(key, val === '' ? '' : parseFloat(val));
+    };
+
     return (
         <div className="space-y-4">
             {props.renderField('Symbol', (
@@ -13,13 +30,14 @@ const PriceCondition = (props: { renderField: any; config: any; handleChange: an
                     value={props.config.symbol || ''}
                     onChange={(e) => props.handleChange('symbol', e.target.value)}
                     placeholder="BTC"
+                    aria-invalid={!!props.errors.symbol}
                     className="font-mono uppercase transition-all focus:scale-[1.01]"
                 />
-            ))}
-            {props.renderField('Operator', (
+            ), true, 'symbol')}
+            {props.renderField('Operator & Price', (
                 <div className="flex flex-row gap-2 w-full items-center">
                     <Select
-                        value={props.config.operator || '>'}
+                        value={props.config.operator || ''}
                         onValueChange={(val) => props.handleChange('operator', val)}>
                         <SelectTrigger className="flex-1">
                             <SelectValue placeholder="Select operator" />
@@ -40,12 +58,15 @@ const PriceCondition = (props: { renderField: any; config: any; handleChange: an
                             type="number"
                             className="pl-7 font-mono transition-all focus:scale-[1.01] w-full"
                             value={props.config.price || ''}
-                            onChange={(e) => props.handleChange('price', parseFloat(e.target.value))}
+                            aria-invalid={!!props.errors.price}
+                            step="0.000001"
+                            min="0"
+                            onChange={(e) => handleNumericChange('price', e.target.value)}
                             placeholder="50000"
                         />
                     </div>
                 </div>
-            ))}
+            ), true, 'price')}
 
         </div>
     );

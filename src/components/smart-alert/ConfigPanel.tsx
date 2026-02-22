@@ -20,12 +20,13 @@ import ExponentialMovingAverage from "@/components/smart-alert/fields/Exponentia
 import BollingerBands from "@/components/smart-alert/fields/BollingerBands.tsx";
 import DonchianChannel from "@/components/smart-alert/fields/DonchianChannel.tsx";
 
+import { validateNodeConfig } from './validation.ts';
+
 const LabelComponent = ({ className, children, ...props }: React.ComponentProps<"label">) => (
     <label className={cn("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70", className)} {...props}>
         {children}
     </label>
 );
-
 
 interface ConfigPanelProps {
     node: any;
@@ -37,6 +38,7 @@ interface ConfigPanelProps {
 
 const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPanelProps) => {
     const [config, setConfig] = useState<any>(node?.data?.config || {});
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const priceCondition: Definition | undefined = definitions.find(d => d.name === 'price_condition');
@@ -48,15 +50,32 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
 
     useEffect(() => {
         setConfig(node?.data?.config || {});
+        setErrors({});
     }, [node]);
 
     const handleChange = (key: string, value: any) => {
         setConfig((prev: any) => ({ ...prev, [key]: value }));
+        // Clear error when user changes the field
+        if (errors[key]) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[key];
+                return newErrors;
+            });
+        }
+    };
+
+    const validate = () => {
+        const newErrors = validateNodeConfig(node.data.blockType, config);
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSave = () => {
-        onSave(node.id, config);
-        onClose();
+        if (validate()) {
+            onSave(node.id, config);
+            onClose();
+        }
     };
 
     const handleDeleteConfirmed = () => {
@@ -66,29 +85,43 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
 
     if (!node) return null;
 
-    const renderField = (label: string, children: React.ReactNode) => (
-        <div className="grid w-full items-center gap-2 mb-4">
-            <LabelComponent>{label}</LabelComponent>
-            {children}
-        </div>
-    );
+    const renderField = (label: string, children: React.ReactNode, required?: boolean, errorKey?: string) => {
+        const error = errorKey ? errors[errorKey] : undefined;
+        return (
+            <div className="grid w-full items-center gap-2 mb-4">
+                <div className="flex justify-between items-center">
+                    <LabelComponent className={cn(error && "text-destructive")}>
+                        {label}
+                        {required && <span className="text-destructive ml-1">*</span>}
+                    </LabelComponent>
+                    {error && (
+                        <span className="text-[10px] text-destructive animate-in fade-in slide-in-from-top-1 font-medium">
+                            {error}
+                        </span>
+                    )}
+                </div>
+                {children}
+            </div>
+        );
+    };
 
     const renderFields = () => {
+        const commonProps = { renderField, config, handleChange, errors };
         switch (node.data.blockType) {
             case 'price_condition':
-                return PriceCondition({ renderField, config, handleChange, priceCondition });
+                return <PriceCondition {...commonProps} priceCondition={priceCondition} />;
             case 'notification':
-                return Notification({ renderField, config, handleChange });
+                return <Notification renderField={renderField} config={config} handleChange={handleChange} />;
             case 'relative_strength_index':
-                return RsiAnalysis({ renderField, config, handleChange, rsiAnalysis });
+                return <RsiAnalysis {...commonProps} rsiAnalysis={rsiAnalysis} />;
             case 'moving_average':
-                return MovingAverage({ renderField, config, handleChange, movingAverage });
+                return <MovingAverage {...commonProps} movingAverage={movingAverage} />;
             case 'exponential_moving_average':
-                return ExponentialMovingAverage({ renderField, config, handleChange, ema });
+                return <ExponentialMovingAverage {...commonProps} ema={ema} />;
             case 'bollinger_bands_analysis':
-                return BollingerBands({ renderField, config, handleChange, bollingerBands });
+                return <BollingerBands {...commonProps} bollingerBands={bollingerBands} />;
             case 'donchian_channel_analysis':
-                return DonchianChannel({ renderField, config, handleChange, donchianChannel });
+                return <DonchianChannel {...commonProps} donchianChannel={donchianChannel} />;
             default:
                 return (
                     <div className="flex flex-col items-center justify-center p-8 text-muted-foreground text-center animate-in fade-in-50">

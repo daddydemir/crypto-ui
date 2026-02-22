@@ -1,8 +1,27 @@
+import { useEffect } from 'react';
 import { Input } from "@/components/ui/input.tsx";
 import type { Definition } from "@/services/mosaicService.ts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
 
-const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; rsiAnalysis: Definition | undefined }) => {
+const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; rsiAnalysis: Definition | undefined; errors: any }) => {
+    // Initial default for operator
+    useEffect(() => {
+        if (!props.config.operator) {
+            props.handleChange('operator', '>');
+        }
+    }, []);
+
+    const handleNumericChange = (key: string, value: string) => {
+        let val = value;
+        if (val.includes('.')) {
+            const [int, dec] = val.split('.');
+            if (dec.length > 6) {
+                val = `${int}.${dec.substring(0, 6)}`;
+            }
+        }
+        props.handleChange(key, val === '' ? '' : parseFloat(val));
+    };
+
     return (
         <div className="space-y-4">
             {props.renderField('Symbol', (
@@ -11,14 +30,15 @@ const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; 
                     value={props.config.symbol || ''}
                     onChange={(e) => props.handleChange('symbol', e.target.value)}
                     placeholder="BTC"
+                    aria-invalid={!!props.errors.symbol}
                     className="font-mono uppercase transition-all focus:scale-[1.01]"
                 />
-            ))}
-            {props.renderField('Index', (
+            ), true, 'symbol')}
+            {props.renderField('Operator & Index', (
 
                 <div className="flex flex-row gap-2 w-full items-center">
                     <Select
-                        value={props.config.operator || '>'}
+                        value={props.config.operator || ''}
                         onValueChange={(val) => props.handleChange('operator', val)}>
                         <SelectTrigger className="flex-1">
                             <SelectValue placeholder="Select operator" />
@@ -37,12 +57,15 @@ const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; 
                     <Input
                         type="number"
                         min={1} max={99}
-                        onChange={(e) => props.handleChange('period', parseInt(e.target.value))}
+                        value={props.config.index || ''}
+                        aria-invalid={!!props.errors.index}
+                        onChange={(e) => handleNumericChange('index', e.target.value)}
                         placeholder="14"
+                        step="0.000001"
                         className="font-mono transition-all focus:scale-[1.01] flex-3"
                     />
                 </div>
-            ))}
+            ), true, 'index')}
         </div>
     );
 }

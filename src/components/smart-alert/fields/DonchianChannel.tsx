@@ -4,14 +4,13 @@ import type { Definition } from "@/services/mosaicService.ts";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 
-const DonchianChannel = (props: { renderField: any; config: any; handleChange: any; donchianChannel: Definition | undefined }) => {
+const DonchianChannel = (props: { renderField: any; config: any; handleChange: any; donchianChannel: Definition | undefined; errors: any }) => {
     const conditions = Array.isArray(props.config.comparisons)
         ? props.config.comparisons
         : [
             {
-                id: Date.now() + Math.random(),
                 left: props.config['comparison-1'] || '',
-                op: props.config['operator-1'] || '>',
+                operator: props.config['operator-1'] || '>',
                 right: props.config['comparison-2'] || ''
             }
         ];
@@ -25,13 +24,24 @@ const DonchianChannel = (props: { renderField: any; config: any; handleChange: a
     const addCondition = () => {
         props.handleChange('comparisons', [
             ...conditions,
-            { id: Date.now() + Math.random(), left: '', op: '>', right: '' }
+            { left: '', operator: '>', right: '' }
         ]);
     };
 
     const removeCondition = (index: number) => {
         const newConditions = conditions.filter((_: any, i: number) => i !== index);
         props.handleChange('comparisons', newConditions);
+    };
+
+    const handleNumericChange = (key: string, value: string) => {
+        let val = value;
+        if (val.includes('.')) {
+            const [int, dec] = val.split('.');
+            if (dec.length > 6) {
+                val = `${int}.${dec.substring(0, 6)}`;
+            }
+        }
+        props.handleChange(key, val === '' ? '' : parseFloat(val));
     };
 
     return (
@@ -42,13 +52,14 @@ const DonchianChannel = (props: { renderField: any; config: any; handleChange: a
                     value={props.config.symbol || ''}
                     onChange={(e) => props.handleChange('symbol', e.target.value)}
                     placeholder="BTC"
+                    aria-invalid={!!props.errors.symbol}
                     className="font-mono uppercase transition-all focus:scale-[1.01]"
                 />
-            ))}
+            ), true, 'symbol')}
             {props.renderField('Comparisons', (
                 <div className="space-y-3 w-full">
                     {conditions.map((condition: any, index: number) => (
-                        <div key={condition.id} className="flex flex-row gap-2 w-full items-center">
+                        <div key={index} className="flex flex-row gap-2 w-full items-center">
                             <Select
                                 value={condition.left}
                                 onValueChange={(val) => updateCondition(index, 'left', val)}>
@@ -67,8 +78,8 @@ const DonchianChannel = (props: { renderField: any; config: any; handleChange: a
                                 </SelectContent>
                             </Select>
                             <Select
-                                value={condition.op}
-                                onValueChange={(val) => updateCondition(index, 'op', val)}>
+                                value={condition.operator}
+                                onValueChange={(val) => updateCondition(index, 'operator', val)}>
                                 <SelectTrigger className="flex-1">
                                     <SelectValue placeholder="Operator" />
                                 </SelectTrigger>
@@ -118,7 +129,7 @@ const DonchianChannel = (props: { renderField: any; config: any; handleChange: a
                         Add Condition
                     </Button>
                 </div>
-            ))}
+            ), false, 'comparisons')}
             {props.renderField('Bandwidth', (
                 <div className="flex flex-row gap-2 w-full items-center">
                     <Select
@@ -140,15 +151,17 @@ const DonchianChannel = (props: { renderField: any; config: any; handleChange: a
                         <Input
                             type="number"
                             value={props.config.bandwidth || ''}
-                            onChange={(e) => props.handleChange('bandwidth', e.target.value)}
+                            onChange={(e) => handleNumericChange('bandwidth', e.target.value)}
                             placeholder="2"
+                            aria-invalid={!!props.errors.bandwidth}
+                            step="0.000001"
+                            min="0"
                             className="pl-7 font-mono transition-all focus:scale-[1.01] w-full"
                         />
                     </div>
-
                 </div>
-            ))}
-        </div>
+            ), false, 'bandwidth')}
+        </div >
     );
 }
 

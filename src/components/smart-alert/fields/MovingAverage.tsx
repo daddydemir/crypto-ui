@@ -4,14 +4,13 @@ import type { Definition } from "@/services/mosaicService.ts";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 
-const MovingAverage = (props: { renderField: any; config: any; handleChange: any; movingAverage: Definition | undefined }) => {
+const MovingAverage = (props: { renderField: any; config: any; handleChange: any; movingAverage: Definition | undefined; errors: any }) => {
     const conditions = Array.isArray(props.config.comparisons)
         ? props.config.comparisons
         : [
             {
-                id: Date.now() + Math.random(),
                 left: props.config['comparison-1'] || '',
-                op: props.config['operator-1'] || '>',
+                operator: props.config['operator-1'] || '>',
                 right: props.config['comparison-2'] || ''
             }
         ];
@@ -25,7 +24,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
     const addCondition = () => {
         props.handleChange('comparisons', [
             ...conditions,
-            { id: Date.now() + Math.random(), left: '', op: '>', right: '' }
+            { left: '', operator: '>', right: '' }
         ]);
     };
 
@@ -42,13 +41,14 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                     value={props.config.symbol || ''}
                     onChange={(e) => props.handleChange('symbol', e.target.value)}
                     placeholder="BTC"
+                    aria-invalid={!!props.errors.symbol}
                     className="font-mono uppercase transition-all focus:scale-[1.01]"
                 />
-            ))}
+            ), true, 'symbol')}
             {props.renderField('Comparisons', (
                 <div className="space-y-3 w-full">
                     {conditions.map((condition: any, index: number) => (
-                        <div key={condition.id} className="flex flex-row gap-2 w-full items-center">
+                        <div key={index} className="flex flex-row gap-2 w-full items-center">
                             <Select
                                 value={condition.left}
                                 onValueChange={(val) => updateCondition(index, 'left', val)}>
@@ -67,8 +67,8 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                                 </SelectContent>
                             </Select>
                             <Select
-                                value={condition.op}
-                                onValueChange={(val) => updateCondition(index, 'op', val)}>
+                                value={condition.operator}
+                                onValueChange={(val) => updateCondition(index, 'operator', val)}>
                                 <SelectTrigger className="flex-1">
                                     <SelectValue placeholder="Operator" />
                                 </SelectTrigger>
@@ -118,7 +118,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                         Add Condition
                     </Button>
                 </div>
-            ))}
+            ), true, 'comparisons')}
         </div>
     );
 }

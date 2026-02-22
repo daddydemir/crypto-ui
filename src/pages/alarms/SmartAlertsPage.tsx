@@ -17,7 +17,10 @@ import BlockNode from "@/components/smart-alert/BlockNode";
 import BlockSidebar from "@/components/smart-alert/BlockSidebar";
 import ConfigPanel from "@/components/smart-alert/ConfigPanel";
 import SaveButton from "@/components/smart-alert/SaveButton";
+import Modal from "@/components/common/Modal";
+import { Button } from "@/components/ui/button";
 import { type Definition, getMosaics } from "@/services/mosaicService.ts";
+import { AlertCircle } from "lucide-react";
 
 const nodeTypes = {
     blockNode: BlockNode,
@@ -30,6 +33,8 @@ const SmartAlerts = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
     const [selectedNode, setSelectedNode] = useState<Node | null>(null);
     const [definitions, setDefinitions] = useState<Definition[]>([]);
+    const [alertModalOpen, setAlertModalOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     useEffect(() => {
         getMosaics().then(res => setDefinitions(res));
@@ -92,18 +97,38 @@ const SmartAlerts = () => {
                 y: event.clientY,
             });
 
-            const newNode: Node = {
-                id: `${type}-${Date.now()}`,
-                type: 'blockNode',
-                position,
-                data: {
-                    label: type.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-                    blockType: type,
-                    config: {}
-                },
-            };
+            setNodes((nds) => {
+                // Enforce single instance per block type
+                if (nds.some(n => n.data.blockType === type)) {
+                    setAlertMessage(`Bu bloktan (${type.split('_').join(' ').toUpperCase()}) zaten bir tane eklenmiş. Her bloktan sadece birer adet kullanabilirsiniz.`);
+                    setAlertModalOpen(true);
+                    return nds;
+                }
 
-            setNodes((nds) => nds.concat(newNode));
+                const existingNodeWithSymbol = nds.find(n => n.data.config?.symbol);
+                const defaultSymbol = existingNodeWithSymbol?.data.config?.symbol || '';
+
+                const symbolUsingTypes = [
+                    'price_condition',
+                    'relative_strength_index',
+                    'moving_average',
+                    'exponential_moving_average',
+                    'bollinger_bands_analysis',
+                    'donchian_channel_analysis'
+                ];
+
+                const newNode: Node = {
+                    id: `${type}-${Date.now()}`,
+                    type: 'blockNode',
+                    position,
+                    data: {
+                        label: type.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                        blockType: type,
+                        config: symbolUsingTypes.includes(type) ? { symbol: defaultSymbol } : {}
+                    },
+                };
+                return nds.concat(newNode);
+            });
         },
         [reactFlowInstance, setNodes]
     );
@@ -121,20 +146,55 @@ const SmartAlerts = () => {
 
     // Config save handler
     const onConfigSave = useCallback((nodeId: string, config: any) => {
-        setNodes((nds) =>
-            nds.map((node) => {
-                if (node.id === nodeId) {
-                    return {
-                        ...node,
-                        data: {
-                            ...node.data,
-                            config,
-                        },
-                    };
+        // Ensure symbol is always uppercase
+        if (config.symbol) {
+            config.symbol = config.symbol.toUpperCase();
+        }
+
+        setNodes((nds) => {
+            const newSymbol = config.symbol;
+
+            return nds.map((node) => {
+                // Determine the new config for this node
+                let nodeConfig = node.id === nodeId ? config : { ...node.data.config };
+
+                // If a symbol is being set/changed, sync it to all nodes that use symbols
+                const symbolUsingTypes = [
+                    'price_condition',
+                    'relative_strength_index',
+                    'moving_average',
+                    'exponential_moving_average',
+                    'bollinger_bands_analysis',
+                    'donchian_channel_analysis'
+                ];
+
+                if (newSymbol && symbolUsingTypes.includes(node.data.blockType)) {
+                    nodeConfig.symbol = newSymbol;
                 }
-                return node;
-            })
-        );
+
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        config: nodeConfig,
+                    },
+                };
+            });
+        });
+
+        // Update selectedNode state to reflect local changes if it's the one saved
+        setSelectedNode(prev => {
+            if (prev?.id === nodeId) {
+                return {
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        config: config
+                    }
+                };
+            }
+            return prev;
+        });
     }, [setNodes]);
 
     // Delete block handler
@@ -248,6 +308,28 @@ const SmartAlerts = () => {
                     )}
                 </div>
             </div>
+
+            <Modal
+                isOpen={alertModalOpen}
+                onClose={() => setAlertModalOpen(false)}
+                title="Sınırlama Uyarısı"
+                maxWidth="max-w-md"
+            >
+                <div className="flex flex-col items-center text-center space-y-4 py-2">
+                    <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-full">
+                        <AlertCircle className="w-8 h-8 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                        {alertMessage}
+                    </p>
+                    <Button
+                        onClick={() => setAlertModalOpen(false)}
+                        className="w-full mt-4"
+                    >
+                        Anladım
+                    </Button>
+                </div>
+            </Modal>
         </div>
     );
 };
