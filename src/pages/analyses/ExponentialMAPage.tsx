@@ -21,8 +21,8 @@ const ExponentialMAPage: React.FC = () => {
     const [isDetailOpen, setIsDetailOpen] = useState(false)
 
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<MovingAveragePoint[]>({
-        cacheKey: `exponential-moving-averages-${selectedCoin?.id}`,
-        fetchFn: () => selectedCoin?.id ? getMovingAverages(selectedCoin.id) : Promise.resolve([])
+        cacheKey: `exponential-moving-averages-${selectedCoin?.symbol}`,
+        fetchFn: () => selectedCoin?.symbol ? getMovingAverages(selectedCoin.symbol) : Promise.resolve([])
     })
 
     const filteredData = useTimeRangeFilter({

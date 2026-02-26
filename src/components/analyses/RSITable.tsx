@@ -150,7 +150,7 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                         <tr 
                             key={`${coin.coin_id}-${index}`} 
                             className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
-                            onClick={() => navigate(`/coins/${coin.name.toLowerCase()}`)}
+                            onClick={() => navigate(`/coins/${coin.coin_id.toLowerCase()}`)} //demir
                         >
                             <td className="p-3">
                                 <div className="flex flex-col">

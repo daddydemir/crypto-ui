@@ -27,8 +27,8 @@ const BollingerBandsPage: React.FC = () => {
     })
 
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<BollingerBandsPoint[]>({
-        cacheKey: `bollinger-bands-${selectedCoin?.id}`,
-        fetchFn: () => selectedCoin?.id ? getBollingerBands(selectedCoin.id) : Promise.resolve([])
+        cacheKey: `bollinger-bands-${selectedCoin?.symbol}`,
+        fetchFn: () => selectedCoin?.symbol ? getBollingerBands(selectedCoin.symbol) : Promise.resolve([])
     })
 
     const { data: signals, loading: signalsLoading, refresh: refreshSignals, lastUpdateText: signalsLastUpdate } = useCachedData<BollingerBandSignal[]>({

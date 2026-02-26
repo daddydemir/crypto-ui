@@ -23,7 +23,7 @@ export async function getRSITopCoins(): Promise<RSICoin[]> {
 
 export async function getRSIHistory(coinId: string): Promise<RSIHistoryPoint[]> {
     try {
-        return await http.get<RSIHistoryPoint[]>(`/coins/${coinId}/rsi/history?days=0`)
+        return await http.get<RSIHistoryPoint[]>(`/coins/${coinId}/rsi/history`)
     } catch (error) {
         console.error('Error fetching RSI history:', error)
         return []

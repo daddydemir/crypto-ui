@@ -9,7 +9,7 @@ export interface MovingAveragePoint {
 }
 
 export async function getMovingAverages(coinId: string): Promise<MovingAveragePoint[]> {
-    return http.get<MovingAveragePoint[]>(`/coins/${coinId}/moving-averages?days=-1`);
+    return http.get<MovingAveragePoint[]>(`/coins/${coinId}/moving-averages`);
 }
 
 export interface MovingAverageSignal {

@@ -28,8 +28,8 @@ const MovingAveragePage: React.FC = () => {
     })
 
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<MovingAveragePoint[]>({
-        cacheKey: `moving-averages-${selectedCoin?.id}`,
-        fetchFn: () => selectedCoin?.id ? getMovingAverages(selectedCoin.id) : Promise.resolve([])
+        cacheKey: `moving-averages-${selectedCoin?.symbol}`,
+        fetchFn: () => selectedCoin?.symbol ? getMovingAverages(selectedCoin.symbol) : Promise.resolve([])
     })
 
     const { data: signals, loading: signalsLoading, refresh: refreshSignals, lastUpdateText: signalsLastUpdate } = useCachedData<MovingAverageSignal[]>({
