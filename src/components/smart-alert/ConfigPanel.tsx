@@ -21,6 +21,7 @@ import BollingerBands from "@/components/smart-alert/fields/BollingerBands.tsx";
 import DonchianChannel from "@/components/smart-alert/fields/DonchianChannel.tsx";
 
 import { validateNodeConfig } from './validation.ts';
+import { useTranslation } from 'react-i18next';
 
 const LabelComponent = ({ className, children, ...props }: React.ComponentProps<"label">) => (
     <label className={cn("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70", className)} {...props}>
@@ -37,6 +38,7 @@ interface ConfigPanelProps {
 }
 
 const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPanelProps) => {
+    const { t } = useTranslation();
     const [config, setConfig] = useState<any>(node?.data?.config || {});
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -66,7 +68,7 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
     };
 
     const validate = () => {
-        const newErrors = validateNodeConfig(node.data.blockType, config);
+        const newErrors = validateNodeConfig(node.data.blockType, config, t);
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -126,8 +128,8 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
                 return (
                     <div className="flex flex-col items-center justify-center p-8 text-muted-foreground text-center animate-in fade-in-50">
                         <AlertCircle className="w-10 h-10 mb-3 opacity-20" />
-                        <p className="text-sm font-medium">No configuration options available</p>
-                        <p className="text-xs text-muted-foreground/75 mt-1">This block type doesn't have any configurable parameters.</p>
+                        <p className="text-sm font-medium">{t('smartAlert.configPanel.noConfigOptions')}</p>
+                        <p className="text-xs text-muted-foreground/75 mt-1">{t('smartAlert.configPanel.noConfigParams')}</p>
                     </div>
                 );
         }
@@ -164,7 +166,7 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
                                 <div className="p-1.5 rounded-md bg-destructive/10">
                                     <TriangleAlert className="w-4 h-4 text-destructive" />
                                 </div>
-                                <CardTitle className="text-sm font-semibold">Delete Block</CardTitle>
+                                <CardTitle className="text-sm font-semibold">{t('smartAlert.configPanel.deleteBlock')}</CardTitle>
                             </div>
                             <Button
                                 variant="ghost"
@@ -177,9 +179,9 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
                         </CardHeader>
                         <CardContent className="p-4">
                             <p className="text-sm text-muted-foreground">
-                                Are you sure you want to delete{' '}
-                                <span className="font-semibold text-foreground">{node.data.label}</span>?
-                                This action cannot be undone.
+                                {t('smartAlert.configPanel.confirmDelete1')}
+                                <span className="font-semibold text-foreground">{node.data.label}</span>
+                                {t('smartAlert.configPanel.confirmDelete2')}
                             </p>
                         </CardContent>
                         <CardFooter className="border-t bg-muted/20 p-2 flex gap-2 justify-end">
@@ -189,7 +191,7 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
                                 className="h-7 text-xs rounded-md"
                                 onClick={() => setShowDeleteConfirm(false)}
                             >
-                                Cancel
+                                {t('smartAlert.configPanel.cancel')}
                             </Button>
                             <Button
                                 variant="destructive"
@@ -198,7 +200,7 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
                                 onClick={handleDeleteConfirmed}
                             >
                                 <Trash2 className="w-3 h-3" />
-                                Delete
+                                {t('smartAlert.configPanel.delete')}
                             </Button>
                         </CardFooter>
                     </Card>
@@ -211,17 +213,17 @@ const ConfigPanel = ({ node, onClose, onSave, onDelete, definitions }: ConfigPan
                     size="icon"
                     className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-md"
                     onClick={() => setShowDeleteConfirm(true)}
-                    title="Delete Block"
+                    title={t('smartAlert.configPanel.deleteBlock')}
                 >
                     <Trash2 className="w-3.5 h-3.5" />
                 </Button>
                 <div className="flex gap-2 flex-1 justify-end">
                     <Button variant="outline" size="sm" className="h-7 text-xs rounded-md" onClick={onClose}>
-                        Cancel
+                        {t('smartAlert.configPanel.cancel')}
                     </Button>
                     <Button size="sm" className="h-7 text-xs gap-1.5 rounded-md" onClick={handleSave}>
                         <Check className="w-3 h-3" />
-                        Save
+                        {t('smartAlert.configPanel.save')}
                     </Button>
                 </div>
             </CardFooter>

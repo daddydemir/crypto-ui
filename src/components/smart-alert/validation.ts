@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-export const validateNodeConfig = (blockType: string, config: any): Record<string, string> => {
+export const validateNodeConfig = (blockType: string, config: any, t: (key: string) => string): Record<string, string> => {
     const errors: Record<string, string> = {};
 
     // All analysis types require a symbol
@@ -14,33 +14,33 @@ export const validateNodeConfig = (blockType: string, config: any): Record<strin
     ];
 
     if (analysisTypes.includes(blockType)) {
-        if (!config.symbol) errors.symbol = 'Sembol gerekli';
+        if (!config.symbol) errors.symbol = t('smartAlert.validation.symbolRequired');
     }
 
     // Validation logic based on block type
     switch (blockType) {
         case 'price_condition':
             if (config.price === undefined || config.price === '' || isNaN(config.price)) {
-                errors.price = 'Fiyat gerekli';
+                errors.price = t('smartAlert.validation.priceRequired');
             } else if (config.price < 0) {
-                errors.price = 'Fiyat pozitif olmalı';
+                errors.price = t('smartAlert.validation.pricePositive');
             }
             break;
         case 'relative_strength_index':
             if (!config.index) {
-                errors.index = 'RSI periyodu gerekli';
+                errors.index = t('smartAlert.validation.rsiPeriodRequired');
             } else if (config.index < 1 || config.index > 99) {
-                errors.index = 'Aralık: 1-99';
+                errors.index = t('smartAlert.validation.rsiRange');
             }
             break;
         case 'moving_average':
         case 'exponential_moving_average':
             if (!config.comparisons || !Array.isArray(config.comparisons) || config.comparisons.length === 0) {
-                errors.comparisons = 'En az bir karşılaştırma gerekli';
+                errors.comparisons = t('smartAlert.validation.atLeastOneComparison');
             } else {
                 const hasInvalid = config.comparisons.some((c: any) => !c.left || !c.right);
                 if (hasInvalid) {
-                    errors.comparisons = 'Tüm alanları doldurun';
+                    errors.comparisons = t('smartAlert.validation.fillAllFields');
                 }
             }
             break;
@@ -50,22 +50,22 @@ export const validateNodeConfig = (blockType: string, config: any): Record<strin
             const hasBandwidth = config.bandwidth !== undefined && config.bandwidth !== '' && !isNaN(config.bandwidth);
 
             if (!hasComparisons && !hasBandwidth) {
-                errors.comparisons = 'Karşılaştırma veya Bandwidth gerekli';
+                errors.comparisons = t('smartAlert.validation.comparisonOrBandwidthRequired');
                 errors.bandwidth = ' ';
             } else {
                 if (hasComparisons) {
                     const hasInvalid = config.comparisons.some((c: any) => !c.left || !c.right);
-                    if (hasInvalid) errors.comparisons = 'Tüm alanları doldurun';
+                    if (hasInvalid) errors.comparisons = t('smartAlert.validation.fillAllFields');
                 }
                 if (hasBandwidth && config.bandwidth < 0) {
-                    errors.bandwidth = 'Pozitif olmalı';
+                    errors.bandwidth = t('smartAlert.validation.positiveRequired');
                 }
             }
             break;
         case 'notification':
-            if (!config.channel) errors.channel = 'Kanal gerekli';
-            if (!config.target) errors.target = 'Hedef gerekli';
-            if (!config.message) errors.message = 'Mesaj gerekli';
+            if (!config.channel) errors.channel = t('smartAlert.validation.channelRequired');
+            if (!config.target) errors.target = t('smartAlert.validation.targetRequired');
+            if (!config.message) errors.message = t('smartAlert.validation.messageRequired');
             break;
     }
 

@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { Input } from "@/components/ui/input.tsx";
 import type { Definition } from "@/services/mosaicService.ts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import { useTranslation } from 'react-i18next';
 
 const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; rsiAnalysis: Definition | undefined; errors: any }) => {
+    const { t } = useTranslation();
     // Initial default for operator
     useEffect(() => {
         if (!props.config.operator) {
@@ -24,7 +26,7 @@ const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; 
 
     return (
         <div className="space-y-4">
-            {props.renderField('Symbol', (
+            {props.renderField(t('smartAlert.fields.symbol'), (
                 <Input
                     type="text"
                     value={props.config.symbol || ''}
@@ -34,14 +36,14 @@ const RsiAnalysis = (props: { renderField: any; config: any; handleChange: any; 
                     className="font-mono uppercase transition-all focus:scale-[1.01]"
                 />
             ), true, 'symbol')}
-            {props.renderField('Operator & Index', (
+            {props.renderField(t('smartAlert.fields.operatorAndIndex'), (
 
                 <div className="flex flex-row gap-2 w-full items-center">
                     <Select
                         value={props.config.operator || ''}
                         onValueChange={(val) => props.handleChange('operator', val)}>
                         <SelectTrigger className="flex-1">
-                            <SelectValue placeholder="Select operator" />
+                            <SelectValue placeholder={t('smartAlert.fields.selectOperator')} />
                         </SelectTrigger>
                         <SelectContent>
                             {props.rsiAnalysis?.fields

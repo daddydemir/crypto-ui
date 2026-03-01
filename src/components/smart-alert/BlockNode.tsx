@@ -11,6 +11,7 @@ import {
     HelpCircle
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useTranslation } from 'react-i18next';
 
 // Tailwind color mapping for block types
 const blockConfig = {
@@ -65,6 +66,7 @@ const blockConfig = {
 };
 
 const BlockNode = ({ data, isConnectable }: any) => {
+    const { t } = useTranslation();
     // Determine configuration based on block type
     const blockType = data.blockType as keyof typeof blockConfig;
     const config = blockConfig[blockType] || {
@@ -120,36 +122,36 @@ const BlockNode = ({ data, isConnectable }: any) => {
                     'donchian_channel_analysis'
                 ].includes(data.blockType) ? (
                     <div className="flex items-center justify-between">
-                        <span className="font-medium">Symbol</span>
+                        <span className="font-medium">{t('smartAlert.blockNode.symbol')}</span>
                         <span className="bg-muted px-2 py-0.5 rounded text-foreground font-mono">{data.config.symbol}</span>
                     </div>
                 ) : null}
 
                 {data.config?.price !== undefined && data.config?.price !== '' && (
                     <div className="flex items-center justify-between">
-                        <span className="font-medium">Price</span>
+                        <span className="font-medium">{t('smartAlert.blockNode.price')}</span>
                         <span className="text-foreground font-mono">{data.config.operator || ''} ${data.config.price}</span>
                     </div>
                 )}
 
                 {data.config?.index !== undefined && data.config?.index !== '' && (
                     <div className="flex items-center justify-between">
-                        <span className="font-medium">RSI Period</span>
+                        <span className="font-medium">{t('smartAlert.blockNode.rsiPeriod')}</span>
                         <span className="text-foreground font-mono">{data.config.operator || ''} {data.config.index}</span>
                     </div>
                 )}
 
                 {data.config?.bandwidth !== undefined && data.config?.bandwidth !== '' && (
                     <div className="flex items-center justify-between">
-                        <span className="font-medium">Bandwidth</span>
+                        <span className="font-medium">{t('smartAlert.blockNode.bandwidth')}</span>
                         <span className="text-foreground font-mono">{data.config.bandwidth_operator || ''} {data.config.bandwidth}%</span>
                     </div>
                 )}
 
                 {data.config?.comparisons && Array.isArray(data.config.comparisons) && data.config.comparisons.length > 0 && (
                     <div className="flex items-center justify-between">
-                        <span className="font-medium">Conditions</span>
-                        <span className="text-foreground font-mono">{data.config.comparisons.length} rules</span>
+                        <span className="font-medium">{t('smartAlert.blockNode.conditions')}</span>
+                        <span className="text-foreground font-mono">{data.config.comparisons.length} {t('smartAlert.blockNode.rules')}</span>
                     </div>
                 )}
 
@@ -160,7 +162,7 @@ const BlockNode = ({ data, isConnectable }: any) => {
                     !data.config?.bandwidth &&
                     (!data.config?.comparisons || data.config.comparisons.length === 0) && (
                         <div className="text-center italic opacity-40 py-1">
-                            Not configured
+                            {t('smartAlert.blockNode.notConfigured')}
                         </div>
                     )}
             </div>

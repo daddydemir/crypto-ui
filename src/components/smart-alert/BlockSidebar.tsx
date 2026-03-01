@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const blockTypes = [
     { type: 'price_condition', label: 'Price Alert', icon: DollarSign, category: 'trigger', colorClass: 'text-emerald-500', bgClass: 'bg-emerald-500/10' },
@@ -28,6 +29,7 @@ const blockTypes = [
 ];
 
 const BlockSidebar = () => {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
 
     const onDragStart = (event: React.DragEvent, blockType: string) => {
@@ -57,7 +59,7 @@ const BlockSidebar = () => {
                     )}
                 >
                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-bold text-foreground">Add Blocks</h3>
+                        <h3 className="text-sm font-bold text-foreground">{t('smartAlert.blockSidebar.addBlocks')}</h3>
                     </div>
 
                     <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar flex-1">
@@ -68,9 +70,9 @@ const BlockSidebar = () => {
                             return (
                                 <div key={category}>
                                     <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                                        {category === 'trigger' ? '🎯 Triggers' :
-                                            category === 'indicator' ? '📊 Indicators' :
-                                                '⚡ Actions'}
+                                        {category === 'trigger' ? t('smartAlert.blockSidebar.triggers') :
+                                            category === 'indicator' ? t('smartAlert.blockSidebar.indicators') :
+                                                t('smartAlert.blockSidebar.actions')}
                                     </h4>
                                     <div className="space-y-2">
                                         {categoryBlocks.map((block) => (
@@ -86,7 +88,7 @@ const BlockSidebar = () => {
                                                 <div className={cn("p-1.5 rounded-md", block.bgClass)}>
                                                     <block.icon className={cn("w-3.5 h-3.5", block.colorClass)} />
                                                 </div>
-                                                <span className="text-xs font-medium text-foreground">{block.label}</span>
+                                                <span className="text-xs font-medium text-foreground">{t(`smartAlert.blockSidebar.types.${block.type}` as any)}</span>
                                                 <GripVertical className="w-3 h-3 text-muted-foreground/30 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                                             </div>
                                         ))}

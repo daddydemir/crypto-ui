@@ -624,5 +624,92 @@
         "content": "ATR'yi pozisyon boyutlandırma ve stop-loss belirleme için kullanın. Yüksek ATR'de daha küçük pozisyon, düşük ATR'de daha büyük pozisyon alabilirsiniz. Stop-loss'u 1.5-2x ATR mesafesine koymak, normal fiyat dalgalanmalarından etkilenmemenizi sağlar. Düşük ATR dönemleri genellikle büyük hareketlerin öncüsüdür - bu dönemlerde kırılım stratejilerine hazır olun. "
       }
     }
+  },
+  "smartAlert": {
+    "saveButton": {
+      "enterName": "Lütfen bir isim girin",
+      "connectionError": "Bağlantı Hatası",
+      "connectionErrorMsg": "Birden fazla blok varken bütün bloklar birbirine bağlı olmalıdır. Bağlantısız bloklar: ",
+      "saveSuccess": "Mozaik başarıyla kaydedildi!",
+      "error": "Hata: ",
+      "unknownError": "Bilinmeyen bir hata oluştu",
+      "saveFailed": "Mozaik kaydedilemedi",
+      "saveMosaic": "Mozaiği Kaydet",
+      "validationErrors": "Doğrulama Hataları",
+      "mosaicName": "Mozaik Adı",
+      "enterDescriptiveName": "Açıklayıcı bir isim girin...",
+      "cancel": "İptal",
+      "saving": "Kaydediliyor...",
+      "save": "Kaydet"
+    },
+    "blockNode": {
+      "symbol": "Sembol",
+      "price": "Fiyat",
+      "rsiPeriod": "RSI Periyodu",
+      "bandwidth": "Bant Genişliği",
+      "conditions": "Koşullar",
+      "rules": "kural",
+      "notConfigured": "Yapılandırılmadı"
+    },
+    "configPanel": {
+      "noConfigOptions": "Yapılandırma seçeneği yok",
+      "noConfigParams": "Bu blok türünün yapılandırılabilir parametresi yoktur.",
+      "deleteBlock": "Bloğu Sil",
+      "confirmDelete1": "",
+      "confirmDelete2": " adlı bloğu silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+      "cancel": "İptal",
+      "delete": "Sil",
+      "save": "Kaydet"
+    },
+    "blockSidebar": {
+      "addBlocks": "Blok Ekle",
+      "triggers": "🎯 Tetikleyiciler",
+      "indicators": "📊 Göstergeler",
+      "actions": "⚡ Eylemler",
+      "types": {
+        "price_condition": "Fiyat Alarmı",
+        "relative_strength_index": "RSI",
+        "moving_average": "Hareketli Ortalama",
+        "exponential_moving_average": "Üstel Hareketli Ortalama",
+        "bollinger_bands_analysis": "Bollinger Bantları",
+        "donchian_channel_analysis": "Donchian Kanalları",
+        "notification": "Bildirim",
+        "webhook": "Webhook"
+      }
+    },
+    "fields": {
+      "symbol": "Sembol",
+      "operatorAndPrice": "Operatör ve Fiyat",
+      "selectOperator": "Operatör seçin",
+      "operatorAndIndex": "Operatör ve İndeks",
+      "channel": "Kanal",
+      "telegram": "Telegram",
+      "discord": "Discord",
+      "email": "E-posta",
+      "targetUserGroup": "Hedef Kullanıcı/Grup",
+      "targetPlaceholder": "@kullanıcıadı veya e-posta",
+      "message": "Mesaj",
+      "messagePlaceholder": "Alarm mesajı...",
+      "comparisons": "Karşılaştırmalar",
+      "select": "Seç",
+      "operator": "Operatör",
+      "addCondition": "Koşul Ekle",
+      "bandwidth": "Bant Genişliği",
+      "op": "Op"
+    },
+    "validation": {
+      "symbolRequired": "Sembol gerekli",
+      "priceRequired": "Fiyat gerekli",
+      "pricePositive": "Fiyat pozitif olmalı",
+      "rsiPeriodRequired": "RSI periyodu gerekli",
+      "rsiRange": "Aralık: 1-99",
+      "atLeastOneComparison": "En az bir karşılaştırma gerekli",
+      "fillAllFields": "Tüm alanları doldurun",
+      "comparisonOrBandwidthRequired": "Karşılaştırma veya Bant Genişliği gerekli",
+      "positiveRequired": "Pozitif olmalı",
+      "channelRequired": "Kanal gerekli",
+      "targetRequired": "Hedef gerekli",
+      "messageRequired": "Mesaj gerekli"
+    }
   }
 }

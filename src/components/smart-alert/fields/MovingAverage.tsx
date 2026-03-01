@@ -3,8 +3,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { Definition } from "@/services/mosaicService.ts";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const MovingAverage = (props: { renderField: any; config: any; handleChange: any; movingAverage: Definition | undefined; errors: any }) => {
+    const { t } = useTranslation();
     const conditions = Array.isArray(props.config.comparisons)
         ? props.config.comparisons
         : [
@@ -35,7 +37,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
 
     return (
         <div className="space-y-4">
-            {props.renderField('Symbol', (
+            {props.renderField(t('smartAlert.fields.symbol'), (
                 <Input
                     type="text"
                     value={props.config.symbol || ''}
@@ -45,7 +47,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                     className="font-mono uppercase transition-all focus:scale-[1.01]"
                 />
             ), true, 'symbol')}
-            {props.renderField('Comparisons', (
+            {props.renderField(t('smartAlert.fields.comparisons'), (
                 <div className="space-y-3 w-full">
                     {conditions.map((condition: any, index: number) => (
                         <div key={index} className="flex flex-row gap-2 w-full items-center">
@@ -53,7 +55,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                                 value={condition.left}
                                 onValueChange={(val) => updateCondition(index, 'left', val)}>
                                 <SelectTrigger className="flex-1">
-                                    <SelectValue placeholder="Select" />
+                                    <SelectValue placeholder={t('smartAlert.fields.select')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {props.movingAverage?.fields
@@ -70,7 +72,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                                 value={condition.operator}
                                 onValueChange={(val) => updateCondition(index, 'operator', val)}>
                                 <SelectTrigger className="flex-1">
-                                    <SelectValue placeholder="Operator" />
+                                    <SelectValue placeholder={t('smartAlert.fields.operator')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=">"> &gt; </SelectItem>
@@ -84,7 +86,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                                 value={condition.right}
                                 onValueChange={(val) => updateCondition(index, 'right', val)}>
                                 <SelectTrigger className="flex-1">
-                                    <SelectValue placeholder="Select" />
+                                    <SelectValue placeholder={t('smartAlert.fields.select')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {props.movingAverage?.fields
@@ -115,7 +117,7 @@ const MovingAverage = (props: { renderField: any; config: any; handleChange: any
                         onClick={addCondition}
                     >
                         <Plus className="h-4 w-4 mr-2" />
-                        Add Condition
+                        {t('smartAlert.fields.addCondition')}
                     </Button>
                 </div>
             ), true, 'comparisons')}

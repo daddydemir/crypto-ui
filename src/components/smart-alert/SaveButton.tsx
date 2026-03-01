@@ -4,6 +4,7 @@ import Modal from '../common/Modal';
 import { cn } from '../../lib/utils';
 import { validateNodeConfig } from './validation.ts';
 import { MOSAIC_BASE_URL } from '../../services/api/config';
+import { useTranslation } from 'react-i18next';
 
 interface SaveButtonProps {
     nodes: any[];
@@ -12,6 +13,7 @@ interface SaveButtonProps {
 }
 
 const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
+    const { t } = useTranslation();
     const [name, setName] = useState('');
     const [showDialog, setShowDialog] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
 
     const handleSave = async () => {
         if (!name.trim()) {
-            alert('Lütfen bir isim girin');
+            alert(t('smartAlert.saveButton.enterName'));
             return;
         }
 
@@ -29,7 +31,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
         // 1. Individual block validation
         const allValidationErrors: { field: string; message: string }[] = [];
         nodes.forEach(node => {
-            const nodeErrors = validateNodeConfig(node.data.blockType, node.data.config || {});
+            const nodeErrors = validateNodeConfig(node.data.blockType, node.data.config || {}, t);
             Object.entries(nodeErrors).forEach(([field, msg]) => {
                 allValidationErrors.push({
                     field: `${node.data.label} -> ${field}`,
@@ -53,8 +55,8 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
             if (unconnectedNodes.length > 0) {
                 const nodeNames = unconnectedNodes.map(n => n.data.label).join(', ');
                 setServerErrors([{
-                    field: 'Bağlantı Hatası',
-                    message: `Birden fazla blok varken bütün bloklar birbirine bağlı olmalıdır. Bağlantısız bloklar: ${nodeNames}.`
+                    field: t('smartAlert.saveButton.connectionError'),
+                    message: `${t('smartAlert.saveButton.connectionErrorMsg')}${nodeNames}.`
                 }]);
                 setLoading(false);
                 return;
@@ -93,7 +95,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
 
             if (response.ok) {
                 // Ideally replace with a toast
-                alert('Mosaic saved successfully!');
+                alert(t('smartAlert.saveButton.saveSuccess'));
                 setShowDialog(false);
                 setName('');
                 onSave?.();
@@ -102,11 +104,11 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                 if (errorData.errors && Array.isArray(errorData.errors)) {
                     setServerErrors(errorData.errors);
                 } else {
-                    alert(`Error: ${errorData.message || 'Unknown error occurred'}`);
+                    alert(`${t('smartAlert.saveButton.error')}${errorData.message || t('smartAlert.saveButton.unknownError')}`);
                 }
             }
         } catch (error) {
-            alert('Failed to save mosaic');
+            alert(t('smartAlert.saveButton.saveFailed'));
             console.error(error);
         } finally {
             setLoading(false);
@@ -130,7 +132,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                 onClick={() => setShowDialog(true)}
             >
                 <Save className="w-4 h-4" />
-                Save Mosaic
+                {t('smartAlert.saveButton.saveMosaic')}
             </button>
 
             <Modal
@@ -139,13 +141,13 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                     setShowDialog(false);
                     setServerErrors(null);
                 }}
-                title="Save Mosaic"
+                title={t('smartAlert.saveButton.saveMosaic')}
                 maxWidth="max-w-md"
             >
                 <div className="space-y-4">
                     {serverErrors && (
                         <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20 animate-in fade-in slide-in-from-top-2">
-                            <h4 className="text-xs font-semibold text-destructive mb-1 uppercase tracking-wider">Validation Errors</h4>
+                            <h4 className="text-xs font-semibold text-destructive mb-1 uppercase tracking-wider">{t('smartAlert.saveButton.validationErrors')}</h4>
                             <ul className="space-y-1">
                                 {serverErrors.map((err, i) => (
                                     <li key={i} className="text-[11px] text-destructive flex gap-2">
@@ -159,12 +161,12 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
 
                     <div className="space-y-2">
                         <label htmlFor="mosaic-name" className="text-sm font-medium text-foreground">
-                            Mosaic Name
+                            {t('smartAlert.saveButton.mosaicName')}
                         </label>
                         <input
                             id="mosaic-name"
                             type="text"
-                            placeholder="Enter a descriptive name..."
+                            placeholder={t('smartAlert.saveButton.enterDescriptiveName')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className={cn(
@@ -184,7 +186,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                             onClick={() => setShowDialog(false)}
                             className="px-4 py-2 text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
                         >
-                            Cancel
+                            {t('smartAlert.saveButton.cancel')}
                         </button>
                         <button
                             onClick={handleSave}
@@ -198,10 +200,10 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                             {loading ? (
                                 <>
                                     <Loader2 className="w-4 h-4 animate-spin" />
-                                    Saving...
+                                    {t('smartAlert.saveButton.saving')}
                                 </>
                             ) : (
-                                'Save'
+                                t('smartAlert.saveButton.save')
                             )}
                         </button>
                     </div>
