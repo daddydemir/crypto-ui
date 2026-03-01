@@ -43,7 +43,14 @@ const BollingerBands = (props: { renderField: any; config: any; handleChange: an
                 val = `${int}.${dec.substring(0, 6)}`;
             }
         }
-        props.handleChange(key, val === '' ? '' : parseFloat(val));
+        const numericVal = val === '' ? '' : parseFloat(val);
+        props.handleChange(key, numericVal);
+
+        // Ensure bandwidth_operator has a default value when bandwidth is set
+        if (key === 'bandwidth' && numericVal !== '' && !props.config.bandwidth_operator) {
+            // Use setTimeout to ensure state is updated sequentially
+            setTimeout(() => props.handleChange('bandwidth_operator', '>'), 0);
+        }
     };
 
     return (

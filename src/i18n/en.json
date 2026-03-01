@@ -176,6 +176,10 @@
     "chart": "Chart",
     "noData": "No data available",
     "loading": "Loading...",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "error": "An error occurred",
+    "retry": "Retry",
     "refresh": "Refresh",
     "refreshing": "Refreshing...",
     "lastUpdate": "Last update",
@@ -189,10 +193,7 @@
     "year": "Year",
     "all": "All",
     "selectCrypto": "Select Cryptocurrency",
-    "error": "An error occurred",
-    "retry": "Retry",
     "save": "Save",
-    "cancel": "Cancel",
     "saving": "Saving...",
     "confirm": "Confirm"
   },
@@ -631,6 +632,17 @@
     }
   },
   "smartAlert": {
+    "list": {
+      "title": "Smart Alerts",
+      "createNew": "New Alert",
+      "noAlerts": "No alerts yet",
+      "noAlertsDescription": "Create your first smart alert to get notified when your conditions are met.",
+      "createFirst": "Create First Alert",
+      "totalAlerts": "Total {{count}} alerts",
+      "unnamed": "Unnamed Alert",
+      "block": "block",
+      "blocks": "blocks"
+    },
     "saveButton": {
       "enterName": "Please enter a name",
       "connectionError": "Connection Error",
@@ -640,6 +652,7 @@
       "unknownError": "Unknown error occurred",
       "saveFailed": "Failed to save mosaic",
       "saveMosaic": "Save Mosaic",
+      "updateMosaic": "Update Mosaic",
       "validationErrors": "Validation Errors",
       "mosaicName": "Mosaic Name",
       "enterDescriptiveName": "Enter a descriptive name...",

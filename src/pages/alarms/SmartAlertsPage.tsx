@@ -17,16 +17,22 @@ import BlockNode from "@/components/smart-alert/BlockNode";
 import BlockSidebar from "@/components/smart-alert/BlockSidebar";
 import ConfigPanel from "@/components/smart-alert/ConfigPanel";
 import SaveButton from "@/components/smart-alert/SaveButton";
+import MosaicList from "@/components/smart-alert/MosaicList";
 import Modal from "@/components/common/Modal";
 import { Button } from "@/components/ui/button";
-import { type Definition, getMosaics } from "@/services/mosaicService.ts";
-import { AlertCircle } from "lucide-react";
+import { type Definition, getMosaics, type Mosaic } from "@/services/mosaicService.ts";
+import { AlertCircle, ArrowLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useTranslation } from 'react-i18next';
 
 const nodeTypes = {
     blockNode: BlockNode,
 };
 
+type ViewMode = 'list' | 'builder';
+
 const SmartAlerts = () => {
+    const { t } = useTranslation();
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -35,10 +41,92 @@ const SmartAlerts = () => {
     const [definitions, setDefinitions] = useState<Definition[]>([]);
     const [alertModalOpen, setAlertModalOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [viewMode, setViewMode] = useState<ViewMode>('list');
+    const [editingMosaicId, setEditingMosaicId] = useState<string | null>(null);
+    const [editingMosaicName, setEditingMosaicName] = useState<string>('');
 
     useEffect(() => {
         getMosaics().then(res => setDefinitions(res));
     }, []);
+
+    const handleCreateNew = useCallback(() => {
+        setNodes([]);
+        setEdges([]);
+        setSelectedNode(null);
+        setEditingMosaicId(null);
+        setEditingMosaicName('');
+        setViewMode('builder');
+    }, [setNodes, setEdges]);
+
+    const handleBackToList = useCallback(() => {
+        setViewMode('list');
+        setNodes([]);
+        setEdges([]);
+        setSelectedNode(null);
+        setEditingMosaicId(null);
+        setEditingMosaicName('');
+    }, [setNodes, setEdges]);
+
+    // Reverse type mapping: backend type -> frontend blockType
+    const reverseTypeMapping: Record<string, string> = {
+        'rsi_analysis': 'relative_strength_index',
+        'ma_analysis': 'moving_average',
+        'ema_analysis': 'exponential_moving_average',
+    };
+
+    const handleEditMosaic = useCallback((mosaic: Mosaic) => {
+        setEditingMosaicId(mosaic.Id);
+        setEditingMosaicName(mosaic.name || '');
+
+        // Convert mosaic blocks to ReactFlow nodes
+        const sortedBlocks = [...mosaic.blocks].sort((a, b) => a.order - b.order);
+
+        const newNodes: Node[] = sortedBlocks.map((block, index) => {
+            const frontendType = reverseTypeMapping[block.type] || block.type;
+            const label = frontendType
+                .split('_')
+                .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+
+            // Normalize config for frontend: backend sends bandwidth as nested object, frontend uses flat keys
+            const config = { ...(block.config || {}) };
+            if ((frontendType === 'bollinger_bands_analysis' || frontendType === 'donchian_channel_analysis')
+                && config.bandwidth && typeof config.bandwidth === 'object') {
+                const bw = config.bandwidth;
+                config.bandwidth = bw.value;
+                config.bandwidth_operator = bw.operator || '>';
+            }
+
+            return {
+                id: block.id,
+                type: 'blockNode',
+                position: { x: 250, y: index * 180 + 50 },
+                data: {
+                    label,
+                    blockType: frontendType,
+                    config,
+                    order: block.order,
+                },
+            };
+        });
+
+        // Reconstruct edges from order sequence (connect blocks in order)
+        const newEdges: Edge[] = [];
+        for (let i = 0; i < sortedBlocks.length - 1; i++) {
+            newEdges.push({
+                id: `edge-${sortedBlocks[i].id}-${sortedBlocks[i + 1].id}`,
+                source: sortedBlocks[i].id,
+                target: sortedBlocks[i + 1].id,
+            });
+        }
+
+        setNodes(newNodes);
+        setEdges(newEdges);
+        setSelectedNode(null);
+        setViewMode('builder');
+    }, [setNodes, setEdges]);
+
+
 
     const onConnect = useCallback(
         (params: Edge | Connection) => {
@@ -256,15 +344,44 @@ const SmartAlerts = () => {
         });
     }, [edges, nodes.length, setNodes]);
 
+    // ── LIST VIEW ──
+    if (viewMode === 'list') {
+        return (
+            <div className="flex h-full w-full bg-background overflow-hidden">
+                <MosaicList onCreateNew={handleCreateNew} onEdit={handleEditMosaic} />
+            </div>
+        );
+    }
+
+    // ── BUILDER VIEW ──
     return (
         <div className="flex h-full w-full bg-background overflow-hidden">
             <div className="flex-1 flex flex-col relative h-full">
                 {/* Toolbar / Header Area */}
                 <div className="h-14 border-b border-border bg-card flex items-center justify-between px-4 z-10">
-                    <h1 className="text-lg font-semibold text-foreground">Smart Alert Builder</h1>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleBackToList}
+                            className={cn(
+                                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200",
+                                "text-muted-foreground hover:text-foreground hover:bg-muted"
+                            )}
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            {t('common.back')}
+                        </button>
+                        <div className="w-px h-6 bg-border" />
+                        <h1 className="text-lg font-semibold text-foreground">Smart Alert Builder</h1>
+                    </div>
                     <div className="flex items-center gap-2">
                         {/* Status or other toolbar items could go here */}
-                        <SaveButton nodes={nodes} edges={edges} />
+                        <SaveButton
+                            nodes={nodes}
+                            edges={edges}
+                            mosaicId={editingMosaicId || undefined}
+                            mosaicName={editingMosaicName || undefined}
+                            onSave={handleBackToList}
+                        />
                     </div>
                 </div>
 

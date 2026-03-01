@@ -13,11 +13,14 @@ interface MenuItem {
 
 const Sidebar: React.FC = () => {
     const location = useLocation();
-    const [openMenu, setOpenMenu] = useState<string | null>("analyses");
+    const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({ analyses: true });
     const { t } = useTranslation();
 
     const toggleMenu = (id: string) => {
-        setOpenMenu(openMenu === id ? null : id);
+        setOpenMenus(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
     };
 
     const menus: MenuItem[] = [
@@ -41,11 +44,23 @@ const Sidebar: React.FC = () => {
             title: t("sidebar.alarms.normal"),
             icon: BellIcon,
             children: [
-                {name: t("sidebar.alarms.normal"), path: "/alarms"},
-                {name: t("sidebar.alarms.smart"), path: "/smart-alerts"},
-            ]},
+                { name: t("sidebar.alarms.normal"), path: "/alarms" },
+                { name: t("sidebar.alarms.smart"), path: "/smart-alerts" },
+            ]
+        },
         { id: "settings", title: t("sidebar.settings"), path: "/settings", icon: Settings },
     ];
+
+    // Auto-expand menu when path changes
+    React.useEffect(() => {
+        menus.forEach(menu => {
+            if (menu.children?.some(child => child.path === location.pathname)) {
+                if (!openMenus[menu.id]) {
+                    setOpenMenus(prev => ({ ...prev, [menu.id]: true }));
+                }
+            }
+        });
+    }, [location.pathname, menus]);
 
     return (
         <aside className="w-64 bg-white dark:bg-gray-800 shadow-md flex flex-col text-gray-800 dark:text-gray-100">
@@ -72,22 +87,22 @@ const Sidebar: React.FC = () => {
                                         <menu.icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                                         <span className="font-medium">{menu.title}</span>
                                     </div>
-                                    {openMenu === menu.id ? (
+                                    {openMenus[menu.id] ? (
                                         <ChevronDown size={16} className="text-gray-600 dark:text-gray-300" />
                                     ) : (
                                         <ChevronRight size={16} className="text-gray-600 dark:text-gray-300" />
                                     )}
                                 </div>
 
-                                {openMenu === menu.id && (
+                                {openMenus[menu.id] && (
                                     <div className="ml-7 mt-1 space-y-1">
                                         {menu.children!.map((child) => (
                                             <Link
                                                 key={child.path}
                                                 to={child.path}
                                                 className={`block p-2 text-sm rounded-md transition-colors ${location.pathname === child.path
-                                                        ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                                        : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
+                                                    ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                    : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
                                                     }`}
                                             >
                                                 {child.name}
@@ -104,8 +119,8 @@ const Sidebar: React.FC = () => {
                             key={menu.id}
                             to={menu.path!}
                             className={`flex items-center space-x-2 p-2 rounded-md ${isActive
-                                    ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                    : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
+                                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
                                 }`}
                         >
                             <menu.icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />

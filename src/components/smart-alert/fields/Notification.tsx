@@ -16,8 +16,8 @@ const Notification = (props: { renderField: any; config: any; handleChange: any;
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="telegram">{t('smartAlert.fields.telegram')}</SelectItem>
-                        <SelectItem value="discord">{t('smartAlert.fields.discord')}</SelectItem>
-                        <SelectItem value="email">{t('smartAlert.fields.email')}</SelectItem>
+                        <SelectItem value="discord" disabled>{t('smartAlert.fields.discord')}</SelectItem>
+                        <SelectItem value="email" disabled>{t('smartAlert.fields.email')}</SelectItem>
                     </SelectContent>
                 </Select>
             ))}

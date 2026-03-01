@@ -176,6 +176,10 @@
     "chart": "Grafik",
     "noData": "Veri bulunamadı",
     "loading": "Yükleniyor...",
+    "delete": "Sil",
+    "cancel": "İptal",
+    "error": "Bir hata oluştu",
+    "retry": "Tekrar Dene",
     "refresh": "Yenile",
     "refreshing": "Yenileniyor...",
     "lastUpdate": "Son güncelleme",
@@ -189,10 +193,7 @@
     "year": "Yıl",
     "all": "Tümü",
     "selectCrypto": "Kripto Para Seçin",
-    "error": "Bir hata oluştu",
-    "retry": "Tekrar Dene",
     "save": "Kaydet",
-    "cancel": "İptal",
     "saving": "Kaydediliyor...",
     "confirm": "Onayla"
   },
@@ -626,6 +627,17 @@
     }
   },
   "smartAlert": {
+    "list": {
+      "title": "Akıllı Alarmlar",
+      "createNew": "Yeni Alarm",
+      "noAlerts": "Henüz alarm yok",
+      "noAlertsDescription": "Koşullarınız karşılandığında bildirim almak için ilk akıllı alarmınızı oluşturun.",
+      "createFirst": "İlk Alarmı Oluştur",
+      "totalAlerts": "Toplam {{count}} alarm",
+      "unnamed": "İsimsiz Alarm",
+      "block": "blok",
+      "blocks": "blok"
+    },
     "saveButton": {
       "enterName": "Lütfen bir isim girin",
       "connectionError": "Bağlantı Hatası",
@@ -635,6 +647,7 @@
       "unknownError": "Bilinmeyen bir hata oluştu",
       "saveFailed": "Mozaik kaydedilemedi",
       "saveMosaic": "Mozaiği Kaydet",
+      "updateMosaic": "Mozaiği Güncelle",
       "validationErrors": "Doğrulama Hataları",
       "mosaicName": "Mozaik Adı",
       "enterDescriptiveName": "Açıklayıcı bir isim girin...",
@@ -654,8 +667,8 @@
     "configPanel": {
       "noConfigOptions": "Yapılandırma seçeneği yok",
       "noConfigParams": "Bu blok türünün yapılandırılabilir parametresi yoktur.",
-      "deleteBlock": "Bloğu Sil",
-      "confirmDelete1": "",
+      "deleteBlock": "Alarmı Sil",
+      "confirmDelete1": "adlı alarmı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
       "confirmDelete2": " adlı bloğu silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
       "cancel": "İptal",
       "delete": "Sil",

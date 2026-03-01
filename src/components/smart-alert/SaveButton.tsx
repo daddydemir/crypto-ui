@@ -5,23 +5,27 @@ import { cn } from '../../lib/utils';
 import { validateNodeConfig } from './validation.ts';
 import { MOSAIC_BASE_URL } from '../../services/api/config';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/contexts/ToastContext';
 
 interface SaveButtonProps {
     nodes: any[];
     edges: any[];
+    mosaicId?: string;
+    mosaicName?: string;
     onSave?: () => void;
 }
 
-const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
+const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, mosaicId, mosaicName: initialName, onSave }) => {
     const { t } = useTranslation();
-    const [name, setName] = useState('');
+    const [name, setName] = useState(initialName || '');
     const [showDialog, setShowDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [serverErrors, setServerErrors] = useState<{ field: string; message: string }[] | null>(null);
+    const toast = useToast();
 
     const handleSave = async () => {
         if (!name.trim()) {
-            alert(t('smartAlert.saveButton.enterName'));
+            toast.warning(t('smartAlert.saveButton.enterName'));
             return;
         }
 
@@ -73,20 +77,40 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
         const mosaic = {
             name: name,
             description: '',
-            blocks: nodes.map(node => ({
-                order: node.data.order,
-                type: typeMapping[node.data.blockType as string] || node.data.blockType,
-                config: node.data.config,
-                connection: (() => {
-                    const targetId = edges.find(edge => edge.source === node.id)?.target;
-                    return targetId ? (nodes.find(n => n.id === targetId)?.data?.order ?? null) : null;
-                })()
-            }))
+            id: mosaicId,
+            blocks: nodes.map(node => {
+                // Normalize config: transform flat bandwidth/bandwidth_operator into nested object
+                const config = { ...node.data.config };
+                if (config.bandwidth !== undefined && config.bandwidth !== '') {
+                    config.bandwidth = {
+                        symbol: config.symbol || '',
+                        value: config.bandwidth,
+                        operator: config.bandwidth_operator || '>'
+                    };
+                    delete config.bandwidth_operator;
+                }
+
+                return {
+                    id: node.id,
+                    order: node.data.order,
+                    type: typeMapping[node.data.blockType as string] || node.data.blockType,
+                    config,
+                    connection: (() => {
+                        const targetId = edges.find(edge => edge.source === node.id)?.target;
+                        return targetId ? (nodes.find(n => n.id === targetId)?.data?.order ?? null) : null;
+                    })()
+                };
+            })
         };
 
         try {
-            const response = await fetch(`${MOSAIC_BASE_URL}/mosaic`, {
-                method: 'POST',
+            const url = mosaicId
+                ? `${MOSAIC_BASE_URL}/mosaic/${mosaicId}`
+                : `${MOSAIC_BASE_URL}/mosaic`;
+            const method = mosaicId ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -94,8 +118,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
             });
 
             if (response.ok) {
-                // Ideally replace with a toast
-                alert(t('smartAlert.saveButton.saveSuccess'));
+                toast.success(t('smartAlert.saveButton.saveSuccess'));
                 setShowDialog(false);
                 setName('');
                 onSave?.();
@@ -104,11 +127,11 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                 if (errorData.errors && Array.isArray(errorData.errors)) {
                     setServerErrors(errorData.errors);
                 } else {
-                    alert(`${t('smartAlert.saveButton.error')}${errorData.message || t('smartAlert.saveButton.unknownError')}`);
+                    toast.error(`${t('smartAlert.saveButton.error')}${errorData.message || t('smartAlert.saveButton.unknownError')}`);
                 }
             }
         } catch (error) {
-            alert(t('smartAlert.saveButton.saveFailed'));
+            toast.error(t('smartAlert.saveButton.saveFailed'));
             console.error(error);
         } finally {
             setLoading(false);
@@ -132,7 +155,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                 onClick={() => setShowDialog(true)}
             >
                 <Save className="w-4 h-4" />
-                {t('smartAlert.saveButton.saveMosaic')}
+                {mosaicId ? t('smartAlert.saveButton.updateMosaic') : t('smartAlert.saveButton.saveMosaic')}
             </button>
 
             <Modal
@@ -141,7 +164,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, onSave }) => {
                     setShowDialog(false);
                     setServerErrors(null);
                 }}
-                title={t('smartAlert.saveButton.saveMosaic')}
+                title={mosaicId ? t('smartAlert.saveButton.updateMosaic') : t('smartAlert.saveButton.saveMosaic')}
                 maxWidth="max-w-md"
             >
                 <div className="space-y-4">

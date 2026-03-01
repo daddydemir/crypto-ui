@@ -20,3 +20,34 @@ export async function getMosaics(): Promise<Definition[]> {
         return []
     }
 }
+
+export interface BlockConfig {
+    [key: string]: any;
+}
+
+export interface MosaicBlock {
+    id: string;
+    type: string;
+    config: BlockConfig;
+    order: number;
+    connections: number;
+}
+
+export interface Mosaic {
+    Id: string;
+    name: string;
+    blocks: MosaicBlock[];
+}
+
+export async function getUserMosaics(): Promise<Mosaic[]> {
+    try {
+        const response = await fetch(`${MOSAIC_BASE_URL}/mosaic`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching user mosaics:', error);
+        return [];
+    }
+}
