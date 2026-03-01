@@ -2,7 +2,10 @@
   "sidebar": {
     "analyses": "Analyses",
     "coins": "Coins",
-    "alarms": "Alarms",
+    "alarms": {
+      "normal": "Alarms",
+      "smart": "Smart Alarms"
+    },
     "settings": "Settings",
     "technical": {
       "rsi": "RSI",
@@ -173,6 +176,10 @@
     "chart": "Chart",
     "noData": "No data available",
     "loading": "Loading...",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "error": "An error occurred",
+    "retry": "Retry",
     "refresh": "Refresh",
     "refreshing": "Refreshing...",
     "lastUpdate": "Last update",
@@ -186,10 +193,7 @@
     "year": "Year",
     "all": "All",
     "selectCrypto": "Select Cryptocurrency",
-    "error": "An error occurred",
-    "retry": "Retry",
     "save": "Save",
-    "cancel": "Cancel",
     "saving": "Saving...",
     "confirm": "Confirm"
   },
@@ -625,6 +629,105 @@
         "title": "Pro Tip",
         "content": "Use ATR for position sizing and stop-loss placement. You can take smaller positions in high ATR, larger positions in low ATR. Placing stop-loss at 1.5-2x ATR distance keeps you safe from normal price fluctuations. Low ATR periods are usually precursors to big moves - be ready for breakout strategies in these periods."
       }
+    }
+  },
+  "smartAlert": {
+    "list": {
+      "title": "Smart Alerts",
+      "createNew": "New Alert",
+      "noAlerts": "No alerts yet",
+      "noAlertsDescription": "Create your first smart alert to get notified when your conditions are met.",
+      "createFirst": "Create First Alert",
+      "totalAlerts": "Total {{count}} alerts",
+      "unnamed": "Unnamed Alert",
+      "block": "block",
+      "blocks": "blocks"
+    },
+    "saveButton": {
+      "enterName": "Please enter a name",
+      "connectionError": "Connection Error",
+      "connectionErrorMsg": "When there are multiple blocks, all blocks must be connected. Unconnected blocks: ",
+      "saveSuccess": "Mosaic saved successfully!",
+      "error": "Error: ",
+      "unknownError": "Unknown error occurred",
+      "saveFailed": "Failed to save mosaic",
+      "saveMosaic": "Save Mosaic",
+      "updateMosaic": "Update Mosaic",
+      "validationErrors": "Validation Errors",
+      "mosaicName": "Mosaic Name",
+      "enterDescriptiveName": "Enter a descriptive name...",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "save": "Save"
+    },
+    "blockNode": {
+      "symbol": "Symbol",
+      "price": "Price",
+      "rsiPeriod": "RSI Period",
+      "bandwidth": "Bandwidth",
+      "conditions": "Conditions",
+      "rules": "rules",
+      "notConfigured": "Not configured"
+    },
+    "configPanel": {
+      "noConfigOptions": "No configuration options available",
+      "noConfigParams": "This block type doesn't have any configurable parameters.",
+      "deleteBlock": "Delete Block",
+      "confirmDelete1": "Are you sure you want to delete ",
+      "confirmDelete2": "? This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "save": "Save"
+    },
+    "blockSidebar": {
+      "addBlocks": "Add Blocks",
+      "triggers": "🎯 Triggers",
+      "indicators": "📊 Indicators",
+      "actions": "⚡ Actions",
+      "types": {
+        "price_condition": "Price Alert",
+        "relative_strength_index": "RSI",
+        "moving_average": "Moving Average",
+        "exponential_moving_average": "Exponential Moving Average",
+        "bollinger_bands_analysis": "Bollinger Bands",
+        "donchian_channel_analysis": "Donchian Channels",
+        "notification": "Notification",
+        "webhook": "Webhook"
+      }
+    },
+    "fields": {
+      "symbol": "Symbol",
+      "operatorAndPrice": "Operator & Price",
+      "selectOperator": "Select operator",
+      "operatorAndIndex": "Operator & Index",
+      "channel": "Channel",
+      "telegram": "Telegram",
+      "discord": "Discord",
+      "email": "Email",
+      "targetUserGroup": "Target User/Group",
+      "targetPlaceholder": "@username or email",
+      "message": "Message",
+      "messagePlaceholder": "Alert message...",
+      "comparisons": "Comparisons",
+      "select": "Select",
+      "operator": "Operator",
+      "addCondition": "Add Condition",
+      "bandwidth": "Bandwidth",
+      "op": "Op"
+    },
+    "validation": {
+      "symbolRequired": "Symbol is required",
+      "priceRequired": "Price is required",
+      "pricePositive": "Price must be positive",
+      "rsiPeriodRequired": "RSI period is required",
+      "rsiRange": "Range: 1-99",
+      "atLeastOneComparison": "At least one comparison is required",
+      "fillAllFields": "Fill all fields",
+      "comparisonOrBandwidthRequired": "Comparison or Bandwidth required",
+      "positiveRequired": "Must be positive",
+      "channelRequired": "Channel is required",
+      "targetRequired": "Target is required",
+      "messageRequired": "Message is required"
     }
   }
 }
