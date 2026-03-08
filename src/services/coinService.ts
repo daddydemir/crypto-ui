@@ -10,6 +10,7 @@ export interface Coin {
     change30d: number
     arithmeticChange7d: number
     arithmeticChange30d: number
+    livePrice?: number
 }
 
 export async function getTopCoins(): Promise<Coin[]> {

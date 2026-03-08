@@ -2,13 +2,13 @@ import React, { useState } from "react"
 import { type Coin } from "@/services/coinService"
 import CoinRow from "./CoinRow"
 import { ChevronUp, ChevronDown, ChevronsUpDown, X } from "lucide-react"
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 interface CoinTableProps {
     coins: Coin[]
 }
 
-type SortField = "change24h" | "change7d" | "change30d" | "arithmeticChange7d" | "arithmeticChange30d" | null
+type SortField = "price" | "change24h" | "change7d" | "change30d" | "arithmeticChange7d" | "arithmeticChange30d" | null
 type SortOrder = "asc" | "desc"
 
 const CoinTable: React.FC<CoinTableProps> = ({ coins }) => {
@@ -67,55 +67,63 @@ const CoinTable: React.FC<CoinTableProps> = ({ coins }) => {
                     </button>
                 </div>
             )}
-            
+
             <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800">
                 <table className="min-w-full text-left text-sm text-gray-700 dark:text-gray-300">
                     <thead className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 uppercase text-xs">
-                    <tr>
-                        <th className="p-3"> {t("coins.coin")}</th>
-                        <th className="p-3"> {t("coins.price")}</th>
-                        <th 
-                            className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none"
-                            onClick={() => handleSort("change24h")}
-                        >
-                            <div className="flex items-center gap-1">
-                                {t("coins.change24h")}
-                                <SortIcon field="change24h" />
-                            </div>
-                        </th>
-                        <th 
-                            className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none"
-                            onClick={() => handleSort("change7d")}
-                        >
-                            <div className="flex items-center gap-1">
-                                {t("coins.change7d")}
-                                <SortIcon field="change7d" />
-                            </div>
-                        </th>
-                        <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("change30d")}>
-                            <div className="flex items-center gap-1">
-                                {t("coins.change30d")}
-                                <SortIcon field="change30d" />
-                            </div>
-                        </th>
-                        <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("arithmeticChange7d")}>
-                            <div className="flex items-center gap-1">
-                                {t("coins.arithmetic7d")}
-                                <SortIcon field="arithmeticChange7d" />
-                            </div>
-                        </th>
-                        <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("arithmeticChange30d")}>
-                            <div className="flex items-center gap-1">
-                                {t("coins.arithmetic30d")}
-                                <SortIcon field="arithmeticChange30d" />
-                            </div>
-                        </th>
-                    </tr>
+                        <tr>
+                            <th className="p-3"> {t("coins.coin")}</th>
+                            <th
+                                className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none"
+                                onClick={() => handleSort("price")}
+                            >
+                                <div className="flex items-center gap-1">
+                                    {t("coins.price")}
+                                    <SortIcon field="price" />
+                                </div>
+                            </th>
+                            <th
+                                className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none"
+                                onClick={() => handleSort("change24h")}
+                            >
+                                <div className="flex items-center gap-1">
+                                    {t("coins.change24h")}
+                                    <SortIcon field="change24h" />
+                                </div>
+                            </th>
+                            <th
+                                className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none"
+                                onClick={() => handleSort("change7d")}
+                            >
+                                <div className="flex items-center gap-1">
+                                    {t("coins.change7d")}
+                                    <SortIcon field="change7d" />
+                                </div>
+                            </th>
+                            <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("change30d")}>
+                                <div className="flex items-center gap-1">
+                                    {t("coins.change30d")}
+                                    <SortIcon field="change30d" />
+                                </div>
+                            </th>
+                            <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("arithmeticChange7d")}>
+                                <div className="flex items-center gap-1">
+                                    {t("coins.arithmetic7d")}
+                                    <SortIcon field="arithmeticChange7d" />
+                                </div>
+                            </th>
+                            <th className="p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition select-none" onClick={() => handleSort("arithmeticChange30d")}>
+                                <div className="flex items-center gap-1">
+                                    {t("coins.arithmetic30d")}
+                                    <SortIcon field="arithmeticChange30d" />
+                                </div>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {sortedCoins.map((coin, index) => (
-                        <CoinRow key={`${coin.id}-${index}`} coin={coin} />
-                    ))}
+                        {sortedCoins.map((coin, index) => (
+                            <CoinRow key={`${coin.id}-${index}`} coin={coin} />
+                        ))}
                     </tbody>
                 </table>
             </div>

@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { getTopCoins } from "@/services/coinService"
 import CoinTable from "@/components/coins/CoinTable"
 import { useTranslation } from "react-i18next"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
+import { useCryptoWebSocket } from "@/hooks/useCryptoWebSocket"
 
 const CoinsPage: React.FC = () => {
     const { t } = useTranslation()
@@ -11,6 +12,23 @@ const CoinsPage: React.FC = () => {
         cacheKey: 'top-coins',
         fetchFn: getTopCoins
     })
+
+    const wsPrices = useCryptoWebSocket()
+
+    const updatedCoins = useMemo(() => {
+        if (!coins) return []
+        if (Object.keys(wsPrices).length === 0) return coins
+
+        return coins.map(coin => {
+            if (wsPrices[coin.symbol]) {
+                return {
+                    ...coin,
+                    livePrice: wsPrices[coin.symbol]
+                }
+            }
+            return coin
+        })
+    }, [coins, wsPrices])
 
     if (loading) {
         return (
@@ -38,7 +56,7 @@ const CoinsPage: React.FC = () => {
                     lastUpdateText={lastUpdateText}
                 />
             </div>
-            <CoinTable coins={coins || []} />
+            <CoinTable coins={updatedCoins} />
         </div>
     )
 }
