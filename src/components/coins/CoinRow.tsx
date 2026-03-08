@@ -10,7 +10,15 @@ const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
         return value >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
     }
 
-    const formatPrice = (price: number) => {
+    const getLivePriceColor = () => {
+        if (!coin.livePrice || coin.livePrice === coin.price) return "text-gray-500 dark:text-gray-400"
+        return coin.livePrice > coin.price
+            ? "text-green-600 dark:text-green-400"
+            : "text-red-600 dark:text-red-400"
+    }
+
+    const formatPrice = (price?: number) => {
+        if (price === undefined) return ""
         if (price < 0.00001) {
             return `$${price.toFixed(10).replace(/\.?0+$/, '')}`
         } else if (price < 0.001) {
@@ -30,7 +38,14 @@ const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
     return (
         <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
             <td className="p-3 font-semibold text-gray-900 dark:text-gray-100">{coin.symbol} - {coin.name}</td>
-            <td className="p-3 text-gray-900 dark:text-gray-100">{formatPrice(coin.price)}</td>
+            <td className="p-3 text-gray-900 dark:text-gray-100">
+                <span className="mr-2">{formatPrice(coin.price)}</span>
+                {coin.livePrice && (
+                    <span className={`text-xs font-medium ${getLivePriceColor()}`}>
+                        ({formatPrice(coin.livePrice)})
+                    </span>
+                )}
+            </td>
             <td className={`p-3 ${getChangeColor(coin.change24h)}`}>
                 {coin.change24h > 0 ? "+" : ""}
                 {coin.change24h}%
