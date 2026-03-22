@@ -36,6 +36,7 @@ const Sidebar: React.FC = () => {
                 { name: t("sidebar.technical.dc"), path: '/analyses/donchian-channels' },
                 { name: t("sidebar.technical.atr"), path: '/analyses/atr' },
                 { name: t("sidebar.technical.macd"), path: '/analyses/macd' },
+                { name: t("sidebar.technical.adi"), path: '/analyses/adi' },
             ],
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
