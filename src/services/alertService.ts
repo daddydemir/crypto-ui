@@ -7,6 +7,7 @@ export interface Alert {
     IsAbove: boolean
     CreateDate: string
     IsActive: boolean
+    livePrice?: number
 }
 
 export interface CreateAlertDto {

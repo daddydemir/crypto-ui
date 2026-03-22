@@ -37,8 +37,20 @@ const AlertRow: React.FC<AlertRowProps> = ({ alert, onEdit, onDelete, onToggleSt
                 </div>
             </td>
             <td className="p-4">
-                <div className="font-mono text-lg font-semibold">
-                    ${alert.Price.toFixed(2)}
+                <div className="flex items-center gap-2">
+                    <span className="font-mono text-lg font-semibold">
+                        ${alert.Price.toFixed(2)}
+                    </span>
+                    {alert.livePrice && (
+                        <div className="flex flex-col">
+                            <span className={`font-mono text-sm font-medium ${alert.livePrice > alert.Price ? 'text-green-500' : alert.livePrice < alert.Price ? 'text-red-500' : 'text-gray-500'}`}>
+                                (${alert.livePrice.toFixed(2)})
+                            </span>
+                            <span className={`text-[10px] font-bold ${alert.livePrice > alert.Price ? 'text-green-600' : alert.livePrice < alert.Price ? 'text-red-600' : 'text-gray-400'}`}>
+                                {alert.livePrice > alert.Price ? '+' : ''}{(((alert.livePrice - alert.Price) / alert.Price) * 100).toFixed(2)}%
+                            </span>
+                        </div>
+                    )}
                 </div>
             </td>
             <td className="p-4">
@@ -59,11 +71,10 @@ const AlertRow: React.FC<AlertRowProps> = ({ alert, onEdit, onDelete, onToggleSt
             <td className="p-4">
                 <button
                     onClick={() => onToggleStatus(alert.ID, !alert.IsActive)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition ${
-                        alert.IsActive
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition ${alert.IsActive
                             ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50'
                             : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-                    }`}
+                        }`}
                 >
                     {alert.IsActive ? t("alarms.active") : t("alarms.inactive")}
                 </button>

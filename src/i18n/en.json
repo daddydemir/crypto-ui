@@ -231,6 +231,7 @@
     "coin": "Coin",
     "coinSymbol": "Coin Symbol",
     "targetPrice": "Target Price",
+    "livePrice": "Live Price",
     "direction": "Direction",
     "status": "Status",
     "createdAt": "Created At",

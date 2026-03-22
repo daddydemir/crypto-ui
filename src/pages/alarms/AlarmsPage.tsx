@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import {
     getAlerts, createAlert, updateAlert, deleteAlert, toggleAlertStatus, type Alert, type CreateAlertDto,
     type UpdateAlertDto
@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
 import { Plus } from "lucide-react"
+import { useCryptoWebSocket } from "@/hooks/useCryptoWebSocket"
 
 const AlarmsPage: React.FC = () => {
     const { t } = useTranslation()
@@ -17,6 +18,23 @@ const AlarmsPage: React.FC = () => {
         cacheKey: 'alerts',
         fetchFn: getAlerts
     })
+
+    const wsPrices = useCryptoWebSocket()
+
+    const updatedAlerts = useMemo(() => {
+        if (!alerts) return []
+        if (Object.keys(wsPrices).length === 0) return alerts
+
+        return alerts.map(alert => {
+            if (wsPrices[alert.Coin]) {
+                return {
+                    ...alert,
+                    livePrice: wsPrices[alert.Coin]
+                }
+            }
+            return alert
+        })
+    }, [alerts, wsPrices])
 
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [editingAlert, setEditingAlert] = useState<Alert | null>(null)
@@ -120,7 +138,7 @@ const AlarmsPage: React.FC = () => {
             </div>
 
             <AlertTable
-                alerts={alerts || []}
+                alerts={updatedAlerts}
                 onEdit={handleEdit}
                 onDelete={handleDeleteAlert}
                 onToggleStatus={handleToggleStatus}

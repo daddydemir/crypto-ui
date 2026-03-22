@@ -231,6 +231,7 @@
     "coin": "Coin",
     "coinSymbol": "Coin Sembolü",
     "targetPrice": "Hedef Fiyat",
+    "livePrice": "Anlık Fiyat",
     "direction": "Yön",
     "status": "Durum",
     "createdAt": "Oluşturulma",
