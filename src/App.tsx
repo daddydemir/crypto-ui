@@ -13,6 +13,7 @@ import ATRPage from '@/pages/analyses/ATRPage';
 import MACDPage from '@/pages/analyses/MACDPage';
 import ADIPage from '@/pages/analyses/ADIPage';
 import SmartAlertsPage from "@/pages/alarms/SmartAlertsPage.tsx";
+import DirectionalRangeStripPage from "@/pages/analyses/DirectionalRangeStripPage";
 
 
 const SettingsPage = () => <div>Ayarlar</div>;
@@ -34,6 +35,7 @@ function App() {
                             <Route path="/analyses/atr" element={<ATRPage />} />
                             <Route path="/analyses/macd" element={<MACDPage />} />
                             <Route path="/analyses/adi" element={<ADIPage />} />
+                            <Route path="/analyses/directional-range-strip" element={<DirectionalRangeStripPage />} />
                             <Route path="/coins" element={<CoinsPage />} />
                             <Route path="/alarms" element={<AlarmsPage />} />
                             <Route path="/settings" element={<SettingsPage />} />

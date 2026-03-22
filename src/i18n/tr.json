@@ -15,7 +15,8 @@
       "dc": "Dochian Kanalları",
       "atr": "ATR",
       "macd": "MACD",
-      "adi": "ADX"
+      "adi": "ADX",
+      "drs": "Yönsel Aralık Şeridi"
     }
   },
   "topbar": {
@@ -171,6 +172,10 @@
     "trendStrength": "Trend Gücü",
     "trendDirection": "Trend Yönü"
   },
+  "drs": {
+    "title": "Yönsel Aralık Şeridi",
+    "description": "Kapanış fiyatlarına dayalı özel oluşturulmuş yönsel kripto para aralığı analizidir."
+  },
   "macd": {
     "title": "MACD",
     "description": "Farklı kripto paralar için Hareketli Ortalama Yakınsama Sapma analizini görüntüleyin",
@@ -212,7 +217,10 @@
     "selectCrypto": "Kripto Para Seçin",
     "save": "Kaydet",
     "saving": "Kaydediliyor...",
-    "confirm": "Onayla"
+    "confirm": "Onayla",
+    "data": "VERİ",
+    "months": "Aylar",
+    "locale": "tr-TR"
   },
   "alarms": {
     "title": "Fiyat Alarmları",

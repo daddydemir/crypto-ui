@@ -15,7 +15,8 @@
       "dc": "Donchian Channels",
       "atr": "ATR",
       "macd": "MACD",
-      "adi": "ADX"
+      "adi": "ADX",
+      "drs": "Directional Range Strip"
     }
   },
   "topbar": {
@@ -171,6 +172,10 @@
     "trendStrength": "Trend Strength",
     "trendDirection": "Trend Direction"
   },
+  "drs": {
+    "title": "Directional Range Strip",
+    "description": "Custom directional range strip analysis for cryptocurrencies based on closing prices."
+  },
   "macd": {
     "title": "MACD",
     "description": "Moving Average Convergence Divergence analysis for different cryptocurrencies",
@@ -212,7 +217,10 @@
     "selectCrypto": "Select Cryptocurrency",
     "save": "Save",
     "saving": "Saving...",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "data": "DATA",
+    "months": "Months",
+    "locale": "en-US"
   },
   "alarms": {
     "title": "Price Alerts",
