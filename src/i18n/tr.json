@@ -14,7 +14,8 @@
       "bb": "Bollinger Bantları",
       "dc": "Dochian Kanalları",
       "atr": "ATR",
-      "macd": "MACD"
+      "macd": "MACD",
+      "adi": "ADX"
     }
   },
   "topbar": {
@@ -153,6 +154,22 @@
     "lowest": "En Düşük",
     "average": "Ortalama",
     "range": "Aralık"
+  },
+  "adi": {
+    "title": "Ortalama Yönsel Endeks (ADX)",
+    "description": "Farklı kripto paralar için ADX trend gücü analizini görüntüleyin",
+    "errorLoading": "ADI verisi yüklenemedi",
+    "chartDescription": "ADX trend gücünü, +DI ve -DI trend yönünü ölçer",
+    "adi": "ADX",
+    "pdi": "+DI",
+    "mdi": "-DI",
+    "dx": "DX",
+    "current": "Güncel ADX",
+    "highest": "En Yüksek",
+    "lowest": "En Düşük",
+    "average": "Ortalama",
+    "trendStrength": "Trend Gücü",
+    "trendDirection": "Trend Yönü"
   },
   "macd": {
     "title": "MACD",
@@ -623,6 +640,54 @@
       "tip": {
         "title": "İpucu",
         "content": "ATR'yi pozisyon boyutlandırma ve stop-loss belirleme için kullanın. Yüksek ATR'de daha küçük pozisyon, düşük ATR'de daha büyük pozisyon alabilirsiniz. Stop-loss'u 1.5-2x ATR mesafesine koymak, normal fiyat dalgalanmalarından etkilenmemenizi sağlar. Düşük ATR dönemleri genellikle büyük hareketlerin öncüsüdür - bu dönemlerde kırılım stratejilerine hazır olun. "
+      }
+    },
+    "adi": {
+      "title": "Ortalama Yönsel Endeks (ADX)",
+      "description": "ADX, trend gücünü ölçmek için kullanılır. Ancak yönü göstermez. Trend yönünü belirlemek için +DI ve -DI olmak üzere iki ek çizgiyle gösterilir. 25 üzeri güçlü bir trende, 20 altı ise zayıf bir trende işaret eder.",
+      "interpretation": {
+        "title": "Yorumlama",
+        "levels": [
+          {
+            "value": "ADX > 25",
+            "meaning": "Güçlü Trend - Yükseliş veya düşüş farketmeksizin"
+          },
+          {
+            "value": "ADX < 20",
+            "meaning": "Zayıf Trend - Yatay piyasa veya zayıf yön"
+          },
+          {
+            "value": "+DI, -DI'nın üstünde",
+            "meaning": "Boğa (Yükseliş) trend yönü"
+          },
+          {
+            "value": "+DI, -DI'nın altında",
+            "meaning": "Ayı (Düşüş) trend yönü"
+          }
+        ],
+        "buy_signals": {
+          "title": "Alış Sinyalleri",
+          "items": [
+            "ADX yükselirken, +DI -DI'yi yukarı yönlü keserse"
+          ]
+        },
+        "sell_signals": {
+          "title": "Satış Sinyalleri",
+          "items": [
+            "ADX yükselirken, -DI +DI'yi yukarı yönlü keserse"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Uyarılar",
+        "items": [
+          "ADX sadece gücü ölçer, yönü belirtmez. Yön için DI çizgilerine bakılmalıdır.",
+          "Gecikmeli bir göstergedir, diğer osilatörler ile teyit edilmelidir."
+        ]
+      },
+      "tip": {
+        "title": "İpucu",
+        "content": "ADX 25'i aştıktan sonra trend yönü stratejileri izlenmelidir."
       }
     }
   },

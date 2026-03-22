@@ -11,6 +11,7 @@ import AlarmsPage from "@/pages/alarms/AlarmsPage.tsx";
 import DonchianChannelsPage from '@/pages/analyses/DonchianChannelsPage';
 import ATRPage from '@/pages/analyses/ATRPage';
 import MACDPage from '@/pages/analyses/MACDPage';
+import ADIPage from '@/pages/analyses/ADIPage';
 import SmartAlertsPage from "@/pages/alarms/SmartAlertsPage.tsx";
 
 
@@ -32,6 +33,7 @@ function App() {
                             <Route path="/analyses/donchian-channels" element={<DonchianChannelsPage />} />
                             <Route path="/analyses/atr" element={<ATRPage />} />
                             <Route path="/analyses/macd" element={<MACDPage />} />
+                            <Route path="/analyses/adi" element={<ADIPage />} />
                             <Route path="/coins" element={<CoinsPage />} />
                             <Route path="/alarms" element={<AlarmsPage />} />
                             <Route path="/settings" element={<SettingsPage />} />

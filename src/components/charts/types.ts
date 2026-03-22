@@ -5,6 +5,7 @@ import type { RSIHistoryPoint } from "@/services/rsiService.ts";
 import type { DonchianChannelsPoint } from "@/services/donchianChannelsService.ts";
 import type { ATRPoint } from "@/services/atrService.ts";
 import type { MACDPoint } from "@/services/macdService.ts";
+import type { ADIPoint } from "@/services/adiService.ts";
 
 export type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -225,6 +226,39 @@ export function mapMACDToChartPoints(
             macd: p.macd ?? null,
             signal: p.signal ?? null,
             histogram: p.histogram ?? null
+        }
+
+        let y: number | null | undefined
+        if (options?.includeY) {
+            if (typeof options.includeY === 'function') {
+                y = options.includeY(p)
+            } else {
+                y = series[options.includeY] ?? null
+            }
+        }
+
+        const point: ChartPoint = {
+            date: p.date,
+            series
+        }
+
+        if (y !== undefined) point.y = y
+        return point
+    })
+}
+
+export function mapADIToChartPoints(
+    data: ADIPoint[],
+    options?: { includeY?: 'adi' | 'pdi' | 'mdi' | 'dx' | ((p: ADIPoint) => number | null) }
+): ChartPoint[] {
+    if (!data || data.length === 0) return []
+
+    return data.map((p) => {
+        const series: Record<string, number | null> = {
+            adi: p.adi ?? null,
+            pdi: p.pdi ?? null,
+            mdi: p.mdi ?? null,
+            dx: p.dx ?? null
         }
 
         let y: number | null | undefined

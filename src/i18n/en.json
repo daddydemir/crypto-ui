@@ -14,7 +14,8 @@
       "bb": "Bollinger Bands",
       "dc": "Donchian Channels",
       "atr": "ATR",
-      "macd": "MACD"
+      "macd": "MACD",
+      "adi": "ADX"
     }
   },
   "topbar": {
@@ -153,6 +154,22 @@
     "lowest": "Lowest",
     "average": "Average",
     "range": "Range"
+  },
+  "adi": {
+    "title": "Average Directional Index (ADX)",
+    "description": "View ADX trend strength analysis for different cryptocurrencies",
+    "errorLoading": "Failed to load ADI data",
+    "chartDescription": "ADX measures trend strength, +DI and -DI measure trend direction",
+    "adi": "ADX",
+    "pdi": "+DI",
+    "mdi": "-DI",
+    "dx": "DX",
+    "current": "Current ADX",
+    "highest": "Highest",
+    "lowest": "Lowest",
+    "average": "Average",
+    "trendStrength": "Trend Strength",
+    "trendDirection": "Trend Direction"
   },
   "macd": {
     "title": "MACD",
@@ -628,6 +645,54 @@
       "tip": {
         "title": "Pro Tip",
         "content": "Use ATR for position sizing and stop-loss placement. You can take smaller positions in high ATR, larger positions in low ATR. Placing stop-loss at 1.5-2x ATR distance keeps you safe from normal price fluctuations. Low ATR periods are usually precursors to big moves - be ready for breakout strategies in these periods."
+      }
+    },
+    "adi": {
+      "title": "Average Directional Index (ADX)",
+      "description": "ADX is used to quantify trend strength. It measures the strength of a trend but not its direction. It is plotted with two other lines, +DI and -DI, to identify trend direction. Values above 25 generally indicate a strong trend, and below 20 indicate a weak trend.",
+      "interpretation": {
+        "title": "Interpretation",
+        "levels": [
+          {
+            "value": "ADX > 25",
+            "meaning": "Strong trend presence"
+          },
+          {
+            "value": "ADX < 20",
+            "meaning": "Weak or no trend"
+          },
+          {
+            "value": "+DI > -DI",
+            "meaning": "Bullish trend direction"
+          },
+          {
+            "value": "+DI < -DI",
+            "meaning": "Bearish trend direction"
+          }
+        ],
+        "buy_signals": {
+          "title": "Buy Signals",
+          "items": [
+            "+DI crosses above -DI while ADX is rising"
+          ]
+        },
+        "sell_signals": {
+          "title": "Sell Signals",
+          "items": [
+            "-DI crosses above +DI while ADX is rising"
+          ]
+        }
+      },
+      "warnings": {
+        "title": "Warnings",
+        "items": [
+          "ADX does not indicate trend direction, only strength",
+          "Lagging indicator, requires confirmation"
+        ]
+      },
+      "tip": {
+        "title": "Pro Tip",
+        "content": "Combine ADX with trend direction indicators. Above 25 ADX confirms a trend strategy is viable."
       }
     }
   },
