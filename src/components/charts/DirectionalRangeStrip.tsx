@@ -6,6 +6,8 @@ export interface ChartDatum {
   Symbol: string;
   Time: string;
   Close: number;
+  High: number;
+  Low: number;
 }
 
 interface DirectionalRangeStripProps {
@@ -46,7 +48,7 @@ export const DirectionalRangeStrip: React.FC<DirectionalRangeStripProps> = ({
       return;
     }
 
-    const margin = { top: 30, right: 30, bottom: 40, left: 60 };
+    const margin = { top: 40, right: 30, bottom: 60, left: 60 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const centerY = innerHeight / 2;
@@ -61,7 +63,10 @@ export const DirectionalRangeStrip: React.FC<DirectionalRangeStripProps> = ({
 
     // Extents
     const dsExt = d3.extent(chartData, d => d.dateObj) as [Date, Date];
-    const yExt = d3.extent(chartData, d => d.Close) as [number, number];
+    const yExt = [
+      d3.min(chartData, d => d.Low) ?? 0,
+      d3.max(chartData, d => d.High) ?? 0
+    ] as [number, number];
 
     // Scales
     const xScale = d3.scaleTime()
@@ -81,8 +86,6 @@ export const DirectionalRangeStrip: React.FC<DirectionalRangeStripProps> = ({
     // Styling Tokens
     const colorUp = "rgba(16, 185, 129, 0.9)"; // Tailwind emerald-500
     const colorDown = "rgba(239, 68, 68, 0.9)"; // Tailwind red-500
-    const colorUpGlow = "rgba(16, 185, 129, 0.3)";
-    const colorDownGlow = "rgba(239, 68, 68, 0.3)";
 
     // Defs for gradients & filters
     const defs = svg.append("defs");
@@ -187,24 +190,110 @@ export const DirectionalRangeStrip: React.FC<DirectionalRangeStripProps> = ({
       .duration(1000)
       .style("opacity", 1);
 
-    // Connecting Drop lines behind dots
-    g.append("g")
-      .selectAll("line")
+    // Range lines (High to Low)
+    const rangeGroup = g.append("g").attr("class", "ranges");
+    
+    rangeGroup.selectAll("line.range")
       .data(chartData)
       .enter()
       .append("line")
+      .attr("class", "range")
       .attr("x1", d => xScale(d.dateObj))
       .attr("x2", d => xScale(d.dateObj))
-      .attr("y1", centerY)
-      .attr("y2", d => d.isUp ? yScaleUp(d.Close) : yScaleDown(d.Close))
-      .attr("stroke", d => d.isUp ? colorUpGlow : colorDownGlow)
+      .attr("y1", d => d.isUp ? yScaleUp(d.High) : yScaleDown(d.High))
+      .attr("y2", d => d.isUp ? yScaleUp(d.Low) : yScaleDown(d.Low))
+      .attr("stroke", d => d.isUp ? colorUp : colorDown)
       .attr("stroke-width", 1.5)
-      .attr("stroke-dasharray", "2,2")
       .style("opacity", 0)
       .transition()
       .duration(800)
       .delay((_d, i) => i * 5)
-      .style("opacity", 1);
+      .style("opacity", 0.5);
+
+    // Range Ticks (High)
+    rangeGroup.selectAll("line.tick-high")
+      .data(chartData)
+      .enter()
+      .append("line")
+      .attr("class", "tick-high")
+      .attr("x1", d => xScale(d.dateObj) - 2)
+      .attr("x2", d => xScale(d.dateObj) + 2)
+      .attr("y1", d => d.isUp ? yScaleUp(d.High) : yScaleDown(d.High))
+      .attr("y2", d => d.isUp ? yScaleUp(d.High) : yScaleDown(d.High))
+      .attr("stroke", d => d.isUp ? colorUp : colorDown)
+      .attr("stroke-width", 1)
+      .style("opacity", 0)
+      .transition()
+      .duration(800)
+      .delay((_d, i) => i * 5)
+      .style("opacity", 0.8);
+
+    // Range Ticks (Low)
+    rangeGroup.selectAll("line.tick-low")
+      .data(chartData)
+      .enter()
+      .append("line")
+      .attr("class", "tick-low")
+      .attr("x1", d => xScale(d.dateObj) - 2)
+      .attr("x2", d => xScale(d.dateObj) + 2)
+      .attr("y1", d => d.isUp ? yScaleUp(d.Low) : yScaleDown(d.Low))
+      .attr("y2", d => d.isUp ? yScaleUp(d.Low) : yScaleDown(d.Low))
+      .attr("stroke", d => d.isUp ? colorUp : colorDown)
+      .attr("stroke-width", 1)
+      .style("opacity", 0)
+      .transition()
+      .duration(800)
+      .delay((_d, i) => i * 5)
+      .style("opacity", 0.8);
+
+    // Period Extreme Lines
+    const maxHighVal = d3.max(chartData, d => d.High) || 0;
+    const minLowVal = d3.min(chartData, d => d.Low) || 0;
+    
+    const maxHighD = chartData.find(d => d.High === maxHighVal);
+    const minLowD = chartData.find(d => d.Low === minLowVal);
+
+    if (maxHighD) {
+      const yPos = maxHighD.isUp ? yScaleUp(maxHighVal) : yScaleDown(maxHighVal);
+      g.append("line")
+        .attr("x1", 0)
+        .attr("x2", innerWidth)
+        .attr("y1", yPos)
+        .attr("y2", yPos)
+        .attr("stroke", colorUp)
+        .attr("stroke-dasharray", "4,4")
+        .attr("stroke-width", 1)
+        .style("opacity", 0.4);
+
+      g.append("text")
+        .attr("x", innerWidth - 5)
+        .attr("y", yPos - 10)
+        .attr("text-anchor", "end")
+        .attr("fill", colorUp)
+        .attr("class", "text-[10px] font-mono font-bold")
+        .text(`${t('drs.high', 'HIGH')}: $${maxHighVal.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${maxHighD.mmdd})`);
+    }
+
+    if (minLowD) {
+      const yPos = minLowD.isUp ? yScaleUp(minLowVal) : yScaleDown(minLowVal);
+      g.append("line")
+        .attr("x1", 0)
+        .attr("x2", innerWidth)
+        .attr("y1", yPos)
+        .attr("y2", yPos)
+        .attr("stroke", colorDown)
+        .attr("stroke-dasharray", "4,4")
+        .attr("stroke-width", 1)
+        .style("opacity", 0.4);
+
+      g.append("text")
+        .attr("x", innerWidth - 5)
+        .attr("y", yPos + 20)
+        .attr("text-anchor", "end")
+        .attr("fill", colorDown)
+        .attr("class", "text-[10px] font-mono font-bold")
+        .text(`${t('drs.low', 'LOW')}: $${minLowVal.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${minLowD.mmdd})`);
+    }
 
     // Render the dots
     g.append("g")
@@ -228,9 +317,22 @@ export const DirectionalRangeStrip: React.FC<DirectionalRangeStripProps> = ({
           
         tooltip.classed("hidden", false)
           .html(`
-            <div class="font-bold text-sm mb-1">${d.Symbol} • ${d.mmdd}</div>
-            <div class="text-xs text-slate-500 dark:text-slate-300">${t('coins.price', 'Price')}: <span class="text-slate-900 dark:text-white font-mono">$${d.Close.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span></div>
-            <div class="text-xs mt-1 ${d.isUp ? 'text-emerald-500 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}">
+            <div class="font-bold text-sm mb-2 border-b border-slate-200 dark:border-slate-700 pb-1">${d.Symbol} • ${d.mmdd}</div>
+            <div class="space-y-1">
+              <div class="flex justify-between gap-4 text-xs">
+                <span class="text-slate-500 dark:text-slate-400">${t('coins.price', 'Price')}:</span>
+                <span class="text-slate-900 dark:text-white font-mono font-semibold">$${d.Close.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              </div>
+              <div class="flex justify-between gap-4 text-[10px]">
+                <span class="text-slate-500 dark:text-slate-400">High:</span>
+                <span class="text-emerald-500 dark:text-emerald-400 font-mono">$${d.High.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              </div>
+              <div class="flex justify-between gap-4 text-[10px]">
+                <span class="text-slate-500 dark:text-slate-400">Low:</span>
+                <span class="text-red-500 dark:text-red-400 font-mono">$${d.Low.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+              </div>
+            </div>
+            <div class="text-xs mt-2 pt-1 border-t border-slate-200 dark:border-slate-700 ${d.isUp ? 'text-emerald-500 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}">
               ${d.isUp ? '▲' : '▼'} ${Math.abs(d.Close - d.prevClose).toFixed(2)} (${(((d.Close - d.prevClose) / d.prevClose) * 100).toFixed(2)}%)
             </div>
           `)

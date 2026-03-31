@@ -174,7 +174,14 @@
   },
   "drs": {
     "title": "Yönsel Aralık Şeridi",
-    "description": "Kapanış fiyatlarına dayalı özel oluşturulmuş yönsel kripto para aralığı analizidir."
+    "description": "Kapanış fiyatlarına dayalı özel oluşturulmuş yönsel kripto para aralığı analizidir.",
+    "periodHigh": "Dönem En Yüksek",
+    "periodLow": "Dönem En Düşük",
+    "high": "YÜKSEK",
+    "low": "DÜŞÜK",
+    "statistics": "Dönem İstatistikleri",
+    "volatility": "Volatilite",
+    "range": "Fiyat Aralığı"
   },
   "macd": {
     "title": "MACD",

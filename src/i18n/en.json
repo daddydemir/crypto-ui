@@ -174,7 +174,14 @@
   },
   "drs": {
     "title": "Directional Range Strip",
-    "description": "Custom directional range strip analysis for cryptocurrencies based on closing prices."
+    "description": "Custom directional range strip analysis for cryptocurrencies based on closing prices.",
+    "periodHigh": "Period High",
+    "periodLow": "Period Low",
+    "high": "HIGH",
+    "low": "LOW",
+    "statistics": "Period Statistics",
+    "volatility": "Volatility",
+    "range": "Price Range"
   },
   "macd": {
     "title": "MACD",
