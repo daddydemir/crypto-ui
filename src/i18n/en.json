@@ -181,7 +181,8 @@
     "low": "LOW",
     "statistics": "Period Statistics",
     "volatility": "Volatility",
-    "range": "Price Range"
+    "range": "Price Range",
+    "rangeHL": "Range (H/L)"
   },
   "macd": {
     "title": "MACD",
@@ -227,7 +228,9 @@
     "confirm": "Confirm",
     "data": "DATA",
     "months": "Months",
-    "locale": "en-US"
+    "locale": "en-US",
+    "price": "Price",
+    "change": "Change"
   },
   "alarms": {
     "title": "Price Alerts",

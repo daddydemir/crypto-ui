@@ -181,7 +181,8 @@
     "low": "DÜŞÜK",
     "statistics": "Dönem İstatistikleri",
     "volatility": "Volatilite",
-    "range": "Fiyat Aralığı"
+    "range": "Fiyat Aralığı",
+    "rangeHL": "Aralık (Y/D)"
   },
   "macd": {
     "title": "MACD",
@@ -227,7 +228,9 @@
     "confirm": "Onayla",
     "data": "VERİ",
     "months": "Aylar",
-    "locale": "tr-TR"
+    "locale": "tr-TR",
+    "price": "Fiyat",
+    "change": "Değişim"
   },
   "alarms": {
     "title": "Fiyat Alarmları",
