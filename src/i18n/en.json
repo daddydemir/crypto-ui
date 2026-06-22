@@ -16,8 +16,13 @@
       "atr": "ATR",
       "macd": "MACD",
       "adi": "ADX",
-      "drs": "Directional Range Strip"
+      "drs": "Directional Range Strip",
+      "charts": "Charts"
     }
+  },
+  "charts": {
+    "title": "Charts",
+    "description": "Charts will be displayed here."
   },
   "topbar": {
     "search": "Search...",

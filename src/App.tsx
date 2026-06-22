@@ -14,9 +14,11 @@ import MACDPage from '@/pages/analyses/MACDPage';
 import ADIPage from '@/pages/analyses/ADIPage';
 import SmartAlertsPage from "@/pages/alarms/SmartAlertsPage.tsx";
 import DirectionalRangeStripPage from "@/pages/analyses/DirectionalRangeStripPage";
+import ChartsPage from "@/pages/analyses/ChartsPage.tsx";
 
 
 const SettingsPage = () => <div>Ayarlar</div>;
+                            <Route path="/analyses/charts" element={<ChartsPage />} />
 
 import { ToastProvider } from "@/contexts/ToastContext";
 
@@ -37,6 +39,7 @@ function App() {
                             <Route path="/analyses/adi" element={<ADIPage />} />
                             <Route path="/analyses/directional-range-strip" element={<DirectionalRangeStripPage />} />
                             <Route path="/coins" element={<CoinsPage />} />
+                            <Route path="/analyses/charts" element={<ChartsPage />} />
                             <Route path="/alarms" element={<AlarmsPage />} />
                             <Route path="/settings" element={<SettingsPage />} />
                             <Route path="/coins/:coinId" element={<CoinDetailPage />} />
