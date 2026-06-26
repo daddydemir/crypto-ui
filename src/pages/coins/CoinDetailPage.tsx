@@ -2,12 +2,12 @@ import React, { useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { getRSIHistory } from "@/services/rsiService"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Brush } from "recharts"
-import {ArrowLeft, TrendingUp, TrendingDown, Calendar, Maximize2} from "lucide-react"
+import { ArrowLeft, TrendingUp, TrendingDown, Calendar, Maximize2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
 import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
-import {mapRsiToChartPoints} from "@/components/charts/types.ts";
+import { mapRsiToChartPoints } from "@/components/charts/types.ts";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
@@ -42,15 +42,15 @@ const CoinDetailPage: React.FC = () => {
                 break
             case '90d':
                 cutoffDate.setDate(now.getDate() - 90)
-                sampleRate = 2
+                sampleRate = 1
                 break
             case '1y':
                 cutoffDate.setFullYear(now.getFullYear() - 1)
-                sampleRate = 7
+                sampleRate = 1
                 break
             case 'all':
                 cutoffDate = new Date(0)
-                sampleRate = Math.ceil(data.length / 200)
+                sampleRate = 1
                 break
         }
 
@@ -105,11 +105,10 @@ const CoinDetailPage: React.FC = () => {
                             day: 'numeric'
                         })}
                     </p>
-                    <p className={`text-lg font-bold ${
-                        data.rsi >= 70 ? 'text-red-600' : 
-                        data.rsi <= 30 ? 'text-green-600' : 
-                        'text-blue-600'
-                    }`}>
+                    <p className={`text-lg font-bold ${data.rsi >= 70 ? 'text-red-600' :
+                            data.rsi <= 30 ? 'text-green-600' :
+                                'text-blue-600'
+                        }`}>
                         RSI: {data.rsi.toFixed(2)}
                     </p>
                 </div>
@@ -133,7 +132,7 @@ const CoinDetailPage: React.FC = () => {
                     data={mapRsiToChartPoints(data)}
                     timeRange={timeRange}
                     coinSymbol={decodedCoinId}
-                    analyseType= 'rsi'
+                    analyseType='rsi'
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
@@ -147,7 +146,7 @@ const CoinDetailPage: React.FC = () => {
                             <ArrowLeft className="w-5 h-5" />
                             {t("common.back", "Back")}
                         </button>
-                        
+
                         <RefreshButton
                             onRefresh={refresh}
                             refreshing={refreshing}
@@ -155,7 +154,7 @@ const CoinDetailPage: React.FC = () => {
                             lastUpdateText={lastUpdateText}
                         />
                     </div>
-                    
+
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                         {decodedCoinId && formatCoinName(decodedCoinId)}
                     </h1>
@@ -179,13 +178,12 @@ const CoinDetailPage: React.FC = () => {
                                 <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                                     {currentRSI.toFixed(2)}
                                 </div>
-                                <div className={`text-sm mt-1 flex items-center gap-1 ${
-                                    rsiChange > 0 ? 'text-green-600 dark:text-green-400' : 
-                                    rsiChange < 0 ? 'text-red-600 dark:text-red-400' : 
-                                    'text-gray-600 dark:text-gray-400'
-                                }`}>
+                                <div className={`text-sm mt-1 flex items-center gap-1 ${rsiChange > 0 ? 'text-green-600 dark:text-green-400' :
+                                        rsiChange < 0 ? 'text-red-600 dark:text-red-400' :
+                                            'text-gray-600 dark:text-gray-400'
+                                    }`}>
                                     {rsiChange > 0 ? <TrendingUp className="w-4 h-4" /> :
-                                     rsiChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
+                                        rsiChange < 0 ? <TrendingDown className="w-4 h-4" /> : null}
                                     {rsiChange > 0 ? '+' : ''}{rsiChange.toFixed(2)}
                                 </div>
                             </div>
@@ -237,11 +235,10 @@ const CoinDetailPage: React.FC = () => {
                                         <button
                                             key={btn.value}
                                             onClick={() => setTimeRange(btn.value)}
-                                            className={`px-3 py-1.5 text-sm rounded-lg transition ${
-                                                timeRange === btn.value
+                                            className={`px-3 py-1.5 text-sm rounded-lg transition ${timeRange === btn.value
                                                     ? 'bg-blue-500 text-white'
                                                     : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                            }`}
+                                                }`}
                                         >
                                             {btn.label}
                                         </button>

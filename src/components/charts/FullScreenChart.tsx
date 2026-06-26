@@ -5,12 +5,12 @@ import type { FullScreenChartProps, TimeRange } from '@/components/charts/types.
 import ApexChartWrapper from './ApexChartWrapper'
 
 const FullScreenChart: React.FC<FullScreenChartProps> = ({
-                                                             data,
-                                                             timeRange,
-                                                             coinSymbol,
-                                                             analyseType,
-                                                             onClose
-                                                         }) => {
+    data,
+    timeRange,
+    coinSymbol,
+    analyseType,
+    onClose
+}) => {
     const { t } = useTranslation()
     const [customTimeRange, setCustomTimeRange] = useState<TimeRange>(timeRange)
 
@@ -32,15 +32,15 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                 break
             case '90d':
                 cutoffDate.setDate(now.getDate() - 90)
-                sampleRate = 2
+                sampleRate = 1
                 break
             case '1y':
                 cutoffDate.setFullYear(now.getFullYear() - 1)
-                sampleRate = 7
+                sampleRate = 1
                 break
             case 'all':
                 cutoffDate = new Date(0)
-                sampleRate = Math.ceil(data.length / 500)
+                sampleRate = 1
                 break
         }
 
@@ -82,11 +82,10 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                                 <button
                                     key={btn.value}
                                     onClick={() => setCustomTimeRange(btn.value)}
-                                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                                        customTimeRange === btn.value
+                                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${customTimeRange === btn.value
                                             ? 'bg-blue-500 text-white'
                                             : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                    }`}
+                                        }`}
                                 >
                                     {btn.label}
                                 </button>
