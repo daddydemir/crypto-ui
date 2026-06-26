@@ -1,5 +1,5 @@
 // typescript
-import React, {useMemo} from 'react'
+import React, {useMemo, useRef} from 'react'
 import Chart from 'react-apexcharts'
 import { type ApexOptions } from 'apexcharts'
 import type {ChartPoint, TimeRange} from '@/components/charts/types.ts'
@@ -12,7 +12,21 @@ interface ApexChartWrapperProps {
 }
 const DEFAULT_COLORS = ['#3B82F6', '#10B981', '#F97316', '#A78BFA', '#F43F5E', '#06B6D4']
 
-const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({data, seriesKeys: providedKeys = []}) => {
+const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
+    data,
+    timeRange,
+    coinSymbol,
+    seriesKeys: providedKeys = []
+}) => {
+    const zoomRangeRef = useRef<{ min: number | null, max: number | null }>({ min: null, max: null })
+    const prevTimeRangeRef = useRef(timeRange)
+    const prevCoinSymbolRef = useRef(coinSymbol)
+
+    if (prevTimeRangeRef.current !== timeRange || prevCoinSymbolRef.current !== coinSymbol) {
+        zoomRangeRef.current = { min: null, max: null }
+        prevTimeRangeRef.current = timeRange
+        prevCoinSymbolRef.current = coinSymbol
+    }
     const keys = useMemo<string[]>(() => {
         if (providedKeys && providedKeys.length > 0) return providedKeys
 
@@ -48,12 +62,35 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({data, seriesKeys: pr
             animations: {enabled: true, speed: 800,
                 animateGradually: {enabled: true, delay: 150},
                 dynamicAnimation: {enabled: true, speed: 350}
+            },
+            events: {
+                zoomed: (_chartContext, { xaxis }) => {
+                    if (xaxis) {
+                        zoomRangeRef.current = { min: xaxis.min ?? null, max: xaxis.max ?? null }
+                    }
+                },
+                scrolled: (_chartContext, { xaxis }) => {
+                    if (xaxis) {
+                        zoomRangeRef.current = { min: xaxis.min ?? null, max: xaxis.max ?? null }
+                    }
+                },
+                beforeResetZoom: () => {
+                    zoomRangeRef.current = { min: null, max: null }
+                    return {
+                        xaxis: {
+                            min: undefined,
+                            max: undefined
+                        }
+                    }
+                }
             }
         },
         stroke: {curve: 'smooth', width: 3, lineCap: 'round'},
         colors,
         xaxis: {
             type: 'datetime',
+            min: zoomRangeRef.current.min ?? undefined,
+            max: zoomRangeRef.current.max ?? undefined,
             labels: {
                 datetimeFormatter: {
                     year: 'yyyy',
