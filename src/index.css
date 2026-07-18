@@ -123,3 +123,21 @@
 html {
     transition: background-color 0.3s, color 0.3s;
 }
+
+@keyframes customFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes customZoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-custom-fade-in {
+  animation: customFadeIn 0.2s ease-out forwards;
+}
+
+.animate-custom-zoom-in {
+  animation: customZoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

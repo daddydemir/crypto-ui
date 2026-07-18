@@ -26,7 +26,16 @@
   },
   "topbar": {
     "search": "Search...",
-    "language": "Language"
+    "language": "Language",
+    "notifications": "Notifications",
+    "noNotifications": "No new notifications",
+    "viewChart": "View Chart",
+    "loadingNotifications": "Loading notifications...",
+    "errorNotifications": "An error occurred while loading notifications",
+    "notificationDetail": "Notification Detail",
+    "creationTime": "Creation Time",
+    "fullscreen": "Fullscreen",
+    "close": "Close"
   },
   "coins": {
     "clearFilter": "Clear Filter",

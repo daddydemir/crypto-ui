@@ -22,7 +22,16 @@
   },
   "topbar": {
     "search": "Ara...",
-    "language": "Dil"
+    "language": "Dil",
+    "notifications": "Bildirimler",
+    "noNotifications": "Yeni bildirim bulunmuyor",
+    "viewChart": "Grafiği Görüntüle",
+    "loadingNotifications": "Bildirimler yükleniyor...",
+    "errorNotifications": "Bildirimler alınırken bir hata oluştu",
+    "notificationDetail": "Bildirim Detayı",
+    "creationTime": "Oluşturulma Zamanı",
+    "fullscreen": "Tam Ekran",
+    "close": "Kapat"
   },
   "coins": {
     "clearFilter": "Sıralamayı Temizle",
