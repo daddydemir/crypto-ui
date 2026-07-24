@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Bell, Sun, Moon, Globe, AlertTriangle, RefreshCw, Maximize2, X, LogOut, LogIn, User as UserIcon } from "lucide-react";
+import { Bell, Sun, Moon, Globe, AlertTriangle, RefreshCw, Maximize2, X, LogOut, User as UserIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getNotifications, type CryptoNotification } from "@/services/notificationService";
 import Modal from "@/components/common/Modal";
@@ -75,7 +75,7 @@ const Topbar: React.FC = () => {
                 const data = await getNotifications();
                 if (data && data.length > 0) {
                     const sorted = [...data].sort((a, b) => b.CreateTime - a.CreateTime);
-                    
+
                     // Update cache with the background check results to keep it fresh
                     cachedNotificationsRef.current = sorted;
                     lastFetchedTimeRef.current = Date.now();
@@ -113,11 +113,11 @@ const Topbar: React.FC = () => {
             const data = await getNotifications();
             const sorted = [...data].sort((a, b) => b.CreateTime - a.CreateTime);
             setNotifications(sorted);
-            
+
             // Cache the results
             cachedNotificationsRef.current = sorted;
             lastFetchedTimeRef.current = Date.now();
-            
+
             if (sorted.length > 0) {
                 const newestTime = sorted[0].CreateTime;
                 localStorage.setItem("lastSeenNotificationTime", newestTime.toString());
@@ -182,7 +182,7 @@ const Topbar: React.FC = () => {
             <div className="w-1/3"></div>
 
             <div className="w-1/3">
-                <Input placeholder={t("topbar.search")} className="dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"/>
+                <Input placeholder={t("topbar.search")} className="dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400" />
             </div>
 
             <div className="flex items-center space-x-4">
@@ -265,7 +265,7 @@ const Topbar: React.FC = () => {
                                                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase border shrink-0 ${styles.bg} ${styles.text}`}>
                                                         {styles.label}
                                                     </span>
-                                                    
+
                                                     <div className="flex-grow min-w-0">
                                                         <div className="flex items-center justify-between mb-1">
                                                             <span className="font-bold text-sm text-gray-900 dark:text-gray-100">
@@ -411,7 +411,7 @@ const Topbar: React.FC = () => {
             )}
 
             {isImageFullscreen && selectedNotification && (
-                <div 
+                <div
                     className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-custom-fade-in cursor-zoom-out"
                     onClick={() => setIsImageFullscreen(false)}
                 >
@@ -435,7 +435,7 @@ const Topbar: React.FC = () => {
                     </div>
 
                     {/* Image container */}
-                    <div 
+                    <div
                         className="w-full h-full flex items-center justify-center p-4 md:p-8"
                         onClick={(e) => e.stopPropagation()}
                     >

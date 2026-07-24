@@ -17,7 +17,6 @@ import DirectionalRangeStripPage from "@/pages/analyses/DirectionalRangeStripPag
 import ChartsPage from "@/pages/analyses/ChartsPage.tsx";
 import LoginPage from "@/pages/login/LoginPage.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
-import React from "react";
 
 const SettingsPage = () => <div className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md font-semibold text-lg text-gray-800 dark:text-gray-100">Ayarlar</div>;
 
@@ -52,7 +51,7 @@ function App() {
                                             <Route path="/coins" element={<CoinsPage />} />
                                             <Route path="/analyses/charts" element={<ChartsPage />} />
                                             <Route path="/coins/:coinId" element={<CoinDetailPage />} />
-                                            
+
                                             <Route path="/alarms" element={<AlarmsPage />} />
                                             <Route path="/settings" element={<SettingsPage />} />
                                             <Route path="/smart-alerts" element={<SmartAlertsPage />} />
