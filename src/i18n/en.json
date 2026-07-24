@@ -827,5 +827,18 @@
       "targetRequired": "Target is required",
       "messageRequired": "Message is required"
     }
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "button": "Login",
+    "error": "Login failed. Please check your credentials.",
+    "requiredUsername": "Username is required",
+    "requiredPassword": "Password is required",
+    "loggingIn": "Logging in...",
+    "welcome": "Welcome Back!",
+    "subtitle": "Sign in to access your crypto dashboard",
+    "logout": "Logout"
   }
 }

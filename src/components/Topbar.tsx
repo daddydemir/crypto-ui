@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Bell, Sun, Moon, Globe, AlertTriangle, RefreshCw, Maximize2, X } from "lucide-react";
+import { Bell, Sun, Moon, Globe, AlertTriangle, RefreshCw, Maximize2, X, LogOut, LogIn, User as UserIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getNotifications, type CryptoNotification } from "@/services/notificationService";
 import Modal from "@/components/common/Modal";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Topbar: React.FC = () => {
+    const { username, isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem("darkMode");
         return saved === "true";
@@ -311,6 +316,54 @@ const Topbar: React.FC = () => {
                                 </button>
                             </div>
                         </>
+                    )}
+                </div>
+
+                {/* User Authentication Menu */}
+                <div className="relative">
+                    {isAuthenticated ? (
+                        <>
+                            <button
+                                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
+                            >
+                                <UserIcon className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                                <span className="font-semibold text-sm max-w-[120px] truncate">
+                                    {username}
+                                </span>
+                            </button>
+
+                            {userMenuOpen && (
+                                <>
+                                    <div className="fixed inset-0 z-40 cursor-default" onClick={() => setUserMenuOpen(false)} />
+                                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50 py-1">
+                                        <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">Giriş Yapıldı</p>
+                                            <p className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{username}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                logout();
+                                                setUserMenuOpen(false);
+                                                navigate("/login");
+                                            }}
+                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 text-left cursor-pointer transition-colors"
+                                        >
+                                            <LogOut size={16} />
+                                            <span>{t("login.logout")}</span>
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <button
+                            onClick={() => navigate("/login")}
+                            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
+                            title={t("login.title")}
+                        >
+                            <UserIcon size={18} className="text-gray-600 dark:text-gray-300" />
+                        </button>
                     )}
                 </div>
             </div>

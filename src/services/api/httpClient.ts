@@ -9,8 +9,11 @@ class HttpClient {
 
     private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const url = `${this.baseUrl}${endpoint}`;
+        const token = localStorage.getItem('token');
+        
         const headers = {
             'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
             ...(options.headers || {}),
         };
 
@@ -23,6 +26,9 @@ class HttpClient {
             const response = await fetch(url, config);
 
             if (!response.ok) {
+                if (response.status === 401 && !endpoint.includes('/login')) {
+                    window.dispatchEvent(new CustomEvent('auth-401-unauthorized'));
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
