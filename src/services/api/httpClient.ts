@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './config';
+import { API_BASE_URL, MOSAIC_BASE_URL } from './config';
 
 class HttpClient {
     private baseUrl: string;
@@ -29,7 +29,17 @@ class HttpClient {
                 if (response.status === 401 && !endpoint.includes('/login')) {
                     window.dispatchEvent(new CustomEvent('auth-401-unauthorized'));
                 }
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const text = await response.text();
+                let errorData: any = null;
+                try {
+                    errorData = text ? JSON.parse(text) : null;
+                } catch {
+                    errorData = null;
+                }
+                const error: any = new Error(errorData?.message || `HTTP error! status: ${response.status}`);
+                error.status = response.status;
+                error.data = errorData;
+                throw error;
             }
 
             // check if response is empty to avoid json parse error
@@ -67,3 +77,5 @@ class HttpClient {
 }
 
 export const http = new HttpClient(API_BASE_URL);
+export const mosaicHttp = new HttpClient(MOSAIC_BASE_URL);
+

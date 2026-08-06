@@ -338,7 +338,7 @@ const Topbar: React.FC = () => {
                                     <div className="fixed inset-0 z-40 cursor-default" onClick={() => setUserMenuOpen(false)} />
                                     <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50 py-1">
                                         <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Giriş Yapıldı</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{t("login.loggedIn")}</p>
                                             <p className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{username}</p>
                                         </div>
                                         <button

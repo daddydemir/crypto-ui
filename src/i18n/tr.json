@@ -835,6 +835,7 @@
     "welcome": "Hoş Geldiniz!",
     "subtitle": "Kripto gösterge paneline erişmek için oturum açın",
     "logout": "Çıkış Yap",
+    "loggedIn": "Giriş Yapıldı",
     "unauthorizedTitle": "Giriş Gerekli",
     "unauthorizedMessage": "Bu işlemi yapabilmek için giriş yapmanız gerekmektedir. Giriş sayfasına gitmek istiyor musunuz?"
   }

@@ -3,7 +3,7 @@ import { Save, Loader2 } from 'lucide-react';
 import Modal from '../common/Modal';
 import { cn } from '../../lib/utils';
 import { validateNodeConfig } from './validation.ts';
-import { MOSAIC_BASE_URL } from '../../services/api/config';
+import { createMosaic, updateMosaic } from '../../services/mosaicService';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/contexts/ToastContext';
 
@@ -104,34 +104,22 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, mosaicId, mosaicN
         };
 
         try {
-            const url = mosaicId
-                ? `${MOSAIC_BASE_URL}/mosaic/${mosaicId}`
-                : `${MOSAIC_BASE_URL}/mosaic`;
-            const method = mosaicId ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(mosaic)
-            });
-
-            if (response.ok) {
-                toast.success(t('smartAlert.saveButton.saveSuccess'));
-                setShowDialog(false);
-                setName('');
-                onSave?.();
+            if (mosaicId) {
+                await updateMosaic(mosaicId, mosaic);
             } else {
-                const errorData = await response.json();
-                if (errorData.errors && Array.isArray(errorData.errors)) {
-                    setServerErrors(errorData.errors);
-                } else {
-                    toast.error(`${t('smartAlert.saveButton.error')}${errorData.message || t('smartAlert.saveButton.unknownError')}`);
-                }
+                await createMosaic(mosaic);
             }
-        } catch (error) {
-            toast.error(t('smartAlert.saveButton.saveFailed'));
+
+            toast.success(t('smartAlert.saveButton.saveSuccess'));
+            setShowDialog(false);
+            setName('');
+            onSave?.();
+        } catch (error: any) {
+            if (error?.data?.errors && Array.isArray(error.data.errors)) {
+                setServerErrors(error.data.errors);
+            } else {
+                toast.error(`${t('smartAlert.saveButton.error')}${error?.data?.message || error?.message || t('smartAlert.saveButton.unknownError')}`);
+            }
             console.error(error);
         } finally {
             setLoading(false);

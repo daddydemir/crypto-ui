@@ -1,4 +1,4 @@
-import { MOSAIC_BASE_URL } from './api/config';
+import { mosaicHttp } from './api/httpClient';
 
 export interface Definition {
     name: string
@@ -14,10 +14,10 @@ export interface Field {
 
 export async function getMosaics(): Promise<Definition[]> {
     try {
-        return await fetch(`${MOSAIC_BASE_URL}/definitions`).then(res => res.json())
+        return await mosaicHttp.get<Definition[]>('/definitions');
     } catch (error) {
-        console.error('Error fetching definitions:', error)
-        return []
+        console.error('Error fetching definitions:', error);
+        return [];
     }
 }
 
@@ -41,13 +41,21 @@ export interface Mosaic {
 
 export async function getUserMosaics(): Promise<Mosaic[]> {
     try {
-        const response = await fetch(`${MOSAIC_BASE_URL}/mosaic`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
+        return await mosaicHttp.get<Mosaic[]>('/mosaic');
     } catch (error) {
         console.error('Error fetching user mosaics:', error);
         return [];
     }
+}
+
+export async function createMosaic(mosaic: any): Promise<any> {
+    return await mosaicHttp.post('/mosaic', mosaic);
+}
+
+export async function updateMosaic(id: string, mosaic: any): Promise<any> {
+    return await mosaicHttp.put(`/mosaic/${id}`, mosaic);
+}
+
+export async function deleteMosaic(id: string): Promise<void> {
+    return await mosaicHttp.delete(`/mosaic/${id}`);
 }

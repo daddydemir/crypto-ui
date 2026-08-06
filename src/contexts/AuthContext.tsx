@@ -102,10 +102,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 isOpen={showConfirm}
                 onClose={handleClose}
                 onConfirm={handleConfirm}
-                title={t("login.unauthorizedTitle", "Giriş Gerekli")}
-                message={t("login.unauthorizedMessage", "Bu işlemi yapabilmek için giriş yapmanız gerekmektedir. Giriş sayfasına gitmek istiyor musunuz?")}
-                confirmText={t("login.title", "Giriş Yap")}
-                cancelText={t("common.cancel", "İptal")}
+                title={t("login.unauthorizedTitle")}
+                message={t("login.unauthorizedMessage")}
+                confirmText={t("login.title")}
+                cancelText={t("common.cancel")}
                 variant="info"
             />
         </AuthContext.Provider>

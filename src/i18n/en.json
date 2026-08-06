@@ -839,6 +839,9 @@
     "loggingIn": "Logging in...",
     "welcome": "Welcome Back!",
     "subtitle": "Sign in to access your crypto dashboard",
-    "logout": "Logout"
+    "logout": "Logout",
+    "loggedIn": "Logged In",
+    "unauthorizedTitle": "Authentication Required",
+    "unauthorizedMessage": "You need to log in to perform this action. Would you like to go to the login page?"
   }
 }

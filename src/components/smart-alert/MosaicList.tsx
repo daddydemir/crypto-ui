@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getUserMosaics, type Mosaic } from '@/services/mosaicService';
+import { getUserMosaics, deleteMosaic, type Mosaic } from '@/services/mosaicService';
 import { Plus, Loader2, Bell, Layers, ChevronRight, Zap, Pencil, Trash2, TriangleAlert } from 'lucide-react';
 import {
     DollarSign,
@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import Modal from '../common/Modal';
 import { Button } from '@/components/ui/button';
-import { MOSAIC_BASE_URL } from '@/services/api/config';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/contexts/ToastContext';
 
@@ -131,18 +130,11 @@ const MosaicList = ({ onCreateNew, onEdit }: MosaicListProps) => {
 
         setDeleting(true);
         try {
-            const response = await fetch(`${MOSAIC_BASE_URL}/mosaic/${mosaicToDelete.Id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                setMosaics(prev => prev.filter(m => m.Id !== mosaicToDelete.Id));
-                setDeleteModalOpen(false);
-                setMosaicToDelete(null);
-                toast.success(t('common.success', 'İşlem başarılı'));
-            } else {
-                toast.error(t('common.error'));
-            }
+            await deleteMosaic(mosaicToDelete.Id);
+            setMosaics(prev => prev.filter(m => m.Id !== mosaicToDelete.Id));
+            setDeleteModalOpen(false);
+            setMosaicToDelete(null);
+            toast.success(t('common.success', 'İşlem başarılı'));
         } catch (err) {
             console.error('Delete error:', err);
             toast.error(t('common.error'));
