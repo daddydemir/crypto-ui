@@ -55,13 +55,13 @@ const StatCard: React.FC<StatCardProps> = ({
     }
 
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+        <div className="surface-card p-5 transition hover:-translate-y-0.5 hover:shadow-md">
             <div className="flex items-start justify-between">
                 <div className="flex-1">
                     <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                         {label}
                     </div>
-                    <div className={`text-3xl font-bold ${colors.text}`}>
+                    <div className={`text-2xl font-bold tracking-tight ${colors.text}`}>
                         {value}
                     </div>
                     {change !== undefined && (
@@ -73,7 +73,7 @@ const StatCard: React.FC<StatCardProps> = ({
                     )}
                 </div>
                 {icon && (
-                    <div className={colors.text}>
+                    <div className={`rounded-xl p-2.5 ${colors.bg} ${colors.text}`}>
                         {icon}
                     </div>
                 )}

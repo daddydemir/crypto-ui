@@ -17,10 +17,18 @@ import DirectionalRangeStripPage from "@/pages/analyses/DirectionalRangeStripPag
 import ChartsPage from "@/pages/analyses/ChartsPage.tsx";
 import LoginPage from "@/pages/login/LoginPage.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
-
-const SettingsPage = () => <div className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md font-semibold text-lg text-gray-800 dark:text-gray-100">Ayarlar</div>;
+import { useAuth } from "@/contexts/AuthContext";
+import PortfolioPage from "@/pages/portfolio/PortfolioPage";
+import TradeJourneyPage from "@/pages/portfolio/TradeJourneyPage";
+import SettingsPage from "@/pages/settings/SettignsPage";
 
 import { ToastProvider } from "@/contexts/ToastContext";
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const { isAuthenticated, loading } = useAuth();
+    if (loading) return null;
+    return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
 
 function App() {
     return (
@@ -51,6 +59,8 @@ function App() {
                                             <Route path="/coins" element={<CoinsPage />} />
                                             <Route path="/analyses/charts" element={<ChartsPage />} />
                                             <Route path="/coins/:coinId" element={<CoinDetailPage />} />
+											<Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
+											<Route path="/portfolio/journey" element={<ProtectedRoute><TradeJourneyPage /></ProtectedRoute>} />
 
                                             <Route path="/alarms" element={<AlarmsPage />} />
                                             <Route path="/settings" element={<SettingsPage />} />

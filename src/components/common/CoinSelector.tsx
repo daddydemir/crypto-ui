@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getTopCoins, type Coin } from '@/services/coinService'
 import { useCachedData } from '@/hooks/useCachedData'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface CoinSelectorProps {
     value?: string
@@ -24,15 +25,15 @@ const CoinSelector: React.FC<CoinSelectorProps> = ({ value, onChange, className 
         }
     }, [coins, value, onChange])
 
-    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const coinPrefix = coins?.find(c => c.id === e.target.value)
+    const handleSelectChange = (coinID: string) => {
+        const coinPrefix = coins?.find(c => c.id === coinID)
         if (coinPrefix) {
             onChange(coinPrefix)
         }
     }
 
     return (
-        <div className={`bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800 mb-6 ${className || ''}`}>
+        <div className={`surface-card mb-6 p-5 ${className || ''}`}>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('common.selectCrypto', 'Select Cryptocurrency')}
             </label>
@@ -41,17 +42,21 @@ const CoinSelector: React.FC<CoinSelectorProps> = ({ value, onChange, className 
                     {t('common.loadingCoins', 'Loading coins...')}
                 </div>
             ) : (
-                <select
+                <Select
                     value={value}
-                    onChange={handleSelectChange}
-                    className="w-full md:w-96 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    onValueChange={handleSelectChange}
                 >
-                    {coins?.map((coin) => (
-                        <option key={coin.id} value={coin.id}>
-                            {coin.symbol.toUpperCase()} - {coin.name}
-                        </option>
-                    ))}
-                </select>
+					<SelectTrigger className="h-10 w-full bg-white md:w-96 dark:bg-gray-800">
+						<SelectValue placeholder={t('common.selectCrypto', 'Select Cryptocurrency')} />
+					</SelectTrigger>
+					<SelectContent searchPlaceholder={t('topbar.search', 'Search...')}>
+						{coins?.map((coin) => (
+							<SelectItem key={coin.id} value={coin.id}>
+								{coin.symbol.toUpperCase()} - {coin.name}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
             )}
         </div>
     )

@@ -32,21 +32,21 @@ const RSIPage: React.FC = () => {
     }
 
     return (
-        <div className="p-6">
-            <div className="mb-6">
-                <div className="flex items-center justify-between">
+        <div className="page-shell">
+            <div className="page-hero mb-6">
+                <div className="relative z-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <h1 className="text-2xl font-bold">{t("rsi.title")}</h1>
+                            <h1 className="text-3xl font-bold tracking-tight text-white">{t("rsi.title")}</h1>
                             <button
                                 onClick={() => setIsDetailOpen(true)}
-                                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                                className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-white/20"
                             >
                                 <Info className="w-4 h-4" />
                                 {t("indicators.detail")}
                             </button>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-400">{t("rsi.description")}</p>
+                        <p className="text-slate-300">{t("rsi.description")}</p>
                     </div>
                     <RefreshButton
                         onRefresh={refresh}
@@ -105,7 +105,7 @@ const RSIPage: React.FC = () => {
                             {t("indicators.rsi.interpretation.title")}
                         </h4>
                         <div className="grid gap-4">
-                            {(t("indicators.rsi.interpretation.levels", { returnObjects: true }) as any[]).map((level, i) => (
+                            {(t("indicators.rsi.interpretation.levels", { returnObjects: true }) as Array<{ value: string; meaning: string }>).map((level, i) => (
                                 <div key={i} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
                                     <span className="font-medium text-blue-600 dark:text-blue-400 block mb-1">
                                         {level.value}

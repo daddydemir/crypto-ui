@@ -1,6 +1,6 @@
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Brush } from 'recharts'
-import { Maximize2 } from 'lucide-react'
+import { BarChart3, Maximize2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import TimeRangeSelector from './TimeRangeSelector'
 import { type TimeRange } from '@/hooks/useTimeRangeFilter'
@@ -28,7 +28,7 @@ interface AnalysisChartProps<T> {
     brushThreshold?: number
 }
 
-function AnalysisChart<T extends Record<string, any>>({
+function AnalysisChart<T extends object>({
     data,
     lines,
     timeRange,
@@ -43,23 +43,21 @@ function AnalysisChart<T extends Record<string, any>>({
     showBrush = true,
     brushThreshold = 50
 }: AnalysisChartProps<T>) {
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
 
     const formatXAxis = (dateStr: string) => {
         const date = new Date(dateStr)
         if (timeRange === '7d' || timeRange === '30d') {
-            return date.toLocaleDateString('tr-TR', { month: 'short', day: 'numeric' })
+            return date.toLocaleDateString(i18n.language === 'tr' ? 'tr-TR' : 'en-US', { month: 'short', day: 'numeric' })
         }
-        return date.toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' })
+        return date.toLocaleDateString(i18n.language === 'tr' ? 'tr-TR' : 'en-US', { month: 'short', year: '2-digit' })
     }
 
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+        <div className="surface-card overflow-hidden p-5 sm:p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                        {title}
-                    </h2>
+                    <div className="flex items-center gap-3"><span className="rounded-xl bg-indigo-50 p-2.5 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-300"><BarChart3 className="h-5 w-5" /></span><h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100">{title}</h2></div>
                     {subtitle && (
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                             {subtitle}
@@ -85,22 +83,20 @@ function AnalysisChart<T extends Record<string, any>>({
             </div>
 
             {data.length > 0 ? (
-                <ResponsiveContainer width="100%" height={500}>
-                    <LineChart data={data}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
+                <ResponsiveContainer width="100%" height={460}>
+                    <LineChart data={data} margin={{ top: 16, right: 12, left: 4, bottom: 4 }}>
+                        <CartesianGrid vertical={false} strokeDasharray="4 6" stroke="currentColor" className="text-slate-200 dark:text-slate-800" />
                         <XAxis
                             dataKey={dateKey}
                             tickFormatter={formatXAxis}
-                            stroke="#9CA3AF"
-                            style={{ fontSize: '12px' }}
+                            axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }}
                         />
                         <YAxis
-                            stroke="#9CA3AF"
-                            style={{ fontSize: '12px' }}
+                            axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} width={72}
                             tickFormatter={yAxisFormatter}
                             domain={yAxisDomain}
                         />
-                        <Tooltip content={tooltipContent} />
+                        <Tooltip content={tooltipContent} cursor={{ stroke: '#818cf8', strokeWidth: 1, strokeDasharray: '4 4' }} contentStyle={{ borderRadius: 14, border: '1px solid #334155', background: '#0f172a', color: '#f8fafc', boxShadow: '0 18px 40px rgba(15,23,42,.22)' }} />
                         <Legend
                             wrapperStyle={{ fontSize: '14px', paddingTop: '20px' }}
                         />
@@ -108,7 +104,7 @@ function AnalysisChart<T extends Record<string, any>>({
                             <Brush
                                 dataKey={dateKey}
                                 height={30}
-                                stroke="#3B82F6"
+                                stroke="#6366f1" fill="#eef2ff"
                                 tickFormatter={formatXAxis}
                             />
                         )}
@@ -121,7 +117,8 @@ function AnalysisChart<T extends Record<string, any>>({
                                 strokeWidth={line.strokeWidth || 2}
                                 name={line.name}
                                 dot={false}
-                                activeDot={{ r: 6 }}
+                                activeDot={{ r: 5, strokeWidth: 3, stroke: '#fff' }}
+                                animationDuration={650}
                             />
                         ))}
                     </LineChart>

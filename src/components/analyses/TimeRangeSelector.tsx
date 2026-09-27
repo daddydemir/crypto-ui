@@ -33,8 +33,8 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
                         key={btn.value}
                         onClick={() => onChange(btn.value)}
                         className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${value === btn.value
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                            ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-indigo-300'
                             }`}
                     >
                         {btn.label}

@@ -73,14 +73,14 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex gap-2">
+            <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                <div className="flex flex-wrap gap-2 rounded-2xl bg-slate-100 p-1.5 dark:bg-slate-800/70">
                     <button
                         onClick={() => setFilterStatus('all')}
                         className={`px-4 py-2 rounded-lg transition ${
                             filterStatus === 'all'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                ? 'bg-white text-indigo-600 shadow-sm dark:bg-slate-700 dark:text-indigo-300'
+                                : 'text-gray-600 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700'
                         }`}
                     >
                         {t("rsi.all")}
@@ -90,7 +90,7 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                         className={`px-4 py-2 rounded-lg transition ${
                             filterStatus === 'overbought'
                                 ? 'bg-red-500 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                : 'text-gray-600 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700'
                         }`}
                     >
                         {t("rsi.overbought")} (≥70)
@@ -100,7 +100,7 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                         className={`px-4 py-2 rounded-lg transition ${
                             filterStatus === 'oversold'
                                 ? 'bg-green-500 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                : 'text-gray-600 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700'
                         }`}
                     >
                         {t("rsi.oversold")} (≤30)
@@ -110,7 +110,7 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                         className={`px-4 py-2 rounded-lg transition ${
                             filterStatus === 'neutral'
                                 ? 'bg-gray-500 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                                : 'text-gray-600 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-gray-700'
                         }`}
                     >
                         {t("rsi.neutral")}
@@ -128,9 +128,9 @@ const RSITable: React.FC<RSITableProps> = ({ coins }) => {
                 )}
             </div>
 
-            <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800">
+            <div className="surface-card overflow-x-auto">
                 <table className="min-w-full text-left text-sm text-gray-700 dark:text-gray-300">
-                    <thead className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 uppercase text-xs">
+                    <thead className="bg-slate-50/80 text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-800/50">
                     <tr>
                         <th className="p-3">{t("rsi.coin")}</th>
                         <th

@@ -113,11 +113,13 @@ const AlarmsPage: React.FC = () => {
     }
 
     return (
-        <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
+        <div className="page-shell">
+            <div className="page-hero mb-6">
+                <div className="relative z-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                 <div>
-                    <h1 className="text-2xl font-bold mb-1">{t("alarms.title")}</h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">Price monitoring</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-white">{t("alarms.title")}</h1>
+                    <p className="mt-2 text-sm text-slate-300">
                         {t("alarms.totalAlerts", { count: alerts?.length || 0 })}
                     </p>
                 </div>
@@ -129,11 +131,12 @@ const AlarmsPage: React.FC = () => {
                     />
                     <button
                         onClick={() => setIsDialogOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+                        className="primary-action bg-white text-slate-950 shadow-white/10 hover:bg-indigo-50"
                     >
                         <Plus className="w-5 h-5" />
                         {t("alarms.createNew")}
                     </button>
+                </div>
                 </div>
             </div>
 

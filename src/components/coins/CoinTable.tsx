@@ -68,9 +68,9 @@ const CoinTable: React.FC<CoinTableProps> = ({ coins }) => {
                 </div>
             )}
 
-            <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800">
+            <div className="surface-card overflow-x-auto">
                 <table className="min-w-full text-left text-sm text-gray-700 dark:text-gray-300">
-                    <thead className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 uppercase text-xs">
+                    <thead className="bg-slate-50/80 text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-800/50">
                         <tr>
                             <th className="p-3"> {t("coins.coin")}</th>
                             <th

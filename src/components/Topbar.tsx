@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Bell, Sun, Moon, Globe, AlertTriangle, RefreshCw, Maximize2, X, LogOut, User as UserIcon } from "lucide-react";
+import { Bell, Sun, Moon, Globe, AlertTriangle, RefreshCw, Maximize2, X, LogOut, User as UserIcon, Menu, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getNotifications, type CryptoNotification } from "@/services/notificationService";
 import Modal from "@/components/common/Modal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const Topbar: React.FC = () => {
+const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
     const { username, isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
     const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -53,6 +53,12 @@ const Topbar: React.FC = () => {
             document.documentElement.classList.remove("dark");
         }
     }, [darkMode]);
+
+    useEffect(() => {
+        const syncTheme = (event: Event) => setDarkMode((event as CustomEvent<boolean>).detail);
+        window.addEventListener("themechange", syncTheme);
+        return () => window.removeEventListener("themechange", syncTheme);
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -177,19 +183,20 @@ const Topbar: React.FC = () => {
     };
 
     return (
-        <header className="flex items-center justify-between px-6 py-3 bg-white dark:bg-gray-800 border-b shadow-sm">
+        <header className="z-20 flex h-[72px] shrink-0 items-center justify-between border-b border-slate-200/70 bg-white/80 px-4 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/75 sm:px-6">
 
-            <div className="w-1/3"></div>
+            <button onClick={onMenuClick} className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-600 shadow-sm lg:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"><Menu size={20} /></button>
 
-            <div className="w-1/3">
-                <Input placeholder={t("topbar.search")} className="dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400" />
+            <div className="relative hidden w-full max-w-md lg:block">
+                <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input placeholder={t("topbar.search")} className="h-11 rounded-xl border-slate-200 bg-slate-100/70 pl-10 shadow-none dark:border-slate-700 dark:bg-slate-900/80 dark:text-gray-100 dark:placeholder-gray-400" />
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
 
                 <button
                     onClick={() => setDarkMode(!darkMode)}
-                    className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
+                    className="rounded-xl p-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-indigo-600 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                     {darkMode ? <Sun size={18} /> : <Moon size={18} />}
                 </button>

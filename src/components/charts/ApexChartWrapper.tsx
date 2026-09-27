@@ -52,11 +52,11 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
 
     const chartOptions: ApexOptions = {
         chart: {
-            type: 'line',
+            type: 'area',
             height: '100%',
             zoom: {enabled: true, type: 'x', autoScaleYaxis: true},
             toolbar: {
-                show: false,
+                show: true,
                 tools: {download: true, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true}
             },
             animations: {enabled: true, speed: 800,
@@ -64,28 +64,25 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
                 dynamicAnimation: {enabled: true, speed: 350}
             },
             events: {
-                zoomed: (_chartContext, { xaxis }) => {
+                zoomed: (_chartContext, options) => {
+                    const xaxis = options?.xaxis
                     if (xaxis) {
                         zoomRangeRef.current = { min: xaxis.min ?? null, max: xaxis.max ?? null }
                     }
                 },
-                scrolled: (_chartContext, { xaxis }) => {
+                scrolled: (_chartContext, options) => {
+                    const xaxis = options?.xaxis
                     if (xaxis) {
                         zoomRangeRef.current = { min: xaxis.min ?? null, max: xaxis.max ?? null }
                     }
                 },
                 beforeResetZoom: () => {
                     zoomRangeRef.current = { min: null, max: null }
-                    return {
-                        xaxis: {
-                            min: undefined,
-                            max: undefined
-                        }
-                    }
                 }
             }
         },
-        stroke: {curve: 'smooth', width: 3, lineCap: 'round'},
+        stroke: {curve: 'smooth', width: 2.5, lineCap: 'round'},
+        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.28, opacityTo: 0.02, stops: [0, 92, 100] } },
         colors,
         xaxis: {
             type: 'datetime',
@@ -145,10 +142,10 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
                 `
             }
         },
-        legend: {position: 'top', horizontalAlign: 'right', fontSize: '14px', fontFamily: 'Inter, sans-serif',},
+        legend: {position: 'top', horizontalAlign: 'left', fontSize: '13px', fontFamily: 'Inter, sans-serif', markers: { size: 6 }, itemMargin: { horizontal: 12 }},
         grid: {
-            borderColor: '#374151',
-            strokeDashArray: 4,
+            borderColor: '#cbd5e1',
+            strokeDashArray: 5,
             padding: {
                 top: 20,
                 right: 20,
@@ -179,7 +176,7 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
         <Chart
             options={chartOptions}
             series={series}
-            type="line"
+            type="area"
             height="100%"
         />
     )

@@ -6,10 +6,6 @@ interface CoinRowProps {
 }
 
 const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
-    const getChangeColor = (value: number) => {
-        return value >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
-    }
-
     const getLivePriceColor = () => {
         if (!coin.livePrice || coin.livePrice === coin.price) return "text-gray-500 dark:text-gray-400"
         return coin.livePrice > coin.price
@@ -35,10 +31,12 @@ const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
         }
     }
 
+    const ChangeBadge = ({ value }: { value: number }) => <span className={`inline-flex min-w-20 justify-center rounded-lg px-2.5 py-1.5 font-mono text-xs font-semibold ${value >= 0 ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400" : "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-400"}`}>{value > 0 ? "+" : ""}{value.toFixed(2)}%</span>
+
     return (
-        <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-            <td className="p-3 font-semibold text-gray-900 dark:text-gray-100">{coin.symbol} - {coin.name}</td>
-            <td className="p-3 text-gray-900 dark:text-gray-100">
+        <tr className="border-b border-slate-100 transition hover:bg-indigo-50/35 dark:border-slate-800 dark:hover:bg-indigo-950/10">
+            <td className="p-3.5"><div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-bold text-white shadow-sm">{coin.symbol.slice(0, 2)}</span><div><p className="font-bold text-slate-900 dark:text-white">{coin.symbol}</p><p className="text-xs text-slate-500">{coin.name}</p></div></div></td>
+            <td className="p-3.5 font-mono font-semibold text-gray-900 dark:text-gray-100">
                 <span className="mr-2">{formatPrice(coin.price)}</span>
                 {coin.livePrice && (
                     <span className={`text-xs font-medium ${getLivePriceColor()}`}>
@@ -46,26 +44,11 @@ const CoinRow: React.FC<CoinRowProps> = ({ coin }) => {
                     </span>
                 )}
             </td>
-            <td className={`p-3 ${getChangeColor(coin.change24h)}`}>
-                {coin.change24h > 0 ? "+" : ""}
-                {coin.change24h}%
-            </td>
-            <td className={`p-3 ${getChangeColor(coin.change7d)}`}>
-                {coin.change7d > 0 ? "+" : ""}
-                {coin.change7d}%
-            </td>
-            <td className={`p-3 ${getChangeColor(coin.change30d)}`}>
-                {coin.change30d > 0 ? "+" : ""}
-                {coin.change30d}%
-            </td>
-            <td className={`p-3 ${getChangeColor(coin.arithmeticChange7d)}`}>
-                {coin.arithmeticChange7d > 0 ? "+" : ""}
-                {coin.arithmeticChange7d}%
-            </td>
-            <td className={`p-3 ${getChangeColor(coin.arithmeticChange30d)}`}>
-                {coin.arithmeticChange30d > 0 ? "+" : ""}
-                {coin.arithmeticChange30d}%
-            </td>
+            <td className="p-3"><ChangeBadge value={coin.change24h}/></td>
+            <td className="p-3"><ChangeBadge value={coin.change7d}/></td>
+            <td className="p-3"><ChangeBadge value={coin.change30d}/></td>
+            <td className="p-3"><ChangeBadge value={coin.arithmeticChange7d}/></td>
+            <td className="p-3"><ChangeBadge value={coin.arithmeticChange30d}/></td>
         </tr>
     )
 }

@@ -241,14 +241,11 @@ const ChartsPage: React.FC = () => {
     }
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-1">{t("charts.title", "Charts")}</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                CSV verisi girin (Tarih, Fiyat):
-            </p>
+        <div className="page-shell">
+            <div className="page-hero mb-6"><div className="relative z-10"><p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">Visual workspace</p><h1 className="text-3xl font-bold tracking-tight">{t("charts.title", "Charts")}</h1><p className="mt-2 text-sm text-slate-300">CSV verilerini yükleyin, işaretleyin ve karşılaştırın.</p></div></div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div className="lg:col-span-1 space-y-4">
+                <div className="surface-card space-y-4 p-5 lg:col-span-1">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Fiyat Verileri
@@ -326,7 +323,7 @@ const ChartsPage: React.FC = () => {
                     </div>
                 </div>
             
-                <div className="lg:col-span-3 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800 relative">
+                <div className="surface-card relative p-4 lg:col-span-3">
                     <button
                         onClick={() => setIsFullscreen(true)}
                         className="absolute top-4 right-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition z-10"

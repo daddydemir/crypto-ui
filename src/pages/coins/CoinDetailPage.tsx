@@ -93,7 +93,7 @@ const CoinDetailPage: React.FC = () => {
         return date.toLocaleDateString('tr-TR', { month: 'short', year: '2-digit' })
     }
 
-    const CustomTooltip = ({ active, payload }: any) => {
+    const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ payload: { date: string; rsi: number } }> }) => {
         if (active && payload && payload.length) {
             const data = payload[0].payload
             return (
@@ -126,7 +126,7 @@ const CoinDetailPage: React.FC = () => {
     ]
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
+        <div className="page-shell">
             {showFullScreenChart && data && decodedCoinId && (
                 <FullScreenChart
                     data={mapRsiToChartPoints(data)}
@@ -136,12 +136,13 @@ const CoinDetailPage: React.FC = () => {
                     onClose={() => setShowFullScreenChart(false)}
                 />
             )}
-            <div className="max-w-7xl mx-auto">
-                <div className="mb-6">
+            <div>
+                <div className="page-hero mb-6">
+                    <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
                         <button
                             onClick={() => navigate(-1)}
-                            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition"
+                            className="flex items-center gap-2 text-slate-300 transition hover:text-white"
                         >
                             <ArrowLeft className="w-5 h-5" />
                             {t("common.back", "Back")}
@@ -155,12 +156,13 @@ const CoinDetailPage: React.FC = () => {
                         />
                     </div>
 
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                    <h1 className="text-3xl font-bold text-white">
                         {decodedCoinId && formatCoinName(decodedCoinId)}
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    <p className="mt-1 text-slate-300">
                         RSI {t("common.history", "History")}
                     </p>
+                    </div>
                 </div>
 
                 {loading ? (
@@ -171,7 +173,7 @@ const CoinDetailPage: React.FC = () => {
                     <>
                         {/* Stats Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                            <div className="surface-card p-6">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                                     {t("rsi.currentRSI", "Current RSI")}
                                 </div>
@@ -188,7 +190,7 @@ const CoinDetailPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                            <div className="surface-card p-6">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                                     {t("rsi.highest", "Highest")}
                                 </div>
@@ -197,7 +199,7 @@ const CoinDetailPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                            <div className="surface-card p-6">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                                     {t("rsi.lowest", "Lowest")}
                                 </div>
@@ -206,7 +208,7 @@ const CoinDetailPage: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                            <div className="surface-card p-6">
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                                     {t("rsi.average", "Average")}
                                 </div>
@@ -217,7 +219,7 @@ const CoinDetailPage: React.FC = () => {
                         </div>
 
                         {/* Chart */}
-                        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-800">
+                        <div className="surface-card p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">

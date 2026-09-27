@@ -36,19 +36,19 @@ const AnalysisPageLayout: React.FC<AnalysisPageLayoutProps> = ({
     const { t } = useTranslation()
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6">
-            <div className="max-w-7xl mx-auto">
+        <div className="page-shell">
+            <div>
                 {/* Header */}
-                <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
+                <div className="page-hero mb-6">
+                    <div className="relative z-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                         <div>
                             <div className="flex items-center gap-3">
-                                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                                <h1 className="text-3xl font-bold tracking-tight text-white">
                                     {title}
                                 </h1>
                                 {headerContent}
                             </div>
-                            <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
                                 {description}
                             </p>
                         </div>

@@ -57,7 +57,9 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 font-sans p-4">
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 p-4 font-sans">
+            <div className="absolute -left-40 top-1/4 h-96 w-96 rounded-full bg-indigo-600/25 blur-3xl" />
+            <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-cyan-500/15 blur-3xl" />
 
             {/* Language Switcher */}
             <div className="absolute top-6 right-6 z-50">
@@ -93,10 +95,10 @@ const LoginPage: React.FC = () => {
             </div>
 
             {/* Login Card */}
-            <div className="w-full max-w-md bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-850 shadow-2xl rounded-2xl p-8 sm:p-10 transition-all duration-300">
+            <div className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white/95 p-8 shadow-2xl shadow-black/30 backdrop-blur-xl transition-all duration-300 dark:bg-slate-900/90 sm:p-10">
                 <div className="flex flex-col items-center mb-8">
                     {/* Visual Brand Icon */}
-                    <div className="w-16 h-16 rounded-xl bg-blue-500 flex items-center justify-center shadow-md mb-4">
+                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-400 shadow-lg shadow-indigo-500/30">
                         <LogIn className="w-8 h-8 text-white" />
                     </div>
 
@@ -124,7 +126,7 @@ const LoginPage: React.FC = () => {
                                 onChange={(e) => setUsernameInput(e.target.value)}
                                 disabled={loading}
                                 placeholder="username"
-                                className="w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                className="w-full rounded-xl border border-gray-200 bg-slate-50 py-3 pl-10 pr-4 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                             />
                         </div>
                     </div>
@@ -146,7 +148,7 @@ const LoginPage: React.FC = () => {
                                 onChange={(e) => setPasswordInput(e.target.value)}
                                 disabled={loading}
                                 placeholder="••••••••"
-                                className="w-full pl-10 pr-12 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                className="w-full rounded-xl border border-gray-200 bg-slate-50 py-3 pl-10 pr-12 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                             />
                             <button
                                 type="button"
@@ -162,7 +164,7 @@ const LoginPage: React.FC = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-2.5 px-4 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
+                        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-white font-semibold shadow-lg shadow-indigo-600/25 transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {loading ? (
                             <>

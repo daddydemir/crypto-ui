@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, ChevronRight, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, } from "lucide-react";
+import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MenuItem {
     id: string;
     title: string;
     path?: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<{ className?: string }>;
     children?: { name: string; path: string }[];
 }
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ onNavigate?: () => void }> = ({ onNavigate }) => {
     const location = useLocation();
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({ analyses: true });
     const { t } = useTranslation();
+	const { isAuthenticated } = useAuth();
 
     const toggleMenu = (id: string) => {
         setOpenMenus(prev => ({
@@ -42,6 +44,8 @@ const Sidebar: React.FC = () => {
             ],
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
+		...(isAuthenticated ? [{ id: "portfolio", title: t("sidebar.portfolio"), path: "/portfolio", icon: WalletCards }] : []),
+		...(isAuthenticated ? [{ id: "trade-journey", title: t("tradeJourney.title"), path: "/portfolio/journey", icon: GitBranch }] : []),
         {
             id: "alarms",
             title: t("sidebar.alarms.normal"),
@@ -54,24 +58,22 @@ const Sidebar: React.FC = () => {
         { id: "settings", title: t("sidebar.settings"), path: "/settings", icon: Settings },
     ];
 
-    // Auto-expand menu when path changes
+    const activeMenuId = menus.find(menu => menu.children?.some(child => child.path === location.pathname))?.id;
+
     React.useEffect(() => {
-        menus.forEach(menu => {
-            if (menu.children?.some(child => child.path === location.pathname)) {
-                if (!openMenus[menu.id]) {
-                    setOpenMenus(prev => ({ ...prev, [menu.id]: true }));
-                }
-            }
-        });
-    }, [location.pathname, menus]);
+        if (activeMenuId) {
+            setOpenMenus(prev => prev[activeMenuId] ? prev : { ...prev, [activeMenuId]: true });
+        }
+    }, [activeMenuId]);
 
     return (
-        <aside className="w-64 bg-white dark:bg-gray-800 shadow-md flex flex-col text-gray-800 dark:text-gray-100">
-            <div className="p-4 text-xl font-semibold border-b border-gray-200 dark:border-gray-700">
-                Crypto Dashboard
+        <aside className="flex h-full w-[280px] flex-col border-r border-white/10 bg-gradient-to-b from-slate-950 via-slate-950 to-indigo-950 text-slate-200 shadow-2xl shadow-slate-950/20">
+            <div className="flex h-[72px] items-center gap-3 border-b border-white/10 px-5">
+                <img src="/coinscope-icon.svg" alt="" className="h-10 w-10 rounded-xl shadow-lg shadow-indigo-500/20" />
+                <div><p className="font-bold tracking-tight text-white">CoinScope</p><p className="text-[11px] font-medium uppercase tracking-[0.18em] text-indigo-300">Market intelligence</p></div>
             </div>
 
-            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            <nav className="flex-1 space-y-2 overflow-y-auto p-4">
                 {menus.map((menu) => {
                     const hasChildren = !!menu.children?.length;
                     const isActive = menu.path
@@ -82,30 +84,31 @@ const Sidebar: React.FC = () => {
                         return (
                             <div key={menu.id}>
                                 <div
-                                    className={`flex items-center justify-between p-2 cursor-pointer rounded-md ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    className={`flex cursor-pointer items-center justify-between rounded-xl px-3 py-2.5 transition ${isActive ? "bg-white/10 text-white" : "text-slate-400 hover:bg-white/5 hover:text-white"
                                         }`}
                                     onClick={() => toggleMenu(menu.id)}
                                 >
                                     <div className="flex items-center space-x-2">
-                                        <menu.icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                                        <span className="font-medium">{menu.title}</span>
+                                        <menu.icon className="h-5 w-5" />
+                                        <span className="text-sm font-semibold">{menu.title}</span>
                                     </div>
                                     {openMenus[menu.id] ? (
-                                        <ChevronDown size={16} className="text-gray-600 dark:text-gray-300" />
+                                        <ChevronDown size={16} />
                                     ) : (
-                                        <ChevronRight size={16} className="text-gray-600 dark:text-gray-300" />
+                                        <ChevronDown size={16} className="-rotate-90" />
                                     )}
                                 </div>
 
                                 {openMenus[menu.id] && (
-                                    <div className="ml-7 mt-1 space-y-1">
+                                    <div className="ml-5 mt-1 space-y-1 border-l border-white/10 pl-3">
                                         {menu.children!.map((child) => (
                                             <Link
                                                 key={child.path}
                                                 to={child.path}
-                                                className={`block p-2 text-sm rounded-md transition-colors ${location.pathname === child.path
-                                                    ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                                    : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
+                                                onClick={onNavigate}
+                                                className={`block rounded-lg px-3 py-2 text-sm transition-colors ${location.pathname === child.path
+                                                    ? "bg-indigo-500/20 font-semibold text-indigo-200"
+                                                    : "text-slate-400 hover:bg-white/5 hover:text-white"
                                                     }`}
                                             >
                                                 {child.name}
@@ -121,18 +124,20 @@ const Sidebar: React.FC = () => {
                         <Link
                             key={menu.id}
                             to={menu.path!}
-                            className={`flex items-center space-x-2 p-2 rounded-md ${isActive
-                                ? "bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
+                            onClick={onNavigate}
+                            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition ${isActive
+                                ? "bg-gradient-to-r from-indigo-500 to-indigo-600 font-semibold text-white shadow-lg shadow-indigo-950/30"
+                                : "text-slate-400 hover:bg-white/5 hover:text-white"
                                 }`}
                         >
-                            <menu.icon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                            <span>{menu.title}</span>
+                            <menu.icon className="h-5 w-5" />
+                            <span className="text-sm">{menu.title}</span>
                         </Link>
                     );
                 })}
 
             </nav>
+            <div className="m-4 rounded-2xl border border-white/10 bg-white/5 p-4"><p className="text-xs font-semibold text-indigo-200">{t("sidebar.marketData")}</p><p className="mt-1 text-xs leading-5 text-slate-500">{t("sidebar.marketDataDescription")}</p></div>
         </aside>
     );
 };

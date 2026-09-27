@@ -24,7 +24,7 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({
             <button
                 onClick={onRefresh}
                 disabled={refreshing || disabled}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="primary-action"
             >
                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                 {refreshing ? t("common.refreshing", "Refreshing...") : t("common.refresh", "Refresh")}

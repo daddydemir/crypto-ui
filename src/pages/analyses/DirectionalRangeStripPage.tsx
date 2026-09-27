@@ -5,16 +5,18 @@ import { getCoinHistory } from "@/services/coinService"
 import { useCachedData } from "@/hooks/useCachedData"
 import { DirectionalRangeStrip, type ChartDatum } from "@/components/charts/DirectionalRangeStrip"
 import AnalysisPageLayout from "@/components/analyses/AnalysisPageLayout"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const DirectionalRangeStripPage: React.FC = () => {
     const { t } = useTranslation()
     const [selectedCoin, setSelectedCoin] = useState<Coin>()
     const [selectedYear, setSelectedYear] = useState<string>("2026")
-    const [selectedMonth, setSelectedMonth] = useState<string>("")
+	const [selectedMonth, setSelectedMonth] = useState<string>("all")
+	const monthParam = selectedMonth === "all" ? "" : selectedMonth
 
     const { data, loading, refreshing, refresh, lastUpdateText, error } = useCachedData<ChartDatum[]>({
         cacheKey: `coin-history-${selectedCoin?.symbol}-${selectedYear}-${selectedMonth}`,
-        fetchFn: () => selectedCoin?.symbol ? getCoinHistory(selectedCoin.symbol, selectedYear, selectedMonth) : Promise.resolve([])
+		fetchFn: () => selectedCoin?.symbol ? getCoinHistory(selectedCoin.symbol, selectedYear, monthParam) : Promise.resolve([])
     })
 
     return (
@@ -30,35 +32,39 @@ const DirectionalRangeStripPage: React.FC = () => {
             error={error}
         >
             <div className="flex gap-4 mb-6">
-                <select 
+                <Select
                     value={selectedYear} 
-                    onChange={e => setSelectedYear(e.target.value)}
-                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-sm text-slate-700 dark:text-slate-200 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onValueChange={setSelectedYear}
                 >
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                </select>
+                    <SelectTrigger className="bg-white dark:bg-slate-800"><SelectValue /></SelectTrigger>
+					<SelectContent searchPlaceholder={t('topbar.search', 'Search...')}>
+						<SelectItem value="2024">2024</SelectItem>
+						<SelectItem value="2025">2025</SelectItem>
+						<SelectItem value="2026">2026</SelectItem>
+					</SelectContent>
+				</Select>
                 
-                <select 
+                <Select
                     value={selectedMonth} 
-                    onChange={e => setSelectedMonth(e.target.value)}
-                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md px-3 py-2 text-sm text-slate-700 dark:text-slate-200 cursor-pointer shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-32"
+                    onValueChange={setSelectedMonth}
                 >
-                    <option value="">{t('common.all', 'All')} {t('common.months', 'Months')}</option>
-                    {Array.from({ length: 12 }).map((_, i) => (
-                        <option key={i+1} value={String(i+1).padStart(2, '0')}>
-                            {new Date(0, i).toLocaleString(t('common.locale', 'en-US'), { month: 'long' })}
-                        </option>
-                    ))}
-                </select>
+					<SelectTrigger className="min-w-40 bg-white dark:bg-slate-800"><SelectValue /></SelectTrigger>
+					<SelectContent searchPlaceholder={t('topbar.search', 'Search...')}>
+						<SelectItem value="all">{t('common.all', 'All')} {t('common.months', 'Months')}</SelectItem>
+						{Array.from({ length: 12 }).map((_, i) => (
+							<SelectItem key={i+1} value={String(i+1).padStart(2, '0')}>
+								{new Date(0, i).toLocaleString(t('common.locale', 'en-US'), { month: 'long' })}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
             </div>
 
             <div className="mb-6 h-[500px]">
                 {data && data.length > 0 ? (
                     <DirectionalRangeStrip 
                         data={data} 
-                        year={selectedMonth ? `${new Date(0, parseInt(selectedMonth)-1).toLocaleString(t('common.locale', 'en-US'), { month: 'short' })} ${selectedYear}` : selectedYear}
+						year={selectedMonth !== "all" ? `${new Date(0, parseInt(selectedMonth)-1).toLocaleString(t('common.locale', 'en-US'), { month: 'short' })} ${selectedYear}` : selectedYear}
                         width={1200}
                         height={500}
                     />

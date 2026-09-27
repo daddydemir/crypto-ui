@@ -2,11 +2,14 @@
   "sidebar": {
     "analyses": "Analizler",
     "coins": "Coinler",
+    "portfolio": "Portföyüm",
     "alarms": {
       "normal": "Alarmlar",
       "smart": "Akıllı Alarmlar"
     },
     "settings": "Ayarlar",
+    "marketData": "Canlı piyasa verisi",
+    "marketDataDescription": "Portföyünüzü ve analizlerinizi tek merkezden yönetin.",
     "technical": {
       "rsi": "RSI",
       "ma": "Hareketli Ortalama",
@@ -42,7 +45,7 @@
     "change30d": "30g",
     "arithmetic7d": "Aritmetik 7g",
     "arithmetic30d": "Aritmetik 30g",
-    "top100": "En İyi 100 Coin",
+    "top100": "En İyi Coinler",
     "totalCoins": "Toplam {{count}} coin"
   },
   "rsi": {
@@ -823,6 +826,13 @@
       "messageRequired": "Mesaj gerekli"
     }
   },
+  "portfolio": {
+    "title": "Portföyüm", "description": "Kripto alım ve satımlarınızı tek yerde kaydedin; varlık, maliyet ve kullandığınız platformları kolayca takip edin.", "import": "Borsadan getir", "newTrade": "Yeni işlem", "activeAssets": "Aktif varlık", "remainingCoins": "Portföyde kalan coin", "buyUsdValue": "Alım USD karşılığı", "buyTrades": "{{count}} alım işlemi", "netUsdValue": "Net USD karşılığı", "usdEnteredTrades": "USD değeri girilen işlemler", "platform": "Platform", "platformDetail": "Kullanılan borsa / cüzdan", "history": "İşlem geçmişi", "records": "{{count}} kayıt", "loading": "Portföy yükleniyor...", "loadError": "Portföy yüklenemedi.", "empty": "Henüz işlem yok", "emptyDescription": "İlk alım veya satımınızı ekleyerek portföyünüzü oluşturmaya başlayın.", "addFirst": "İlk işlemi ekle", "trade": "İşlem", "date": "Tarih", "received": "Alınan", "spent": "Satılan", "usdValue": "USD karşılığı", "buy": "Alım", "sell": "Satım", "manual": "Manuel", "edit": "Düzenle", "delete": "Sil", "deleteTitle": "İşlemi sil", "deleteMessage": "{{coin}} işlemini silmek istediğinizden emin misiniz?",
+    "form": { "editTitle": "İşlemi düzenle", "createTitle": "Yeni işlem ekle", "baseAsset": "Baz varlık", "quoteAsset": "Karşıt varlık", "receivedAmount": "Alınan miktar", "spentAmount": "Satılan miktar", "base": "baz", "quote": "karşıt", "optional": "opsiyonel", "tradeDate": "İşlem tarihi", "note": "Not", "notePlaceholder": "Bu işlemle ilgili kısa bir not...", "cancel": "Vazgeç", "save": "İşlemi kaydet", "saving": "Kaydediliyor...", "saveError": "İşlem kaydedilemedi." },
+    "importDialog": { "title": "Borsadan işlem getir", "period": "Dönem seçimi", "thisMonth": "Bu ay", "lastMonth": "Geçen ay", "last30": "Son 30 gün", "last90": "Son 90 gün", "startMonth": "Başlangıç ayı", "endMonth": "Bitiş ayı", "monthHint": "Birden fazla ay seçebilirsiniz; toplam dönem 90 günü aşamaz.", "baseOptional": "Baz (opsiyonel)", "quoteOptional": "Karşıt (opsiyonel)", "btcturkHint": "İşlem çiftini boş bırakırsanız seçilen dönemdeki tüm BtcTurk işlemleri getirilir.", "searching": "Sorgulanıyor...", "search": "İşlemleri sorgula", "empty": "İşlem bulunamadı", "emptyDescription": "Seçilen işlem çifti ve tarih aralığında kayıt bulunmuyor.", "type": "Tür", "pair": "Çift", "fee": "Komisyon", "selected": "{{selected}} / {{total}} işlem seçildi", "addSelected": "Seçilenleri portföye ekle", "dateRequired": "Tarih aralığı zorunludur.", "pairRequired": "Binance sorguları için işlem çifti zorunludur.", "btcturkPair": "BtcTurk için iki varlığı da girin veya işlem çiftini tamamen boş bırakın.", "dateOrder": "Başlangıç tarihi bitiş tarihinden sonra olamaz.", "max90": "Tek sorguda en fazla 90 günlük bir dönem seçebilirsiniz.", "unexpected": "Borsadan beklenmeyen bir yanıt alındı.", "searchError": "İşlemler alınamadı. Lütfen tekrar deneyin.", "importError": "İçe aktarılamadı" }
+  },
+  "tradeJourney": { "title": "İşlem Haritası", "description": "Alım ve satımlarınızın coin bazındaki yolculuğunu, dallanan kronolojik bir akış üzerinde inceleyin.", "refresh": "Yenile", "platform": "Platform", "selectPlatform": "Platform seçin", "searchPlatform": "Platform ara...", "coin": "Coin", "allCoins": "Tüm coinler", "searchCoin": "Coin ara...", "loading": "İşlem haritası hazırlanıyor...", "loadError": "İşlemler yüklenemedi.", "empty": "Bu platformda işlem bulunamadı", "emptyDescription": "Önce borsadan işlem aktarabilir veya başka bir platform seçebilirsiniz.", "tradeCount": "{{count}} işlem · eskiden yeniye", "total": "Toplam {{amount}} {{asset}}", "amount": "Miktar", "unitPrice": "Birim fiyat", "totalLabel": "İşlem toplamı", "balanceAfter": "İşlem sonrası", "realizedPnl": "Gerçekleşen K/Z", "pnlUnavailable": "Kâr/zarar için eşleşen alış bulunamadı" },
+  "settingsPage": { "description": "Görünüm ve uygulama tercihlerinizi yönetin.", "darkMode": "Karanlık mod", "darkModeDescription": "Düşük ışıkta daha rahat bir görünüm.", "language": "Dil", "languageDescription": "Uygulama arayüzünün dilini seçin.", "notifications": "Bildirim tercihleri", "notificationsDescription": "Detaylı bildirim ayarları yakında burada olacak." },
   "login": {
     "title": "Giriş Yap",
     "username": "Kullanıcı Adı",

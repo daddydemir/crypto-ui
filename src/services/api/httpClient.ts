@@ -30,15 +30,14 @@ class HttpClient {
                     window.dispatchEvent(new CustomEvent('auth-401-unauthorized'));
                 }
                 const text = await response.text();
-                let errorData: any = null;
+                let errorData: { message?: string } | null = null;
                 try {
                     errorData = text ? JSON.parse(text) : null;
                 } catch {
                     errorData = null;
                 }
-                const error: any = new Error(errorData?.message || `HTTP error! status: ${response.status}`);
-                error.status = response.status;
-                error.data = errorData;
+                const message = errorData?.message || text.trim() || `İstek başarısız oldu (${response.status})`;
+                const error = Object.assign(new Error(message), { status: response.status, data: errorData });
                 throw error;
             }
 
@@ -55,7 +54,7 @@ class HttpClient {
         return this.request<T>(endpoint, { ...options, method: 'GET' });
     }
 
-    post<T>(endpoint: string, body: any, options?: RequestInit): Promise<T> {
+    post<T>(endpoint: string, body: unknown, options?: RequestInit): Promise<T> {
         return this.request<T>(endpoint, {
             ...options,
             method: 'POST',
@@ -63,7 +62,7 @@ class HttpClient {
         });
     }
 
-    put<T>(endpoint: string, body: any, options?: RequestInit): Promise<T> {
+    put<T>(endpoint: string, body: unknown, options?: RequestInit): Promise<T> {
         return this.request<T>(endpoint, {
             ...options,
             method: 'PUT',

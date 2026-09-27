@@ -124,6 +124,28 @@ html {
     transition: background-color 0.3s, color 0.3s;
 }
 
+body {
+  min-width: 320px;
+  background: #f5f7fb;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.dark body { background: #080d19; }
+
+.app-canvas {
+  background-image:
+    radial-gradient(circle at 15% 0%, rgb(99 102 241 / 0.07), transparent 26rem),
+    radial-gradient(circle at 95% 10%, rgb(34 211 238 / 0.05), transparent 24rem);
+}
+
+.page-shell { @apply mx-auto w-full max-w-[1500px] space-y-6; }
+.surface-card { @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm shadow-slate-900/5 dark:border-white/10 dark:bg-slate-900/80; }
+.page-hero { @apply relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 px-6 py-7 text-white shadow-xl sm:px-8; }
+.page-hero::after { content: ""; @apply pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl; }
+.primary-action { @apply inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-indigo-700 disabled:pointer-events-none disabled:opacity-50; }
+
+* { scrollbar-width: thin; scrollbar-color: rgb(148 163 184 / .45) transparent; }
+
 @keyframes customFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
