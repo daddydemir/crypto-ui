@@ -18,6 +18,8 @@ jobs:
         run: |
           docker compose --env-file .env.example build
           docker save crypto-ui:latest --output crypto-ui-image.tar
+          chmod 644 crypto-ui-image.tar
+          test -r crypto-ui-image.tar
 
       - name: Copy Docker image to server
         uses: appleboy/scp-action@v0.1.7
