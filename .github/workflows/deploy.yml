@@ -1,4 +1,4 @@
-name: deploy frontend to server
+name: Deploy frontend with Docker
 
 on:
   push:
@@ -14,22 +14,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Build Docker image
+        run: |
+          docker compose --env-file .env.example build
+          docker save crypto-ui:latest --output crypto-ui-image.tar
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
-      - name: Copy build to server
-        uses: appleboy/scp-action@v0.1.4
+      - name: Copy Docker image to server
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "dist/*"
-          target: "/var/www/html/crypto-ui/dist"
+          source: "crypto-ui-image.tar"
+          target: "/tmp/"
+          overwrite: true
+
+      - name: Start container on server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            set -e
+            docker load --input /tmp/crypto-ui-image.tar
+            docker rm --force crypto-ui || true
+            docker run --detach --name crypto-ui --restart unless-stopped --publish 8070:80 crypto-ui:latest
+            rm --force /tmp/crypto-ui-image.tar

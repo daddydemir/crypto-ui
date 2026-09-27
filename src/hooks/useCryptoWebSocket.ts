@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { WS_BASE_URL } from '@/services/api/config';
 
 interface WSMessage {
     s: string; // symbol
@@ -12,7 +13,7 @@ export interface PriceUpdate {
     time: number;
 }
 
-export function useCryptoWebSocket(url: string = 'wss://cryptoapi.daddydemir.dev/ws') {
+export function useCryptoWebSocket(url: string = WS_BASE_URL) {
     const [prices, setPrices] = useState<Record<string, number>>({});
     const ws = useRef<WebSocket | null>(null);
     const reconnectTimeout = useRef<any>(null);

@@ -1,5 +1,20 @@
 # React + TypeScript + Vite
 
+## Environment variables
+
+Copy `.env.example` to `.env` and set the API URLs for your environment. Vite reads this file when running locally, and Docker Compose passes the same values to the production build. These `VITE_` values are included in the browser bundle, so do not put secrets in them.
+
+## Run with Docker
+
+```sh
+cp .env.example .env
+docker compose up --build
+```
+
+The application is available at [http://localhost:8070](http://localhost:8070). To change an API URL, edit `.env` and rebuild the image with `docker compose up --build`.
+
+For local development, install dependencies with `npm ci` and start Vite with `npm run dev`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
