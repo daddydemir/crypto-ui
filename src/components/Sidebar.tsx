@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch } from "lucide-react";
+import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch, FlaskConical, ListFilter } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -41,11 +41,14 @@ const Sidebar: React.FC<{ onNavigate?: () => void }> = ({ onNavigate }) => {
                 { name: t("sidebar.technical.adi"), path: '/analyses/adi' },
                 { name: t("sidebar.technical.drs", "Directional Range Strip"), path: '/analyses/directional-range-strip' },
                 { name: t("sidebar.technical.charts", "Charts"), path: '/analyses/charts' },
+                { name: t("sidebar.technical.marketBreadth", "Market Breadth"), path: '/market-breadth' },
             ],
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
 		...(isAuthenticated ? [{ id: "portfolio", title: t("sidebar.portfolio"), path: "/portfolio", icon: WalletCards }] : []),
 		...(isAuthenticated ? [{ id: "trade-journey", title: t("tradeJourney.title"), path: "/portfolio/journey", icon: GitBranch }] : []),
+		...(isAuthenticated ? [{ id: "strategy-lab", title: t("strategyLab.title"), path: "/strategy-lab", icon: FlaskConical }] : []),
+		...(isAuthenticated ? [{ id: "trade-explorer", title: t("tradeExplorer.title"), path: "/trade-explorer", icon: ListFilter }] : []),
         {
             id: "alarms",
             title: t("sidebar.alarms.normal"),

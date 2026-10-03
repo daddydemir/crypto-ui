@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coinscope-v1'
+const CACHE_NAME = 'coinscope-v2'
 const APP_SHELL = ['/', '/manifest.webmanifest', '/coinscope-icon.svg', '/coinscope-icon-192.png', '/coinscope-icon-512.png']
 
 self.addEventListener('install', (event) => {
@@ -26,20 +26,37 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put('/', copy))
+          event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put('/', copy)))
           return response
         })
-        .catch(() => caches.match('/'))
+        .catch(async () => {
+          const fallback = await caches.match('/')
+          return fallback || new Response('Offline', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+          })
+        })
     )
     return
   }
 
   event.respondWith(
     caches.match(request).then((cached) => {
-      const network = fetch(request).then((response) => {
-        if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()))
-        return response
-      })
+      const network = fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            // Clone synchronously, before returning the original response to the
+            // browser. Delaying clone() until caches.open() resolves races with
+            // the browser consuming the response body.
+            const copy = response.clone()
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)))
+          }
+          return response
+        })
+        .catch(() => cached || new Response('Offline', {
+          status: 503,
+          headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+        }))
       return cached || network
     })
   )

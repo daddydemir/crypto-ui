@@ -21,6 +21,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import PortfolioPage from "@/pages/portfolio/PortfolioPage";
 import TradeJourneyPage from "@/pages/portfolio/TradeJourneyPage";
 import SettingsPage from "@/pages/settings/SettignsPage";
+import MarketBreadthPage from "@/pages/analyses/MarketBreadthPage";
+import StrategyLabPage from "@/pages/strategy/StrategyLabPage";
+import TradeExplorerPage from "@/pages/strategy/TradeExplorerPage";
 
 import { ToastProvider } from "@/contexts/ToastContext";
 
@@ -58,6 +61,9 @@ function App() {
                                             <Route path="/analyses/directional-range-strip" element={<DirectionalRangeStripPage />} />
                                             <Route path="/coins" element={<CoinsPage />} />
                                             <Route path="/analyses/charts" element={<ChartsPage />} />
+                                            <Route path="/market-breadth" element={<MarketBreadthPage />} />
+                                            <Route path="/strategy-lab" element={<ProtectedRoute><StrategyLabPage /></ProtectedRoute>} />
+                                            <Route path="/trade-explorer" element={<ProtectedRoute><TradeExplorerPage /></ProtectedRoute>} />
                                             <Route path="/coins/:coinId" element={<CoinDetailPage />} />
 											<Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
 											<Route path="/portfolio/journey" element={<ProtectedRoute><TradeJourneyPage /></ProtectedRoute>} />

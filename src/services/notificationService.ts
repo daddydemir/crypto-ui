@@ -9,9 +9,11 @@ export interface CryptoNotification {
 
 export async function getNotifications(): Promise<CryptoNotification[]> {
     try {
-        return await http.get<CryptoNotification[]>('/notifications');
-    } catch (error) {
-        console.error('Error fetching notifications:', error);
+        const notifications = await http.get<CryptoNotification[] | null>('/notifications');
+        return Array.isArray(notifications) ? notifications : [];
+    } catch {
+        // Notifications are polled in the background. A temporary failure should not
+        // create a new console error every 30 seconds.
         return [];
     }
 }

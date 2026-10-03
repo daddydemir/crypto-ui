@@ -21,6 +21,7 @@
       "adi": "ADX",
       "drs": "Yönsel Aralık Şeridi",
       "charts": "Grafikler"
+      ,"marketBreadth": "Piyasa Genişliği"
     }
   },
   "topbar": {
@@ -34,7 +35,13 @@
     "notificationDetail": "Bildirim Detayı",
     "creationTime": "Oluşturulma Zamanı",
     "fullscreen": "Tam Ekran",
-    "close": "Kapat"
+    "close": "Kapat",
+    "strategyTest": "Strateji Testi",
+    "strategyCompleted": "Strateji testi tamamlandı",
+    "indicator": "Gösterge",
+    "fixedValue": "Sabit değer",
+    "deleteRunTitle": "Strateji çalıştırması silinsin mi?",
+    "deleteRunMessage": "Bu çalıştırma ile tüm işlem ve grafik verileri kalıcı olarak silinecektir."
   },
   "coins": {
     "clearFilter": "Sıralamayı Temizle",
@@ -826,6 +833,25 @@
       "messageRequired": "Mesaj gerekli"
     }
   },
+  "strategyLab": { "eyebrow": "Araştırma çalışma alanı", "title": "Strateji Laboratuvarı", "subtitle": "Günlük stratejiler oluşturun, geriye ve ileriye dönük test edin.", "create": "Strateji Oluştur", "dailyCloseNotice": "Göstergeler ve sinyaller günlük kapanışları kullanır. İşlemler bir sonraki mevcut günlük kapanışta uygulanır; zarar durdur için günün en düşük, kâr al için günün en yüksek fiyatı kullanılır.", "strategies": "Stratejiler", "runs": "çalıştırma", "run": "Çalıştır", "edit": "Düzenle", "clone": "Kopyala", "delete": "Sil", "activity": "Strateji Çalıştırmaları", "strategy": "Strateji", "coin": "Coin", "searchCoin": "Coin ara...", "mode": "Mod", "status": "Durum", "return": "Getiri", "details": "Detaylar", "start": "Strateji Çalıştır", "backtest": "Geriye Dönük Test", "forward": "İleriye Dönük Test Başlat", "queued": "Backtest kuyruğa eklendi.", "started": "Strateji çalıştırması başlatıldı.", "queueing": "Kuyruğa ekleniyor...", "starting": "Başlatılıyor...", "startDate": "Başlangıç tarihi", "endDate": "Bitiş tarihi", "duration": { "30d": "30 Gün", "90d": "90 Gün", "6m": "6 Ay", "1y": "1 Yıl", "custom": "Özel tarih aralığı", "untilStopped": "Durdurulana Kadar" }, "tradeHistory": "İşlem Geçmişi", "openTrade": "Açık işlem", "days": "gün", "confirm": { "deleteTitle": "Strateji silinsin mi?", "deleteMessage": "{{name}} ve yapılandırması silinecek. Mevcut çalışma geçmişi korunacaktır.", "cloneTitle": "Strateji kopyalansın mı?", "cloneMessage": "{{name}} stratejisinin yeni bir kopyası oluşturulacaktır." }, "builder": { "title": "Strateji Oluşturucu", "editTitle": "Stratejiyi Düzenle", "name": "Strateji adı", "description": "Açıklama", "entry": "Giriş Koşulları", "exit": "Çıkış Koşulları", "valueOrField": "Değer veya alan", "condition": "Koşul ekle", "stopLoss": "Zarar Durdur %", "takeProfit": "Kâr Al %", "save": "Stratejiyi Kaydet", "update": "Stratejiyi Güncelle" }, "metrics": { "equity": "Güncel Varlık", "return": "Toplam Getiri %", "drawdown": "Maksimum Düşüş %", "winRate": "Kazanma Oranı %", "trades": "İşlem Sayısı", "fees": "Toplam Komisyon", "benchmark": "Al ve Tut %", "difference": "Fark yüzde puan" } },
+  "marketBreadth": {
+    "eyebrow": "Piyasa analizi",
+    "title": "Piyasa Genişliği",
+    "universe": "Evren: Stablecoin'ler hariç piyasa değerine göre ilk 100 kripto para",
+    "coins": "coin",
+    "pp7d": "yüzde puan / 7 gün",
+    "actions": { "refresh": "Yenile", "retry": "Tekrar dene" },
+    "errors": { "load": "Piyasa genişliği yüklenemedi.", "empty": "Piyasa genişliği verisi bulunamadı." },
+    "warnings": { "coverage": "MA99 veri kapsamı sınırlı: Evrendeki {{total}} coinin {{valid}} tanesinde geçerli veri var.", "excluded": "Günlük kapanış verisi bulunmayan veya güncel olmayan {{count}} coin hesaplamadan çıkarıldı." },
+    "sections": { "participation": "Piyasa Katılımı", "trend": "Trend Genişliği", "momentum": "Momentum" },
+    "score": { "title": "Genişlik Skoru", "trend": "Trend", "momentum": "Momentum", "participation": "Katılım", "formula": "%45 Trend + %30 Momentum + %25 Katılım", "disclaimer": "Deterministik gösterge özetidir; alım veya satım tavsiyesi değildir." },
+    "btc": { "title": "BTC ve Piyasa", "price": "BTC Fiyatı", "breadth7d": "Genişlik / 7 gün", "divergingDown": "BTC yükselirken piyasa katılımı geriledi.", "divergingUp": "BTC gerilerken piyasa katılımı iyileşti.", "sameDirection": "BTC ve piyasa katılımı aynı yönde hareket ediyor." },
+    "metrics": { "advancing": "Yükselen", "declining": "Düşen", "unchanged": "Değişmeyen", "adRatio": "Yükselen/Düşen Oranı", "netAdvance": "Net Yükseliş", "positive24h": "Pozitif 24 saat", "positive7d": "Pozitif 7 gün", "aboveMA7": "MA7 Üzerinde", "aboveMA25": "MA25 Üzerinde", "aboveMA99": "MA99 Üzerinde", "bullish": "Yükseliş Yapısı", "mixed": "Karma", "bearish": "Düşüş Yapısı" },
+    "formulas": { "aboveMA7": "Son fiyat > MA7", "aboveMA25": "Son fiyat > MA25", "aboveMA99": "Son fiyat > MA99", "ma7AboveMA25": "MA7 > MA25", "ma25AboveMA99": "MA25 > MA99", "bullishFormula": "MA7 > MA25 > MA99", "bearishFormula": "MA7 < MA25 < MA99", "rsiAbove50": "RSI(14) > 50", "rsiAbove60": "RSI(14) > 60", "rsiAbove70": "RSI(14) > 70", "rsiBelow30": "RSI(14) < 30", "positive24h": "24 saatlik fiyat değişimi > 0" },
+    "history": { "title": "Genişlik Geçmişi", "description": "Zaman içinde yüzde bazlı piyasa katılımı", "empty": "Geçmiş piyasa genişliği verisi bulunamadı" },
+    "periods": { "30d": "30 gün", "90d": "90 gün", "1y": "1 yıl" },
+    "drilldown": { "loading": "Coinler yükleniyor…", "coin": "Coin", "price": "Fiyat", "metricValue": "Metrik değeri", "empty": "Bu metriğe uyan coin bulunamadı." }
+  },
   "portfolio": {
     "title": "Portföyüm", "description": "Kripto alım ve satımlarınızı tek yerde kaydedin; varlık, maliyet ve kullandığınız platformları kolayca takip edin.", "import": "Borsadan getir", "newTrade": "Yeni işlem", "activeAssets": "Aktif varlık", "remainingCoins": "Portföyde kalan coin", "buyUsdValue": "Alım USD karşılığı", "buyTrades": "{{count}} alım işlemi", "netUsdValue": "Net USD karşılığı", "usdEnteredTrades": "USD değeri girilen işlemler", "platform": "Platform", "platformDetail": "Kullanılan borsa / cüzdan", "history": "İşlem geçmişi", "records": "{{count}} kayıt", "loading": "Portföy yükleniyor...", "loadError": "Portföy yüklenemedi.", "empty": "Henüz işlem yok", "emptyDescription": "İlk alım veya satımınızı ekleyerek portföyünüzü oluşturmaya başlayın.", "addFirst": "İlk işlemi ekle", "trade": "İşlem", "date": "Tarih", "received": "Alınan", "spent": "Satılan", "usdValue": "USD karşılığı", "buy": "Alım", "sell": "Satım", "manual": "Manuel", "edit": "Düzenle", "delete": "Sil", "deleteTitle": "İşlemi sil", "deleteMessage": "{{coin}} işlemini silmek istediğinizden emin misiniz?",
     "form": { "editTitle": "İşlemi düzenle", "createTitle": "Yeni işlem ekle", "baseAsset": "Baz varlık", "quoteAsset": "Karşıt varlık", "receivedAmount": "Alınan miktar", "spentAmount": "Satılan miktar", "base": "baz", "quote": "karşıt", "optional": "opsiyonel", "tradeDate": "İşlem tarihi", "note": "Not", "notePlaceholder": "Bu işlemle ilgili kısa bir not...", "cancel": "Vazgeç", "save": "İşlemi kaydet", "saving": "Kaydediliyor...", "saveError": "İşlem kaydedilemedi." },
@@ -833,6 +859,10 @@
   },
   "tradeJourney": { "title": "İşlem Haritası", "description": "Alım ve satımlarınızın coin bazındaki yolculuğunu, dallanan kronolojik bir akış üzerinde inceleyin.", "refresh": "Yenile", "platform": "Platform", "selectPlatform": "Platform seçin", "searchPlatform": "Platform ara...", "coin": "Coin", "allCoins": "Tüm coinler", "searchCoin": "Coin ara...", "loading": "İşlem haritası hazırlanıyor...", "loadError": "İşlemler yüklenemedi.", "empty": "Bu platformda işlem bulunamadı", "emptyDescription": "Önce borsadan işlem aktarabilir veya başka bir platform seçebilirsiniz.", "tradeCount": "{{count}} işlem · eskiden yeniye", "total": "Toplam {{amount}} {{asset}}", "amount": "Miktar", "unitPrice": "Birim fiyat", "totalLabel": "İşlem toplamı", "balanceAfter": "İşlem sonrası bakiye", "realizedPnl": "Gerçekleşen K/Z", "pnlUnavailable": "Kâr/zarar için eşleşen alış bulunamadı", "currentBalance": "Mevcut bakiye", "averageCost": "Ortalama maliyet", "transactionCount": "İşlem sayısı", "sizeLegend": "Nokta boyutu = miktar", "allTrades": "Tüm işlemler", "date": "Tarih", "direction": "Yön", "trade": "İşlem", "balanceOverTime": "Bakiye zaman içinde", "balanceRiverDescription": "Şerit kalınlığı her işlemden sonra elde tutulan varlık miktarını gösterir.", "inCash": "nakitte", "assetBalance": "Varlık bakiyesi", "period": "Dönem", "balance": "Bakiye", "duration": "Süre", "status": "Durum", "openPosition": "Açık pozisyon", "hours": "{{value}} saat", "days": "{{value}} gün" },
   "settingsPage": { "description": "Görünüm ve uygulama tercihlerinizi yönetin.", "darkMode": "Karanlık mod", "darkModeDescription": "Düşük ışıkta daha rahat bir görünüm.", "language": "Dil", "languageDescription": "Uygulama arayüzünün dilini seçin.", "notifications": "Bildirim tercihleri", "notificationsDescription": "Detaylı bildirim ayarları yakında burada olacak." },
+  "tradeExplorer": { "title": "İşlem Gezgini", "subtitle": "İşlemlerin neden açılıp kapandığını ve günlük kapanışların nasıl ilerlediğini inceleyin.", "dailyClose": "Günlük kapanış fiyatları kullanılarak hesaplanmıştır", "all": "Tüm İşlemler", "winners": "Kazananlar", "losers": "Kaybedenler", "open": "Açık İşlemler", "closed": "Kapalı İşlemler", "coin": "Coin", "strategy": "Strateji", "run": "Strateji Çalıştırması", "runType": "Çalıştırma Türü", "from": "Başlangıç", "to": "Bitiş", "total": "Toplam İşlem", "winRate": "Kazanma Oranı", "avgReturn": "Ortalama Getiri", "avgWinner": "Ortalama Kazanan", "avgLoser": "Ortalama Kaybeden", "trades": "İşlemler", "entry": "Giriş", "exit": "Çıkış", "return": "Getiri", "holding": "Elde Tutma", "fees": "Komisyon", "reason": "Çıkış Nedeni", "days": "gün", "details": "Detay", "summary": "İşlem Özeti", "priceChart": "Günlük Kapanış Fiyatı", "whyEntry": "Neden Giriş?", "whyExit": "Neden Çıkış?", "entrySnapshot": "Giriş Anlık Görüntüsü", "exitSnapshot": "Çıkış Anlık Görüntüsü", "journey": "İşlem Yolculuğu", "bestClose": "En İyi Günlük Kapanış", "worstClose": "En Kötü Günlük Kapanış", "postExit": "Çıkış Sonrası Analiz", "notEnough": "Henüz yeterli veri yok", "notes": "Notlar", "saveNote": "Notu Kaydet", "openPosition": "AÇIK POZİSYON", "currentClose": "Güncel Günlük Kapanış", "unrealized": "Gerçekleşmemiş K&Z", "signal": "Sinyal", "execution": "Gerçekleşme", "previous": "Önceki", "next": "Sonraki", "noTrades": "Bu filtrelere uyan işlem bulunamadı." },
+  "strategyCharts": { "performance": "Performans", "performanceDescription": "Stratejinin Al ve Tut yaklaşımına göre zaman içerisindeki performansı.", "return": "Getiri %", "value": "Portföy Değeri", "strategy": "Strateji", "buyHold": "Al ve Tut", "difference": "Fark", "drawdown": "Düşüş", "maxDrawdown": "Maksimum Düşüş", "previousPeak": "Önceki Zirve", "currentEquity": "Güncel Varlık", "dailyValues": "Günlük portföy değerleri temel alınmıştır." },
+  "strategyChartSeries": { "strategyReturn": "Strateji Getirisi", "buyHoldReturn": "Al ve Tut Getirisi", "strategyPortfolio": "Strateji Portföyü", "buyHoldPortfolio": "Al ve Tut Portföyü" },
+  "globalSearch": { "recent": "Son Kullanılanlar", "coins": "Coinler", "strategies": "Stratejiler", "runs": "Strateji Çalıştırmaları", "alerts": "Alarmlar", "trades": "İşlemler", "pages": "Sayfalar", "hint": "Coin, strateji, çalışma, alarm ve işlem arayın...", "noResults": "\"{{query}}\" için sonuç bulunamadı", "unavailable": "Arama şu anda kullanılamıyor" },
   "login": {
     "title": "Giriş Yap",
     "username": "Kullanıcı Adı",

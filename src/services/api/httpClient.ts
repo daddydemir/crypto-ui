@@ -45,7 +45,8 @@ class HttpClient {
             const text = await response.text();
             return text ? JSON.parse(text) : {} as T;
         } catch (error) {
-            console.error(`API Error in ${url}:`, error);
+            // The caller owns presentation/logging. Logging here caused every handled
+            // request failure to be printed again by each service and component.
             throw error;
         }
     }
@@ -66,6 +67,14 @@ class HttpClient {
         return this.request<T>(endpoint, {
             ...options,
             method: 'PUT',
+            body: JSON.stringify(body),
+        });
+    }
+
+    patch<T>(endpoint: string, body: unknown, options?: RequestInit): Promise<T> {
+        return this.request<T>(endpoint, {
+            ...options,
+            method: 'PATCH',
             body: JSON.stringify(body),
         });
     }

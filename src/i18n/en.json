@@ -21,6 +21,7 @@
       "adi": "ADX",
       "drs": "Directional Range Strip",
       "charts": "Charts"
+      ,"marketBreadth": "Market Breadth"
     }
   },
   "charts": {
@@ -38,7 +39,13 @@
     "notificationDetail": "Notification Detail",
     "creationTime": "Creation Time",
     "fullscreen": "Fullscreen",
-    "close": "Close"
+    "close": "Close",
+    "strategyTest": "Strategy Test",
+    "strategyCompleted": "Strategy test completed",
+    "indicator": "Indicator",
+    "fixedValue": "Fixed value",
+    "deleteRunTitle": "Delete strategy run?",
+    "deleteRunMessage": "This run and all of its trades and chart data will be permanently deleted."
   },
   "coins": {
     "clearFilter": "Clear Filter",
@@ -831,6 +838,25 @@
       "messageRequired": "Message is required"
     }
   },
+  "strategyLab": { "eyebrow": "Research workspace", "title": "Strategy Lab", "subtitle": "Build, backtest and forward-test daily strategies.", "create": "Create Strategy", "dailyCloseNotice": "Indicators and signals use daily closes. Trades execute at the next available daily close; stop-loss uses the daily low and take-profit uses the daily high.", "strategies": "Strategies", "runs": "runs", "run": "Run", "edit": "Edit", "clone": "Duplicate", "delete": "Delete", "activity": "Strategy Runs", "strategy": "Strategy", "coin": "Coin", "searchCoin": "Search coins...", "mode": "Mode", "status": "Status", "return": "Return", "details": "Details", "start": "Start Strategy Run", "backtest": "Run Backtest", "forward": "Start Forward Test", "queued": "Backtest added to the queue.", "started": "Strategy run started.", "queueing": "Adding to queue...", "starting": "Starting...", "startDate": "Start date", "endDate": "End date", "duration": { "30d": "30 Days", "90d": "90 Days", "6m": "6 Months", "1y": "1 Year", "custom": "Custom date range", "untilStopped": "Run Until Stopped" }, "tradeHistory": "Trade History", "openTrade": "Open trade", "days": "days", "confirm": { "deleteTitle": "Delete strategy?", "deleteMessage": "{{name}} and its configuration will be deleted. Existing run history is retained.", "cloneTitle": "Duplicate strategy?", "cloneMessage": "A new copy of {{name}} will be created." }, "builder": { "title": "Strategy Builder", "editTitle": "Edit Strategy", "name": "Strategy name", "description": "Description", "entry": "Entry Conditions", "exit": "Exit Conditions", "valueOrField": "Value or field", "condition": "Add condition", "stopLoss": "Stop Loss %", "takeProfit": "Take Profit %", "save": "Save Strategy", "update": "Update Strategy" }, "metrics": { "equity": "Current Equity", "return": "Total Return %", "drawdown": "Max Drawdown %", "winRate": "Win Rate %", "trades": "Trades", "fees": "Total Fees", "benchmark": "Buy & Hold %", "difference": "Difference pp" } },
+  "marketBreadth": {
+    "eyebrow": "Market intelligence",
+    "title": "Market Breadth",
+    "universe": "Universe: Top 100 non-stablecoin cryptocurrencies",
+    "coins": "coins",
+    "pp7d": "pp / 7d",
+    "actions": { "refresh": "Refresh", "retry": "Try again" },
+    "errors": { "load": "Market breadth could not be loaded.", "empty": "No market breadth data available." },
+    "warnings": { "coverage": "Limited MA99 coverage: {{valid}} of {{total}} universe coins have valid data.", "excluded": "{{count}} coins were excluded because daily closing data is unavailable or stale." },
+    "sections": { "participation": "Market Participation", "trend": "Trend Breadth", "momentum": "Momentum" },
+    "score": { "title": "Breadth Score", "trend": "Trend", "momentum": "Momentum", "participation": "Participation", "formula": "45% Trend + 30% Momentum + 25% Participation", "disclaimer": "Deterministic indicator summary; not a buy or sell recommendation." },
+    "btc": { "title": "BTC vs Market", "price": "BTC Price", "breadth7d": "Breadth / 7d", "divergingDown": "BTC is rising while market participation has declined.", "divergingUp": "BTC is declining while market participation has improved.", "sameDirection": "BTC and market participation are moving in the same direction." },
+    "metrics": { "advancing": "Advancing", "declining": "Declining", "unchanged": "Unchanged", "adRatio": "A/D Ratio", "netAdvance": "Net Advance", "positive24h": "Positive 24h", "positive7d": "Positive 7d", "aboveMA7": "Above MA7", "aboveMA25": "Above MA25", "aboveMA99": "Above MA99", "bullish": "Bullish", "mixed": "Mixed", "bearish": "Bearish" },
+    "formulas": { "aboveMA7": "Latest price > MA7", "aboveMA25": "Latest price > MA25", "aboveMA99": "Latest price > MA99", "ma7AboveMA25": "MA7 > MA25", "ma25AboveMA99": "MA25 > MA99", "bullishFormula": "MA7 > MA25 > MA99", "bearishFormula": "MA7 < MA25 < MA99", "rsiAbove50": "RSI(14) > 50", "rsiAbove60": "RSI(14) > 60", "rsiAbove70": "RSI(14) > 70", "rsiBelow30": "RSI(14) < 30", "positive24h": "24h price change > 0" },
+    "history": { "title": "Breadth History", "description": "Percentage-based market participation over time", "empty": "No historical breadth data" },
+    "periods": { "30d": "30 days", "90d": "90 days", "1y": "1 year" },
+    "drilldown": { "loading": "Loading coins…", "coin": "Coin", "price": "Price", "metricValue": "Metric value", "empty": "No coins match this metric." }
+  },
   "portfolio": {
     "title": "My Portfolio", "description": "Record your crypto purchases and sales in one place and easily track assets, costs, and platforms.", "import": "Import from exchange", "newTrade": "New trade", "activeAssets": "Active assets", "remainingCoins": "Coins held in portfolio", "buyUsdValue": "Purchase USD value", "buyTrades": "{{count}} buy trades", "netUsdValue": "Net USD value", "usdEnteredTrades": "Trades with a USD value", "platform": "Platform", "platformDetail": "Exchange / wallet used", "history": "Trade history", "records": "{{count}} records", "loading": "Loading portfolio...", "loadError": "Portfolio could not be loaded.", "empty": "No trades yet", "emptyDescription": "Add your first purchase or sale to start building your portfolio.", "addFirst": "Add first trade", "trade": "Trade", "date": "Date", "received": "Received", "spent": "Spent", "usdValue": "USD value", "buy": "Buy", "sell": "Sell", "manual": "Manual", "edit": "Edit", "delete": "Delete", "deleteTitle": "Delete trade", "deleteMessage": "Are you sure you want to delete the {{coin}} trade?",
     "form": { "editTitle": "Edit trade", "createTitle": "Add new trade", "baseAsset": "Base asset", "quoteAsset": "Quote asset", "receivedAmount": "Amount received", "spentAmount": "Amount spent", "base": "base", "quote": "quote", "optional": "optional", "tradeDate": "Trade date", "note": "Note", "notePlaceholder": "A short note about this trade...", "cancel": "Cancel", "save": "Save trade", "saving": "Saving...", "saveError": "Trade could not be saved." },
@@ -838,6 +864,10 @@
   },
   "tradeJourney": { "title": "Trade Map", "description": "Explore the journey of your buys and sells for each coin on a branching chronological timeline.", "refresh": "Refresh", "platform": "Platform", "selectPlatform": "Select a platform", "searchPlatform": "Search platforms...", "coin": "Coin", "allCoins": "All coins", "searchCoin": "Search coins...", "loading": "Preparing trade map...", "loadError": "Trades could not be loaded.", "empty": "No trades found on this platform", "emptyDescription": "Import trades from an exchange first or select another platform.", "tradeCount": "{{count}} trades · oldest to newest", "total": "Total {{amount}} {{asset}}", "amount": "Amount", "unitPrice": "Unit price", "totalLabel": "Trade total", "balanceAfter": "Balance after trade", "realizedPnl": "Realized P/L", "pnlUnavailable": "No matching purchase found for profit/loss", "currentBalance": "Current balance", "averageCost": "Average cost", "transactionCount": "Transaction count", "sizeLegend": "Point size = amount", "allTrades": "All trades", "date": "Date", "direction": "Direction", "trade": "Trade", "balanceOverTime": "Balance over time", "balanceRiverDescription": "The band thickness shows the asset amount held after each trade.", "inCash": "in cash", "assetBalance": "Asset balance", "period": "Period", "balance": "Balance", "duration": "Duration", "status": "Status", "openPosition": "Open position", "hours": "{{value}} hours", "days": "{{value}} days" },
   "settingsPage": { "description": "Manage appearance and application preferences.", "darkMode": "Dark mode", "darkModeDescription": "A more comfortable view in low light.", "language": "Language", "languageDescription": "Choose the application interface language.", "notifications": "Notification preferences", "notificationsDescription": "Detailed notification settings will be available here soon." },
+  "tradeExplorer": { "title": "Trade Explorer", "subtitle": "Understand why trades opened, closed and how daily closes evolved.", "dailyClose": "Calculated using daily closing prices", "all": "All Trades", "winners": "Winners", "losers": "Losers", "open": "Open Trades", "closed": "Closed Trades", "coin": "Coin", "strategy": "Strategy", "run": "Strategy Run", "runType": "Run Type", "from": "From", "to": "To", "total": "Total Trades", "winRate": "Win Rate", "avgReturn": "Average Return", "avgWinner": "Average Winner", "avgLoser": "Average Loser", "trades": "Trades", "entry": "Entry", "exit": "Exit", "return": "Return", "holding": "Holding", "fees": "Fees", "reason": "Exit Reason", "days": "days", "details": "Details", "summary": "Trade Summary", "priceChart": "Daily Close Price", "whyEntry": "Why Entry?", "whyExit": "Why Exit?", "entrySnapshot": "Entry Snapshot", "exitSnapshot": "Exit Snapshot", "journey": "Trade Journey", "bestClose": "Best Daily Close", "worstClose": "Worst Daily Close", "postExit": "Post-Exit Analysis", "notEnough": "Not enough data yet", "notes": "Notes", "saveNote": "Save Note", "openPosition": "OPEN POSITION", "currentClose": "Current Daily Close", "unrealized": "Unrealized P&L", "signal": "Signal", "execution": "Execution", "previous": "Previous", "next": "Next", "noTrades": "No trades match these filters." },
+  "strategyCharts": { "performance": "Performance", "performanceDescription": "Strategy performance compared with Buy & Hold.", "return": "Return %", "value": "Portfolio Value", "strategy": "Strategy", "buyHold": "Buy & Hold", "difference": "Difference", "drawdown": "Drawdown", "maxDrawdown": "Max Drawdown", "previousPeak": "Previous Peak", "currentEquity": "Current Equity", "dailyValues": "Based on daily portfolio values." },
+  "strategyChartSeries": { "strategyReturn": "Strategy Return", "buyHoldReturn": "Buy & Hold Return", "strategyPortfolio": "Strategy Portfolio", "buyHoldPortfolio": "Buy & Hold Portfolio" },
+  "globalSearch": { "recent": "Recent", "coins": "Coins", "strategies": "Strategies", "runs": "Strategy Runs", "alerts": "Alerts", "trades": "Trades", "pages": "Pages", "hint": "Search coins, strategies, runs, alerts and trades...", "noResults": "No results found for \"{{query}}\"", "unavailable": "Search unavailable" },
   "login": {
     "title": "Login",
     "username": "Username",
