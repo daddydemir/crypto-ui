@@ -76,8 +76,9 @@ const AlertRow: React.FC<AlertRowProps> = ({ alert, onEdit, onDelete, onToggleSt
                             : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                         }`}
                 >
-                    {alert.IsActive ? t("alarms.active") : t("alarms.inactive")}
+                    {alert.TriggeredAt ? t("alarms.triggered") : alert.IsActive ? t("alarms.active") : t("alarms.inactive")}
                 </button>
+                {alert.TriggeredAt && <p className="mt-1 text-xs text-amber-600">${alert.TriggeredPrice.toFixed(2)} · {formatDate(alert.TriggeredAt)}</p>}
             </td>
             <td className="p-4 text-sm text-gray-600 dark:text-gray-400">
                 {formatDate(alert.CreateDate)}

@@ -7,6 +7,8 @@ export interface Alert {
     IsAbove: boolean
     CreateDate: string
     IsActive: boolean
+    TriggeredAt?: string | null
+    TriggeredPrice: number
     livePrice?: number
 }
 

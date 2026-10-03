@@ -21,6 +21,7 @@ import {
 import Modal from "@/components/common/Modal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { notifyNewBrowserNotifications } from "@/services/browserNotificationService";
 
 const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
   const { username, isAuthenticated, logout } = useAuth();
@@ -117,6 +118,7 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
           if (newestTime > lastSeen) {
             setHasNewNotifications(true);
           }
+          void notifyNewBrowserNotifications(sorted);
         }
       } catch (e) {
         console.error("Error in background check for notifications:", e);
@@ -211,6 +213,12 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
           bg: "bg-indigo-50 dark:bg-indigo-900/30 border-indigo-100 dark:border-indigo-800/30",
           text: "text-indigo-700 dark:text-indigo-300",
           label: t("topbar.strategyTest"),
+        };
+      case "price_alert":
+        return {
+          bg: "bg-amber-50 dark:bg-amber-900/30 border-amber-100 dark:border-amber-800/30",
+          text: "text-amber-700 dark:text-amber-300",
+          label: t("topbar.priceAlert"),
         };
       default:
         return {
@@ -471,6 +479,11 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
                 <p className="font-semibold">{t("topbar.strategyCompleted")}</p>
                 <p className="mt-1 text-sm opacity-80">{selectedNotification.Coin}</p>
               </div>
+            ) : selectedNotification.Type.toLowerCase() === "price_alert" ? (
+              <div className="rounded-xl border border-amber-100 bg-amber-50 p-5 text-amber-900 dark:border-amber-800/40 dark:bg-amber-950/30 dark:text-amber-100">
+                <p className="font-semibold">{t("topbar.priceAlertTriggered")}</p>
+                <p className="mt-1 text-sm opacity-80">{selectedNotification.Coin}</p>
+              </div>
             ) : <div className="relative group flex justify-center bg-gray-50 dark:bg-gray-950 p-4 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden min-h-[300px] items-center">
               <img
                 src={
@@ -501,7 +514,7 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
         </Modal>
       )}
 
-      {isImageFullscreen && selectedNotification && selectedNotification.Type.toLowerCase() !== "strategy" && (
+      {isImageFullscreen && selectedNotification && !["strategy", "price_alert"].includes(selectedNotification.Type.toLowerCase()) && (
         <div
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-custom-fade-in cursor-zoom-out"
           onClick={() => setIsImageFullscreen(false)}

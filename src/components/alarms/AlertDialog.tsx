@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react"
 import { type Alert, type CreateAlertDto } from "@/services/alertService"
 import { X, TrendingUp, TrendingDown } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { getTopCoins } from "@/services/coinService"
+import { useCachedData } from "@/hooks/useCachedData"
 
 interface AlertDialogProps {
     isOpen: boolean
@@ -16,6 +19,10 @@ const AlertDialog: React.FC<AlertDialogProps> = ({ isOpen, onClose, onSave, edit
     const [price, setPrice] = useState("")
     const [isAbove, setIsAbove] = useState(true)
     const [saving, setSaving] = useState(false)
+    const { data: coins, loading: coinsLoading } = useCachedData({
+        cacheKey: "top-coins",
+        fetchFn: getTopCoins,
+    })
 
     useEffect(() => {
         if (editAlert) {
@@ -73,14 +80,18 @@ const AlertDialog: React.FC<AlertDialogProps> = ({ isOpen, onClose, onSave, edit
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t("alarms.coinSymbol")}
                         </label>
-                        <input
-                            type="text"
-                            value={coin}
-                            onChange={(e) => setCoin(e.target.value.toUpperCase())}
-                            placeholder="BTC"
-                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                            required
-                        />
+                        <Select value={coin} onValueChange={setCoin} disabled={coinsLoading}>
+                            <SelectTrigger className="h-11 w-full bg-white dark:bg-gray-800">
+                                <SelectValue placeholder={coinsLoading ? t("common.loadingCoins", "Loading coins...") : t("common.selectCrypto", "Select Cryptocurrency")} />
+                            </SelectTrigger>
+                            <SelectContent className="z-[100]" searchPlaceholder={t("strategyLab.searchCoin")}>
+                                {coins?.map((item) => (
+                                    <SelectItem key={item.id} value={item.symbol.toUpperCase()}>
+                                        {item.symbol.toUpperCase()} - {item.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div>

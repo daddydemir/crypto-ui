@@ -81,6 +81,7 @@ function AppSelect({
         <SelectValue />
       </SelectTrigger>
       <SelectContent
+        className="z-[150]"
         searchable={items.length > 6}
         searchPlaceholder={searchPlaceholder}
       >

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coinscope-v2'
+const CACHE_NAME = 'coinscope-v4'
 const APP_SHELL = ['/', '/manifest.webmanifest', '/coinscope-icon.svg', '/coinscope-icon-192.png', '/coinscope-icon-512.png']
 
 self.addEventListener('install', (event) => {
@@ -58,6 +58,21 @@ self.addEventListener('fetch', (event) => {
           headers: { 'Content-Type': 'text/plain; charset=utf-8' },
         }))
       return cached || network
+    })
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  const target = event.notification.data?.url || '/'
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      const existing = clients[0]
+      if (existing) {
+        existing.navigate(target)
+        return existing.focus()
+      }
+      return self.clients.openWindow(target)
     })
   )
 })
