@@ -24,6 +24,8 @@ import SettingsPage from "@/pages/settings/SettignsPage";
 import MarketBreadthPage from "@/pages/analyses/MarketBreadthPage";
 import StrategyLabPage from "@/pages/strategy/StrategyLabPage";
 import TradeExplorerPage from "@/pages/strategy/TradeExplorerPage";
+import PurchaseGoalsPage from "@/pages/purchase-goals/PurchaseGoalsPage";
+import PurchaseGoalDetailPage from "@/pages/purchase-goals/PurchaseGoalDetailPage";
 
 import { ToastProvider } from "@/contexts/ToastContext";
 
@@ -67,6 +69,8 @@ function App() {
                                             <Route path="/coins/:coinId" element={<CoinDetailPage />} />
 											<Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
 											<Route path="/portfolio/journey" element={<ProtectedRoute><TradeJourneyPage /></ProtectedRoute>} />
+											<Route path="/purchase-goals" element={<ProtectedRoute><PurchaseGoalsPage /></ProtectedRoute>} />
+											<Route path="/purchase-goals/:id" element={<ProtectedRoute><PurchaseGoalDetailPage /></ProtectedRoute>} />
 
                                             <Route path="/alarms" element={<AlarmsPage />} />
                                             <Route path="/settings" element={<SettingsPage />} />

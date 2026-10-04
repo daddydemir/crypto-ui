@@ -1,5 +1,5 @@
-const CACHE_NAME = 'coinscope-v4'
-const APP_SHELL = ['/', '/manifest.webmanifest', '/coinscope-icon.svg', '/coinscope-icon-192.png', '/coinscope-icon-512.png']
+const CACHE_NAME = 'coinscope-v5'
+const APP_SHELL = ['/', '/manifest.webmanifest?v=20261004', '/coinscope-icon.svg?v=20261004', '/coinscope-icon-192.png?v=20261004', '/coinscope-icon-512.png?v=20261004']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)))
@@ -35,6 +35,27 @@ self.addEventListener('fetch', (event) => {
             status: 503,
             headers: { 'Content-Type': 'text/plain; charset=utf-8' },
           })
+        })
+    )
+    return
+  }
+
+  // Branding files change infrequently and browsers cache them aggressively.
+  // Prefer the network so a deployment replaces the icon immediately, while
+  // retaining the cached response as an offline fallback.
+  if (/\.(?:svg|png|ico|webmanifest)$/.test(url.pathname)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone()
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)))
+          }
+          return response
+        })
+        .catch(async () => {
+          const cached = await caches.match(request)
+          return cached || new Response('Offline', { status: 503 })
         })
     )
     return

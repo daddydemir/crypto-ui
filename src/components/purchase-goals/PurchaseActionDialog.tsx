@@ -1,0 +1,14 @@
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import Modal from '@/components/common/Modal'
+
+export type PurchaseAction = {type:'price'|'purchase';itemId:number;amount:number;date:string}|{type:'saving';savingId:number;amount:number;date:string;note:string}
+
+export default function PurchaseActionDialog({action,onClose,onSubmit}:{action:PurchaseAction|null;onClose:()=>void;onSubmit:(value:PurchaseAction)=>Promise<void>}){
+ const {t}=useTranslation();const [value,setValue]=useState<PurchaseAction|null>(action);const [busy,setBusy]=useState(false)
+ useEffect(()=>setValue(action),[action]);if(!value)return null
+ const title=value.type==='price'?t('purchaseGoalDialogs.priceTitle'):value.type==='purchase'?t('purchaseGoalDialogs.purchaseTitle'):t('purchaseGoalDialogs.savingTitle')
+ async function submit(e:React.FormEvent){e.preventDefault();if(!value)return;setBusy(true);try{await onSubmit(value);onClose()}finally{setBusy(false)}}
+ const field='h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-slate-700 dark:bg-slate-950'
+ return <Modal isOpen onClose={onClose} title={title} maxWidth="max-w-lg"><form onSubmit={submit} className="space-y-4"><p className="text-sm leading-6 text-slate-500">{t(`purchaseGoalDialogs.${value.type}Help`)}</p><label className="block space-y-1.5"><span className="text-sm font-semibold dark:text-white">{value.type==='purchase'?t('purchaseGoalDetail.purchasePrice'):value.type==='price'?t('purchaseGoalDetail.newPrice'):t('purchaseGoalDetail.savingAmountPrompt')}</span><input autoFocus required type="number" step="0.01" min={value.type==='saving'?undefined:0} className={field} value={value.amount} onChange={e=>setValue({...value,amount:Number(e.target.value)})}/></label><label className="block space-y-1.5"><span className="text-sm font-semibold dark:text-white">{t('purchaseGoalDialogs.date')}</span><input required type="date" className={field} value={value.date.slice(0,10)} onChange={e=>setValue({...value,date:e.target.value})}/></label>{value.type==='saving'&&<label className="block space-y-1.5"><span className="text-sm font-semibold dark:text-white">{t('purchaseGoalDetail.note')}</span><textarea rows={3} className={`${field} h-auto py-3`} value={value.note} onChange={e=>setValue({...value,note:e.target.value})}/></label>}<div className="flex justify-end gap-3 border-t pt-4 dark:border-slate-800"><button type="button" onClick={onClose} className="rounded-xl border px-4 py-2 font-semibold dark:border-slate-700">{t('common.cancel')}</button><button disabled={busy} className="rounded-xl bg-indigo-600 px-5 py-2 font-semibold text-white disabled:opacity-60">{busy?t('purchaseGoals.actions.saving'):t('purchaseGoalDialogs.save')}</button></div></form></Modal>
+}

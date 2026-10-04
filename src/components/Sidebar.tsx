@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch, FlaskConical, ListFilter } from "lucide-react";
+import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch, FlaskConical, ListFilter, Goal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -46,6 +46,7 @@ const Sidebar: React.FC<{ onNavigate?: () => void }> = ({ onNavigate }) => {
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
 		...(isAuthenticated ? [{ id: "portfolio", title: t("sidebar.portfolio"), path: "/portfolio", icon: WalletCards }] : []),
+		...(isAuthenticated ? [{ id: "purchase-goals", title: t("sidebar.purchaseGoals", "Purchase Goals"), path: "/purchase-goals", icon: Goal }] : []),
 		...(isAuthenticated ? [{ id: "trade-journey", title: t("tradeJourney.title"), path: "/portfolio/journey", icon: GitBranch }] : []),
 		...(isAuthenticated ? [{ id: "strategy-lab", title: t("strategyLab.title"), path: "/strategy-lab", icon: FlaskConical }] : []),
 		...(isAuthenticated ? [{ id: "trade-explorer", title: t("tradeExplorer.title"), path: "/trade-explorer", icon: ListFilter }] : []),
@@ -72,7 +73,7 @@ const Sidebar: React.FC<{ onNavigate?: () => void }> = ({ onNavigate }) => {
     return (
         <aside className="flex h-full w-[280px] flex-col border-r border-white/10 bg-gradient-to-b from-slate-950 via-slate-950 to-indigo-950 text-slate-200 shadow-2xl shadow-slate-950/20">
             <div className="flex h-[72px] items-center gap-3 border-b border-white/10 px-5">
-                <img src="/coinscope-icon.svg" alt="" className="h-10 w-10 rounded-xl shadow-lg shadow-indigo-500/20" />
+                <img src="/coinscope-icon.svg?v=20261004" alt="" className="h-10 w-10 rounded-xl shadow-lg shadow-indigo-500/20" />
                 <div><p className="font-bold tracking-tight text-white">CoinScope</p><p className="text-[11px] font-medium uppercase tracking-[0.18em] text-indigo-300">Market intelligence</p></div>
             </div>
 

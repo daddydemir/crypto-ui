@@ -27,7 +27,7 @@ export async function notifyNewBrowserNotifications(items: CryptoNotification[])
   const registration = 'serviceWorker' in navigator ? await navigator.serviceWorker.ready.catch(() => null) : null
   for (const item of unseen) {
     const title = item.Type === 'PRICE_ALERT' ? 'CoinScope · Price Alert' : 'CoinScope'
-    const options: NotificationOptions = { body: item.Coin, icon: '/coinscope-icon-192.png', badge: '/coinscope-icon-192.png', tag: `${item.Type}-${item.CreateTime}`, data: { url: item.Type === 'PRICE_ALERT' ? '/alarms' : '/' } }
+    const options: NotificationOptions = { body: item.Coin, icon: '/coinscope-icon-192.png?v=20261004', badge: '/coinscope-icon-192.png?v=20261004', tag: `${item.Type}-${item.CreateTime}`, data: { url: item.Type === 'PRICE_ALERT' ? '/alarms' : '/' } }
     if (registration) await registration.showNotification(title, options)
     else new Notification(title, options)
   }
