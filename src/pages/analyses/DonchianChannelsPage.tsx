@@ -104,10 +104,10 @@ const DonchianChannelsPage: React.FC = () => {
     }
 
     const chartLines = [
-        { dataKey: 'Upper', name: 'Upper Channel', color: '#EF4444' },
-        { dataKey: 'Middle', name: 'Middle Line', color: '#3B82F6' },
-        { dataKey: 'Lower', name: 'Lower Channel', color: '#10B981' },
-        { dataKey: 'Price', name: 'Price', color: '#8B5CF6' }
+        { dataKey: 'Upper', name: 'Upper Channel', color: '#F87171', strokeWidth: 1.5 },
+        { dataKey: 'Middle', name: 'Middle Line', color: '#60A5FA', strokeWidth: 2 },
+        { dataKey: 'Lower', name: 'Lower Channel', color: '#34D399', strokeWidth: 1.5 },
+        { dataKey: 'Price', name: 'Price', color: '#8B5CF6', strokeWidth: 3 }
     ]
 
     return (

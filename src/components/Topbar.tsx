@@ -238,7 +238,7 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
         <Menu size={20} />
       </button>
 
-      <GlobalSearch />
+      <div className="min-w-0 flex-1 sm:flex-none"><GlobalSearch /></div>
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
         <button
@@ -361,7 +361,7 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
             className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
           >
             <Globe className="w-4 h-4" />
-            <span>{i18n.language.toUpperCase()}</span>
+            <span className="hidden sm:inline">{i18n.language.toUpperCase()}</span>
           </button>
 
           {open && (
@@ -397,7 +397,7 @@ const Topbar: React.FC<{ onMenuClick?: () => void }> = ({ onMenuClick }) => {
                 className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
               >
                 <UserIcon className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-                <span className="font-semibold text-sm max-w-[120px] truncate">
+                <span className="hidden max-w-[120px] truncate text-sm font-semibold sm:inline">
                   {username}
                 </span>
               </button>

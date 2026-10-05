@@ -2,16 +2,19 @@ import React, { useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { getRSIHistory } from "@/services/rsiService"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Brush } from "recharts"
-import { ArrowLeft, TrendingUp, TrendingDown, Calendar, Maximize2 } from "lucide-react"
+import { ArrowLeft, TrendingUp, TrendingDown, Maximize2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useCachedData } from "@/hooks/useCachedData"
 import RefreshButton from "@/components/common/RefreshButton"
 import FullScreenChart from "@/components/charts/FullScreenChart.tsx";
 import { mapRsiToChartPoints } from "@/components/charts/types.ts";
+import TimeRangeSelector from "@/components/analyses/TimeRangeSelector";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 type TimeRange = '7d' | '30d' | '90d' | '1y' | 'all'
 
 const CoinDetailPage: React.FC = () => {
+    const isMobile = useIsMobile()
     const { coinId } = useParams<{ coinId: string }>()
     const decodedCoinId = decodeURIComponent(coinId || '');
     const navigate = useNavigate()
@@ -117,14 +120,6 @@ const CoinDetailPage: React.FC = () => {
         return null
     }
 
-    const timeRangeButtons: { value: TimeRange; label: string }[] = [
-        { value: '7d', label: t('rsi.timeRange.7d') },
-        { value: '30d', label: t('rsi.timeRange.30d') },
-        { value: '90d', label: t('rsi.timeRange.90d') },
-        { value: '1y', label: t('rsi.timeRange.1y') },
-        { value: 'all', label: t('rsi.timeRange.all') },
-    ]
-
     return (
         <div className="page-shell">
             {showFullScreenChart && data && decodedCoinId && (
@@ -219,9 +214,9 @@ const CoinDetailPage: React.FC = () => {
                         </div>
 
                         {/* Chart */}
-                        <div className="surface-card p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <div>
+                        <div className="chart-card surface-card min-w-0 p-3 sm:p-6">
+                            <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="min-w-0">
                                     <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                                         RSI {t("common.chart", "Chart")}
                                     </h2>
@@ -231,23 +226,11 @@ const CoinDetailPage: React.FC = () => {
                                 </div>
 
                                 {/* Time Range Selector */}
-                                <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-gray-500" />
-                                    {timeRangeButtons.map((btn) => (
-                                        <button
-                                            key={btn.value}
-                                            onClick={() => setTimeRange(btn.value)}
-                                            className={`px-3 py-1.5 text-sm rounded-lg transition ${timeRange === btn.value
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                                }`}
-                                        >
-                                            {btn.label}
-                                        </button>
-                                    ))}
+                                <div className="flex min-w-0 items-center gap-2">
+                                    <TimeRangeSelector value={timeRange} onChange={setTimeRange} />
                                     <button
                                         onClick={() => setShowFullScreenChart(true)}
-                                        className="top-4 right-4 p-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition z-10"
+                                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 transition hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
                                         title={t('common.fullScreen', 'Full Screen')}
                                     >
                                         <Maximize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -256,34 +239,35 @@ const CoinDetailPage: React.FC = () => {
                             </div>
 
                             {filteredData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={450}>
-                                    <LineChart data={filteredData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                                <div className="chart-stage h-[270px] sm:h-[380px] lg:h-[450px]"><ResponsiveContainer width="100%" height="100%">
+                                    <LineChart data={filteredData} margin={{ top: 5, right: isMobile ? 4 : 30, left: isMobile ? -20 : 0, bottom: 5 }}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
                                         <XAxis
                                             dataKey="date"
                                             tickFormatter={formatXAxis}
                                             stroke="#9CA3AF"
-                                            tick={{ fill: '#9CA3AF', fontSize: 12 }}
+                                            tick={{ fill: '#9CA3AF', fontSize: isMobile ? 10 : 12 }}
                                             interval="preserveStartEnd"
-                                            minTickGap={50}
+                                            minTickGap={isMobile ? 48 : 50}
                                         />
                                         <YAxis
                                             domain={[0, 100]}
                                             stroke="#9CA3AF"
-                                            tick={{ fill: '#9CA3AF', fontSize: 12 }}
+                                            width={isMobile ? 36 : 60}
+                                            tick={{ fill: '#9CA3AF', fontSize: isMobile ? 10 : 12 }}
                                         />
                                         <Tooltip content={<CustomTooltip />} />
                                         <ReferenceLine
                                             y={70}
                                             stroke="#EF4444"
                                             strokeDasharray="3 3"
-                                            label={{ value: t("rsi.overbought"), fill: '#EF4444', fontSize: 11 }}
+                                            label={{ value: t("rsi.overbought"), fill: '#EF4444', fontSize: isMobile ? 9 : 11, position: 'insideTopRight' }}
                                         />
                                         <ReferenceLine
                                             y={30}
                                             stroke="#10B981"
                                             strokeDasharray="3 3"
-                                            label={{ value: t("rsi.oversold"), fill: '#10B981', fontSize: 11 }}
+                                            label={{ value: t("rsi.oversold"), fill: '#10B981', fontSize: isMobile ? 9 : 11, position: 'insideBottomRight' }}
                                         />
                                         <Line
                                             type="monotone"
@@ -295,7 +279,7 @@ const CoinDetailPage: React.FC = () => {
                                             isAnimationActive={false}
                                         />
                                         {/* Brush - Zoom ve kaydırma için */}
-                                        {filteredData.length > 50 && (
+                                        {!isMobile && filteredData.length > 50 && (
                                             <Brush
                                                 dataKey="date"
                                                 height={30}
@@ -304,7 +288,7 @@ const CoinDetailPage: React.FC = () => {
                                             />
                                         )}
                                     </LineChart>
-                                </ResponsiveContainer>
+                                </ResponsiveContainer></div>
                             ) : (
                                 <div className="h-96 flex items-center justify-center text-gray-500 dark:text-gray-400">
                                     {t("common.noData", "No data available")}

@@ -203,6 +203,7 @@ const ChartsPage: React.FC = () => {
                 },
                 ticks: {
                     color: 'rgba(107, 114, 128, 0.7)',
+                    callback: (value: string | number) => Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(Number(value)),
                 }
             },
             x: {
@@ -212,6 +213,9 @@ const ChartsPage: React.FC = () => {
                 },
                 ticks: {
                     color: 'rgba(107, 114, 128, 0.7)',
+                    autoSkip: true,
+                    maxRotation: 0,
+                    maxTicksLimit: 4,
                 }
             }
         }

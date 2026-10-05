@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Calendar, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import {
     CategoryScale,
     Chart as ChartJS,
@@ -15,6 +15,9 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import type { FullScreenChartProps, TimeRange } from '@/components/charts/types.ts'
+import TimeRangeSelector from '@/components/analyses/TimeRangeSelector'
+import { useIsMobile } from '@/hooks/useMediaQuery'
+import { downsample } from '@/components/charts/chartUtils'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
 
@@ -35,6 +38,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
     onClose
 }) => {
     const { t, i18n } = useTranslation()
+    const isMobile = useIsMobile()
     const [customTimeRange, setCustomTimeRange] = useState<TimeRange>(timeRange)
 
     const filteredData = useMemo(() => {
@@ -94,7 +98,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
     )
 
     const chartData = useMemo<ChartData<'line'>>(() => ({
-        labels: filteredData.map((point) => new Date(point.date).toLocaleDateString(locale, {
+        labels: downsample(filteredData, isMobile ? 240 : 800).map((point) => new Date(point.date).toLocaleDateString(locale, {
             day: '2-digit',
             month: 'short',
             year: '2-digit',
@@ -103,7 +107,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
             const color = chartColors[index % chartColors.length]
             return {
                 label: key === 'value' ? coinSymbol.toUpperCase() : key,
-                data: filteredData.map((point) => (
+                data: downsample(filteredData, isMobile ? 240 : 800).map((point) => (
                     key === 'value' ? point.y ?? null : point.series?.[key] ?? null
                 )),
                 borderColor: color.border,
@@ -117,7 +121,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                 fill: false,
             }
         }),
-    }), [coinSymbol, filteredData, locale, seriesKeys])
+    }), [coinSymbol, filteredData, isMobile, locale, seriesKeys])
 
     const chartOptions = useMemo<ChartOptions<'line'>>(() => ({
         responsive: true,
@@ -133,7 +137,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
         plugins: {
             legend: {
                 display: seriesKeys.length > 1,
-                position: 'top',
+                position: isMobile ? 'bottom' : 'top',
                 align: 'start',
                 labels: {
                     color: '#94a3b8',
@@ -169,7 +173,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                     color: '#94a3b8',
                     maxRotation: 0,
                     autoSkip: true,
-                    maxTicksLimit: 10,
+                    maxTicksLimit: isMobile ? 4 : 10,
                 },
             },
             y: {
@@ -181,22 +185,14 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                 },
             },
         },
-    }), [numberFormatter, seriesKeys.length])
-
-    const timeRangeButtons: { value: TimeRange; label: string }[] = [
-        { value: '7d', label: '7 ' + t('common.days', 'Days') },
-        { value: '30d', label: '30 ' + t('common.days', 'Days') },
-        { value: '90d', label: '90 ' + t('common.days', 'Days') },
-        { value: '1y', label: '1 ' + t('common.year', 'Year') },
-        { value: 'all', label: t('common.all', 'All') },
-    ]
+    }), [isMobile, numberFormatter, seriesKeys.length])
 
     return (
         <div className="fixed inset-0 bg-white dark:bg-gray-950 z-50 flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <div className="flex min-w-0 flex-col gap-3 border-b border-gray-200 p-3 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                <div className="min-w-0">
+                    <h1 className="break-words text-lg font-bold text-gray-900 dark:text-gray-100 sm:text-2xl">
                         {coinSymbol.toUpperCase()} - {t(`${analyseType}.title`, 'Moving Averages')}
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400">
@@ -204,28 +200,12 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
                     </p>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-gray-400" />
-                        <div className="flex gap-1 flex-wrap">
-                            {timeRangeButtons.map((btn) => (
-                                <button
-                                    key={btn.value}
-                                    onClick={() => setCustomTimeRange(btn.value)}
-                                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${customTimeRange === btn.value
-                                            ? 'bg-blue-500 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                        }`}
-                                >
-                                    {btn.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                <div className="flex min-w-0 items-center gap-2">
+                    <TimeRangeSelector value={customTimeRange} onChange={setCustomTimeRange} />
 
                     <button
                         onClick={onClose}
-                        className="p-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-500 text-white transition hover:bg-gray-600"
                         title={t('common.close', 'Close')}
                     >
                         <X className="w-5 h-5" />
@@ -234,7 +214,7 @@ const FullScreenChart: React.FC<FullScreenChartProps> = ({
             </div>
 
             {/* Chart Container */}
-            <div className="flex-1 min-h-0 p-6">
+            <div className="min-h-0 flex-1 p-2 sm:p-6">
                 {filteredData.length > 0 ? (
                     <div className="h-full rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                         <Line data={chartData} options={chartOptions} />

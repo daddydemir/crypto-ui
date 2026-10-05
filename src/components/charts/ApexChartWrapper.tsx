@@ -3,6 +3,8 @@ import React, {useMemo, useRef} from 'react'
 import Chart from 'react-apexcharts'
 import { type ApexOptions } from 'apexcharts'
 import type {ChartPoint, TimeRange} from '@/components/charts/types.ts'
+import { useIsMobile } from '@/hooks/useMediaQuery'
+import { downsample, formatCompactNumber } from '@/components/charts/chartUtils'
 
 interface ApexChartWrapperProps {
     data: ChartPoint[]
@@ -18,6 +20,7 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
     coinSymbol,
     seriesKeys: providedKeys = []
 }) => {
+    const isMobile = useIsMobile()
     const zoomRangeRef = useRef<{ min: number | null, max: number | null }>({ min: null, max: null })
     const prevTimeRangeRef = useRef(timeRange)
     const prevCoinSymbolRef = useRef(coinSymbol)
@@ -38,15 +41,16 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
         return includeY ? ['y', ...seriesKeys] : seriesKeys
     }, [data, providedKeys])
 
+    const renderedData = useMemo(() => downsample(data, isMobile ? 180 : 600), [data, isMobile])
     const series = useMemo(() => {
         return keys.map((key) => ({
             name: key === 'y' ? 'Value' : key,
-            data: data.map(d => ({
+            data: renderedData.map(d => ({
                 x: new Date(d.date).getTime(),
                 y: key === 'y' ? (d.y ?? null) : (d.series?.[key] ?? null)
             }))
         }))
-    }, [data, keys])
+    }, [renderedData, keys])
 
     const colors = DEFAULT_COLORS.slice(0, Math.max(series.length, DEFAULT_COLORS.length))
 
@@ -56,10 +60,10 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
             height: '100%',
             zoom: {enabled: true, type: 'x', autoScaleYaxis: true},
             toolbar: {
-                show: true,
+                show: !isMobile,
                 tools: {download: true, selection: true, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true}
             },
-            animations: {enabled: true, speed: 800,
+            animations: {enabled: !isMobile, speed: 500,
                 animateGradually: {enabled: true, delay: 150},
                 dynamicAnimation: {enabled: true, speed: 350}
             },
@@ -89,6 +93,9 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
             min: zoomRangeRef.current.min ?? undefined,
             max: zoomRangeRef.current.max ?? undefined,
             labels: {
+                rotate: 0,
+                hideOverlappingLabels: true,
+                trim: true,
                 datetimeFormatter: {
                     year: 'yyyy',
                     month: "MMM 'yy",
@@ -101,7 +108,7 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
         yaxis: {
             labels: {
                 formatter: function(value: number) {
-                    return `$${value.toFixed(2)}`
+                    return isMobile ? formatCompactNumber(value) : `$${value.toFixed(2)}`
                 }
             },
             tooltip: {enabled: true}
@@ -142,15 +149,15 @@ const ApexChartWrapper: React.FC<ApexChartWrapperProps> = ({
                 `
             }
         },
-        legend: {position: 'top', horizontalAlign: 'left', fontSize: '13px', fontFamily: 'Inter, sans-serif', markers: { size: 6 }, itemMargin: { horizontal: 12 }},
+        legend: {position: isMobile ? 'bottom' : 'top', horizontalAlign: isMobile ? 'center' : 'left', fontSize: isMobile ? '11px' : '13px', fontFamily: 'Inter, sans-serif', markers: { size: 6 }, itemMargin: { horizontal: isMobile ? 6 : 12 }},
         grid: {
             borderColor: '#cbd5e1',
             strokeDashArray: 5,
             padding: {
                 top: 20,
-                right: 20,
+                right: isMobile ? 4 : 20,
                 bottom: 20,
-                left: 20
+                left: isMobile ? 0 : 20
             }
         },
         markers: {

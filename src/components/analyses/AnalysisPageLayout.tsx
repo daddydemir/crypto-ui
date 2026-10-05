@@ -40,10 +40,10 @@ const AnalysisPageLayout: React.FC<AnalysisPageLayoutProps> = ({
             <div>
                 {/* Header */}
                 <div className="page-hero mb-6">
-                    <div className="relative z-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-                        <div>
-                            <div className="flex items-center gap-3">
-                                <h1 className="text-3xl font-bold tracking-tight text-white">
+                    <div className="relative z-10 flex min-w-0 flex-col justify-between gap-5 sm:flex-row sm:items-end">
+                        <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <h1 className="break-words text-2xl font-bold tracking-tight text-white sm:text-3xl">
                                     {title}
                                 </h1>
                                 {headerContent}
