@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
-import { Lock, User, Eye, EyeOff, LogIn, Globe } from "lucide-react";
+import { Lock, User, Eye, EyeOff, LogIn, Globe, QrCode } from "lucide-react";
 
 const LoginPage: React.FC = () => {
-    const { login, isAuthenticated } = useAuth();
+    const { login, loginWithDeviceCode, isAuthenticated } = useAuth();
     const { success, error } = useToast();
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const deviceCode = searchParams.get("deviceCode");
 
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
@@ -48,6 +50,14 @@ const LoginPage: React.FC = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDeviceLogin = async () => {
+        if (!deviceCode) return;
+        setLoading(true);
+        try { await loginWithDeviceCode(deviceCode); success(t("login.qrSuccess")); navigate("/coins"); }
+        catch { error(t("login.qrError")); }
+        finally { setLoading(false); }
     };
 
     const changeLang = (lang: string) => {
@@ -110,7 +120,12 @@ const LoginPage: React.FC = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
+                {deviceCode ? <div className="space-y-5 text-center">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50"><QrCode /></div>
+                    <div><h3 className="font-semibold text-slate-900 dark:text-white">{t("login.qrTitle")}</h3><p className="mt-2 text-sm text-slate-500">{t("login.qrDescription")}</p></div>
+                    <button type="button" onClick={() => void handleDeviceLogin()} disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white disabled:opacity-50"><LogIn size={18}/>{loading ? t("login.loggingIn") : t("login.qrButton")}</button>
+                    <button type="button" onClick={() => navigate("/login", { replace: true })} className="text-sm font-medium text-slate-500 hover:text-indigo-600">{t("login.usePassword")}</button>
+                </div> : <form onSubmit={handleLogin} className="space-y-6">
                     {/* Username Input */}
                     <div className="space-y-2">
                         <label className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
@@ -181,7 +196,7 @@ const LoginPage: React.FC = () => {
                             </>
                         )}
                     </button>
-                </form>
+                </form>}
             </div>
         </div>
     );

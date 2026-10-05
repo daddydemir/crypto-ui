@@ -3,6 +3,7 @@ import { http } from "@/services/api/httpClient";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { deviceLinkService } from "@/services/deviceLinkService";
 
 interface LoginResponse {
     username: string;
@@ -15,6 +16,7 @@ interface AuthContextType {
     isAuthenticated: boolean;
     loading: boolean;
     login: (username: string, password: string) => Promise<LoginResponse>;
+    loginWithDeviceCode: (code: string) => Promise<LoginResponse>;
     logout: () => void;
 }
 
@@ -86,6 +88,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const loginWithDeviceCode = async (code: string): Promise<LoginResponse> => {
+        const data = await deviceLinkService.claim(code);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", data.username);
+        setToken(data.token);
+        setUsername(data.username);
+        return data;
+    };
+
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
@@ -96,7 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const isAuthenticated = !!token;
 
     return (
-        <AuthContext.Provider value={{ token, username, isAuthenticated, loading, login, logout }}>
+        <AuthContext.Provider value={{ token, username, isAuthenticated, loading, login, loginWithDeviceCode, logout }}>
             {children}
             <ConfirmDialog
                 isOpen={showConfirm}

@@ -1,4 +1,4 @@
-import { API_BASE_URL, MOSAIC_BASE_URL } from './config';
+import { API_BASE_URL, AUTH_BASE_URL, MOSAIC_BASE_URL } from './config';
 
 class HttpClient {
     private baseUrl: string;
@@ -85,5 +85,6 @@ class HttpClient {
 }
 
 export const http = new HttpClient(API_BASE_URL);
+export const authHttp = new HttpClient(AUTH_BASE_URL);
 export const mosaicHttp = new HttpClient(MOSAIC_BASE_URL);
 

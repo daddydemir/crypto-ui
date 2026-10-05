@@ -73,7 +73,7 @@ function App() {
 											<Route path="/purchase-goals/:id" element={<ProtectedRoute><PurchaseGoalDetailPage /></ProtectedRoute>} />
 
                                             <Route path="/alarms" element={<AlarmsPage />} />
-                                            <Route path="/settings" element={<SettingsPage />} />
+                                            <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
                                             <Route path="/smart-alerts" element={<SmartAlertsPage />} />
                                         </Routes>
                                     </AppLayout>
