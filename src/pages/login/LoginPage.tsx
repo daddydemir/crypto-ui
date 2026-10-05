@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
 import { Lock, User, Eye, EyeOff, LogIn, Globe, QrCode, X } from "lucide-react";
+import { BrowserQRCodeReader, type IScannerControls } from "@zxing/browser";
 
 const LoginPage: React.FC = () => {
     const { login, loginWithDeviceCode, isAuthenticated } = useAuth();
@@ -21,8 +22,8 @@ const LoginPage: React.FC = () => {
     const [scannerOpen, setScannerOpen] = useState(false);
     const [scannerError, setScannerError] = useState<string | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const streamRef = useRef<MediaStream | null>(null);
-    const scanFrameRef = useRef<number | null>(null);
+    const scannerControlsRef = useRef<IScannerControls | null>(null);
+    const acceptingScanRef = useRef(true);
 
     // Redirect to home page if already authenticated
     useEffect(() => {
@@ -32,16 +33,13 @@ const LoginPage: React.FC = () => {
     }, [isAuthenticated, navigate]);
 
     const stopScanner = () => {
-        if (scanFrameRef.current !== null) cancelAnimationFrame(scanFrameRef.current);
-        scanFrameRef.current = null;
-        streamRef.current?.getTracks().forEach(track => track.stop());
-        streamRef.current = null;
+        scannerControlsRef.current?.stop();
+        scannerControlsRef.current = null;
         setScannerOpen(false);
     };
 
     useEffect(() => () => {
-        if (scanFrameRef.current !== null) cancelAnimationFrame(scanFrameRef.current);
-        streamRef.current?.getTracks().forEach(track => track.stop());
+        scannerControlsRef.current?.stop();
     }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -98,32 +96,31 @@ const LoginPage: React.FC = () => {
 
     const startQrScanner = async () => {
         setScannerError(null);
-        if (!("BarcodeDetector" in window) || !navigator.mediaDevices?.getUserMedia) {
+        if (!navigator.mediaDevices?.getUserMedia) {
             setScannerError(t("login.qrUnsupported"));
             setScannerOpen(true);
             return;
         }
         setScannerOpen(true);
+        acceptingScanRef.current = true;
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
-            streamRef.current = stream;
             await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
             if (!videoRef.current) throw new Error("camera unavailable");
-            videoRef.current.srcObject = stream;
-            await videoRef.current.play();
-            const detector = new BarcodeDetector({ formats: ["qr_code"] });
-            const scan = async () => {
-                if (!videoRef.current || !streamRef.current) return;
-                try {
-                    const results = await detector.detect(videoRef.current);
-                    if (results[0]?.rawValue && await completeQrLogin(results[0].rawValue)) return;
-                } catch { /* Video may not have a decodable frame yet. */ }
-                scanFrameRef.current = requestAnimationFrame(() => void scan());
-            };
-            scanFrameRef.current = requestAnimationFrame(() => void scan());
+            const reader = new BrowserQRCodeReader(undefined, { delayBetweenScanAttempts: 200 });
+            scannerControlsRef.current = await reader.decodeFromConstraints(
+                { video: { facingMode: { ideal: "environment" } }, audio: false },
+                videoRef.current,
+                result => {
+                    if (!result || !acceptingScanRef.current) return;
+                    acceptingScanRef.current = false;
+                    void completeQrLogin(result.getText()).then(successful => {
+                        if (!successful) acceptingScanRef.current = true;
+                    });
+                },
+            );
         } catch {
-            streamRef.current?.getTracks().forEach(track => track.stop());
-            streamRef.current = null;
+            scannerControlsRef.current?.stop();
+            scannerControlsRef.current = null;
             setScannerError(t("login.qrCameraError"));
         }
     };
