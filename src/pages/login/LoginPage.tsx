@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
-import { Lock, User, Eye, EyeOff, LogIn, Globe, QrCode } from "lucide-react";
+import { Lock, User, Eye, EyeOff, LogIn, Globe, QrCode, X } from "lucide-react";
 
 const LoginPage: React.FC = () => {
     const { login, loginWithDeviceCode, isAuthenticated } = useAuth();
@@ -18,6 +18,11 @@ const LoginPage: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [langOpen, setLangOpen] = useState(false);
+    const [scannerOpen, setScannerOpen] = useState(false);
+    const [scannerError, setScannerError] = useState<string | null>(null);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+    const scanFrameRef = useRef<number | null>(null);
 
     // Redirect to home page if already authenticated
     useEffect(() => {
@@ -25,6 +30,19 @@ const LoginPage: React.FC = () => {
             navigate("/coins");
         }
     }, [isAuthenticated, navigate]);
+
+    const stopScanner = () => {
+        if (scanFrameRef.current !== null) cancelAnimationFrame(scanFrameRef.current);
+        scanFrameRef.current = null;
+        streamRef.current?.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+        setScannerOpen(false);
+    };
+
+    useEffect(() => () => {
+        if (scanFrameRef.current !== null) cancelAnimationFrame(scanFrameRef.current);
+        streamRef.current?.getTracks().forEach(track => track.stop());
+    }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -58,6 +76,56 @@ const LoginPage: React.FC = () => {
         try { await loginWithDeviceCode(deviceCode); success(t("login.qrSuccess")); navigate("/coins"); }
         catch { error(t("login.qrError")); }
         finally { setLoading(false); }
+    };
+
+    const completeQrLogin = async (rawValue: string) => {
+        try {
+            const scannedUrl = new URL(rawValue, window.location.origin);
+            const code = scannedUrl.searchParams.get("deviceCode");
+            if (!code || scannedUrl.pathname !== "/login") throw new Error("invalid QR");
+            stopScanner();
+            setLoading(true);
+            await loginWithDeviceCode(code);
+            success(t("login.qrSuccess"));
+            navigate("/coins");
+            return true;
+        } catch {
+            setScannerError(t("login.qrInvalid"));
+            setLoading(false);
+            return false;
+        }
+    };
+
+    const startQrScanner = async () => {
+        setScannerError(null);
+        if (!("BarcodeDetector" in window) || !navigator.mediaDevices?.getUserMedia) {
+            setScannerError(t("login.qrUnsupported"));
+            setScannerOpen(true);
+            return;
+        }
+        setScannerOpen(true);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+            streamRef.current = stream;
+            await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+            if (!videoRef.current) throw new Error("camera unavailable");
+            videoRef.current.srcObject = stream;
+            await videoRef.current.play();
+            const detector = new BarcodeDetector({ formats: ["qr_code"] });
+            const scan = async () => {
+                if (!videoRef.current || !streamRef.current) return;
+                try {
+                    const results = await detector.detect(videoRef.current);
+                    if (results[0]?.rawValue && await completeQrLogin(results[0].rawValue)) return;
+                } catch { /* Video may not have a decodable frame yet. */ }
+                scanFrameRef.current = requestAnimationFrame(() => void scan());
+            };
+            scanFrameRef.current = requestAnimationFrame(() => void scan());
+        } catch {
+            streamRef.current?.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+            setScannerError(t("login.qrCameraError"));
+        }
     };
 
     const changeLang = (lang: string) => {
@@ -196,8 +264,11 @@ const LoginPage: React.FC = () => {
                             </>
                         )}
                     </button>
+                    <div className="flex items-center gap-3"><span className="h-px flex-1 bg-slate-200 dark:bg-slate-700"/><span className="text-xs font-medium text-slate-400">{t("login.or")}</span><span className="h-px flex-1 bg-slate-200 dark:bg-slate-700"/></div>
+                    <button type="button" onClick={() => void startQrScanner()} className="flex w-full items-center justify-center gap-2 rounded-xl border border-indigo-200 px-4 py-3 font-semibold text-indigo-600 transition hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-300 dark:hover:bg-indigo-950/40"><QrCode size={20}/>{t("login.scanQr")}</button>
                 </form>}
             </div>
+            {scannerOpen && <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"><div className="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl dark:bg-slate-900"><button type="button" onClick={stopScanner} className="absolute right-4 top-4 z-10 rounded-lg bg-black/40 p-2 text-white"><X size={18}/></button><h3 className="pr-10 text-lg font-bold text-slate-900 dark:text-white">{t("login.scanQr")}</h3><p className="mt-1 text-sm text-slate-500">{t("login.scanQrDescription")}</p><div className="relative mt-5 aspect-square overflow-hidden rounded-2xl bg-slate-950"><video ref={videoRef} playsInline muted className="h-full w-full object-cover"/><div className="pointer-events-none absolute inset-10 rounded-2xl border-2 border-cyan-400 shadow-[0_0_0_999px_rgba(0,0,0,0.35)]"/></div>{scannerError && <p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-300">{scannerError}</p>}</div></div>}
         </div>
     );
 };

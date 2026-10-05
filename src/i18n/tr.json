@@ -889,6 +889,6 @@
     "loggedIn": "Giriş Yapıldı",
     "unauthorizedTitle": "Giriş Gerekli",
     "unauthorizedMessage": "Bu işlemi yapabilmek için giriş yapmanız gerekmektedir. Giriş sayfasına gitmek istiyor musunuz?",
-    "qrTitle": "QR kod ile giriş", "qrDescription": "Bu cihazda yeni bir oturum açmak için devam edin. Kod tek kullanımlıdır.", "qrButton": "Oturum aç", "qrSuccess": "Yeni cihazda oturum açıldı.", "qrError": "QR kod geçersiz veya süresi dolmuş.", "usePassword": "Parola ile giriş yap"
+    "qrTitle": "QR kod ile giriş", "qrDescription": "Bu cihazda yeni bir oturum açmak için devam edin. Kod tek kullanımlıdır.", "qrButton": "Oturum aç", "qrSuccess": "Yeni cihazda oturum açıldı.", "qrError": "QR kod geçersiz veya süresi dolmuş.", "usePassword": "Parola ile giriş yap", "or": "veya", "scanQr": "QR ile giriş yap", "scanQrDescription": "Diğer cihazdaki Ayarlar ekranında oluşturulan QR kodu kameraya gösterin.", "qrInvalid": "Bu QR kod uygulamaya ait değil veya geçersiz.", "qrUnsupported": "Bu tarayıcı kamera ile QR taramayı desteklemiyor.", "qrCameraError": "Kamera açılamadı. Tarayıcı kamera iznini kontrol edin."
   }
 }

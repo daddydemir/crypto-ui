@@ -894,6 +894,6 @@
     "loggedIn": "Logged In",
     "unauthorizedTitle": "Authentication Required",
     "unauthorizedMessage": "You need to log in to perform this action. Would you like to go to the login page?",
-    "qrTitle": "Sign in with QR code", "qrDescription": "Continue to open a new session on this device. The code can only be used once.", "qrButton": "Sign in", "qrSuccess": "Signed in on the new device.", "qrError": "The QR code is invalid or has expired.", "usePassword": "Sign in with password"
+    "qrTitle": "Sign in with QR code", "qrDescription": "Continue to open a new session on this device. The code can only be used once.", "qrButton": "Sign in", "qrSuccess": "Signed in on the new device.", "qrError": "The QR code is invalid or has expired.", "usePassword": "Sign in with password", "or": "or", "scanQr": "Sign in with QR", "scanQrDescription": "Point the camera at the QR code created from Settings on your other device.", "qrInvalid": "This QR code is invalid or does not belong to this application.", "qrUnsupported": "This browser does not support QR scanning with the camera.", "qrCameraError": "The camera could not be opened. Check the browser camera permission."
   }
 }
