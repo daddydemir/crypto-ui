@@ -5,6 +5,7 @@ import ExchangeImportDialog from "@/components/portfolio/ExchangeImportDialog"
 import TransactionDialog from "@/components/portfolio/TransactionDialog"
 import { createPortfolioTransaction, deletePortfolioTransaction, getPortfolioTransactions, updatePortfolioTransaction, type PortfolioTransaction, type PortfolioTransactionInput } from "@/services/portfolioService"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 export default function PortfolioPage() {
     const { t, i18n } = useTranslation()
@@ -82,7 +83,7 @@ export default function PortfolioPage() {
                         <h1 className="text-3xl font-bold tracking-tight">{t("portfolio.title")}</h1>
                         <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300">{t("portfolio.description")}</p>
                     </div>
-                    <div className="flex flex-col gap-2 sm:flex-row"><button onClick={() => setImportOpen(true)} className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"><Download size={18} /> {t("portfolio.import")}</button><button onClick={openCreate} className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 shadow-lg transition hover:-translate-y-0.5 hover:bg-indigo-50"><Plus size={18} /> {t("portfolio.newTrade")}</button></div>
+                    <div className="flex flex-col gap-2 sm:flex-row"><Link to="/portfolio/assets" className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"><Coins size={18} /> {t("activeHoldings.title")}</Link><button onClick={() => setImportOpen(true)} className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"><Download size={18} /> {t("portfolio.import")}</button><button onClick={openCreate} className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 shadow-lg transition hover:-translate-y-0.5 hover:bg-indigo-50"><Plus size={18} /> {t("portfolio.newTrade")}</button></div>
                 </div>
             </section>
 

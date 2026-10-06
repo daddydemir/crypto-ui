@@ -15,6 +15,7 @@ const pages:SearchItem[]=[
  {id:'/trade-explorer',type:'PAGE',title:'Trade Explorer',subtitle:'Trades',meta:'Page',route:'/trade-explorer'},
  {id:'/alarms',type:'PAGE',title:'Alerts',subtitle:'Monitoring',meta:'Page',route:'/alarms'},
  {id:'/portfolio',type:'PAGE',title:'Portfolio',subtitle:'Portfolio',meta:'Page',route:'/portfolio'},
+ {id:'/portfolio/assets',type:'PAGE',title:'Active Assets',subtitle:'Portfolio positions and average costs',meta:'Page',route:'/portfolio/assets'},
 ]
 function route(item:SearchItem){switch(item.type){case'COIN':return`/coins/${encodeURIComponent(item.id)}`;case'STRATEGY':return`/strategy-lab?strategyId=${item.id}`;case'STRATEGY_RUN':return`/strategy-lab?runId=${item.id}`;case'ALERT':return`/alarms?alertId=${item.id}`;case'TRADE':return`/trade-explorer?tradeId=${item.id}`;default:return item.route??item.id}}
 function readRecent():SearchItem[]{try{return JSON.parse(localStorage.getItem(recentKey)??'[]')}catch{return[]}}

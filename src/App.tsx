@@ -19,6 +19,7 @@ import LoginPage from "@/pages/login/LoginPage.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useAuth } from "@/contexts/AuthContext";
 import PortfolioPage from "@/pages/portfolio/PortfolioPage";
+import ActiveAssetsPage from "@/pages/portfolio/ActiveAssetsPage";
 import TradeJourneyPage from "@/pages/portfolio/TradeJourneyPage";
 import SettingsPage from "@/pages/settings/SettignsPage";
 import MarketBreadthPage from "@/pages/analyses/MarketBreadthPage";
@@ -68,6 +69,7 @@ function App() {
                                             <Route path="/trade-explorer" element={<ProtectedRoute><TradeExplorerPage /></ProtectedRoute>} />
                                             <Route path="/coins/:coinId" element={<CoinDetailPage />} />
 											<Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
+											<Route path="/portfolio/assets" element={<ProtectedRoute><ActiveAssetsPage /></ProtectedRoute>} />
 											<Route path="/portfolio/journey" element={<ProtectedRoute><TradeJourneyPage /></ProtectedRoute>} />
 											<Route path="/purchase-goals" element={<ProtectedRoute><PurchaseGoalsPage /></ProtectedRoute>} />
 											<Route path="/purchase-goals/:id" element={<ProtectedRoute><PurchaseGoalDetailPage /></ProtectedRoute>} />

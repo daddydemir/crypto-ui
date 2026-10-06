@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch, FlaskConical, ListFilter, Goal } from "lucide-react";
+import { ChevronDown, Bell as BellIcon, Settings, ChartNoAxesCombined, Bitcoin, WalletCards, GitBranch, FlaskConical, ListFilter, Goal, Coins } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -46,6 +46,7 @@ const Sidebar: React.FC<{ onNavigate?: () => void }> = ({ onNavigate }) => {
         },
         { id: "coins", title: t("sidebar.coins"), path: "/coins", icon: Bitcoin },
 		...(isAuthenticated ? [{ id: "portfolio", title: t("sidebar.portfolio"), path: "/portfolio", icon: WalletCards }] : []),
+		...(isAuthenticated ? [{ id: "active-assets", title: t("activeHoldings.title"), path: "/portfolio/assets", icon: Coins }] : []),
 		...(isAuthenticated ? [{ id: "purchase-goals", title: t("sidebar.purchaseGoals", "Purchase Goals"), path: "/purchase-goals", icon: Goal }] : []),
 		...(isAuthenticated ? [{ id: "trade-journey", title: t("tradeJourney.title"), path: "/portfolio/journey", icon: GitBranch }] : []),
 		...(isAuthenticated ? [{ id: "strategy-lab", title: t("strategyLab.title"), path: "/strategy-lab", icon: FlaskConical }] : []),
