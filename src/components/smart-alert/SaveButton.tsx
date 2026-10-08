@@ -65,6 +65,15 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, mosaicId, mosaicN
                 setLoading(false);
                 return;
             }
+
+			if (edges.length !== nodes.length - 1) {
+				setServerErrors([{
+					field: t('smartAlert.saveButton.connectionError'),
+					message: t('smartAlert.saveButton.connectionErrorMsg')
+				}]);
+				setLoading(false);
+				return;
+			}
         }
 
         const typeMapping: Record<string, string> = {
@@ -97,7 +106,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, mosaicId, mosaicN
                     config,
                     connection: (() => {
                         const targetId = edges.find(edge => edge.source === node.id)?.target;
-                        return targetId ? (nodes.find(n => n.id === targetId)?.data?.order ?? null) : null;
+                        return targetId ? (nodes.find(n => n.id === targetId)?.data?.order ?? undefined) : undefined;
                     })()
                 };
             })
@@ -125,6 +134,10 @@ const SaveButton: React.FC<SaveButtonProps> = ({ nodes, edges, mosaicId, mosaicN
             setLoading(false);
         }
     };
+
+    React.useEffect(() => {
+        setName(initialName || '');
+    }, [initialName, mosaicId]);
 
     React.useEffect(() => {
         if (showDialog) {

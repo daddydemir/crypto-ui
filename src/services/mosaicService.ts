@@ -30,22 +30,17 @@ export interface MosaicBlock {
     type: string;
     config: BlockConfig;
     order: number;
-    connections: number;
+    connection?: number;
 }
 
 export interface Mosaic {
-    Id: string;
+    id: string;
     name: string;
     blocks: MosaicBlock[];
 }
 
 export async function getUserMosaics(): Promise<Mosaic[]> {
-    try {
-        return await mosaicHttp.get<Mosaic[]>('/mosaic');
-    } catch (error) {
-        console.error('Error fetching user mosaics:', error);
-        return [];
-    }
+    return await mosaicHttp.get<Mosaic[]>('/mosaic');
 }
 
 export async function createMosaic(mosaic: any): Promise<any> {

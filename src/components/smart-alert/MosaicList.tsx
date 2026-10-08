@@ -130,8 +130,8 @@ const MosaicList = ({ onCreateNew, onEdit }: MosaicListProps) => {
 
         setDeleting(true);
         try {
-            await deleteMosaic(mosaicToDelete.Id);
-            setMosaics(prev => prev.filter(m => m.Id !== mosaicToDelete.Id));
+            await deleteMosaic(mosaicToDelete.id);
+            setMosaics(prev => prev.filter(m => m.id !== mosaicToDelete.id));
             setDeleteModalOpen(false);
             setMosaicToDelete(null);
             toast.success(t('common.success', 'İşlem başarılı'));
@@ -245,7 +245,7 @@ const MosaicList = ({ onCreateNew, onEdit }: MosaicListProps) => {
                         {/* Mosaic Cards */}
                         {mosaics.map((mosaic) => (
                             <div
-                                key={mosaic.Id}
+                                key={mosaic.id}
                                 onClick={() => onEdit(mosaic)}
                                 className={cn(
                                     "group rounded-xl border border-border bg-card p-4 transition-all duration-200",
@@ -284,7 +284,7 @@ const MosaicList = ({ onCreateNew, onEdit }: MosaicListProps) => {
 
                                 {/* Blocks */}
                                 <div className="flex flex-wrap gap-2">
-                                    {mosaic.blocks
+                                    {[...mosaic.blocks]
                                         .sort((a, b) => a.order - b.order)
                                         .map((block, idx) => {
                                             const info = getBlockInfo(block.type);

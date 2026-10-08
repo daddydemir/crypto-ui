@@ -8,7 +8,6 @@ import {
     Waves,
     Columns2,
     Bell,
-    Webhook,
     GripVertical,
     Plus,
     X,
@@ -25,7 +24,6 @@ const blockTypes = [
     { type: 'bollinger_bands_analysis', label: 'Bollinger Bands', icon: Waves, category: 'indicator', colorClass: 'text-pink-500', bgClass: 'bg-pink-500/10' },
     { type: 'donchian_channel_analysis', label: 'Donchian Channels', icon: Columns2, category: 'indicator', colorClass: 'text-cyan-500', bgClass: 'bg-cyan-500/10' },
     { type: 'notification', label: 'Notification', icon: Bell, category: 'action', colorClass: 'text-red-500', bgClass: 'bg-red-500/10' },
-    { type: 'webhook', label: 'Webhook', icon: Webhook, category: 'action', colorClass: 'text-slate-500', bgClass: 'bg-slate-500/10' },
 ];
 
 const BlockSidebar = () => {

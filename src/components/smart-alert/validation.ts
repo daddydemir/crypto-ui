@@ -20,6 +20,7 @@ export const validateNodeConfig = (blockType: string, config: any, t: (key: stri
     // Validation logic based on block type
     switch (blockType) {
         case 'price_condition':
+			if (!config.operator) errors.operator = t('smartAlert.validation.fillAllFields');
             if (config.price === undefined || config.price === '' || isNaN(config.price)) {
                 errors.price = t('smartAlert.validation.priceRequired');
             } else if (config.price < 0) {
@@ -27,6 +28,7 @@ export const validateNodeConfig = (blockType: string, config: any, t: (key: stri
             }
             break;
         case 'relative_strength_index':
+			if (!config.operator) errors.operator = t('smartAlert.validation.fillAllFields');
             if (!config.index) {
                 errors.index = t('smartAlert.validation.rsiPeriodRequired');
             } else if (config.index < 1 || config.index > 99) {

@@ -75,7 +75,7 @@ const SmartAlerts = () => {
     };
 
     const handleEditMosaic = useCallback((mosaic: Mosaic) => {
-        setEditingMosaicId(mosaic.Id);
+        setEditingMosaicId(mosaic.id);
         setEditingMosaicName(mosaic.name || '');
 
         // Convert mosaic blocks to ReactFlow nodes
@@ -110,13 +110,16 @@ const SmartAlerts = () => {
             };
         });
 
-        // Reconstruct edges from order sequence (connect blocks in order)
+        // Reconstruct the persisted graph; fall back to order for legacy records.
         const newEdges: Edge[] = [];
-        for (let i = 0; i < sortedBlocks.length - 1; i++) {
+        for (let i = 0; i < sortedBlocks.length; i++) {
+            const target = sortedBlocks.find(candidate => candidate.order === sortedBlocks[i].connection)
+                || (sortedBlocks[i].connection === undefined ? sortedBlocks[i + 1] : undefined);
+            if (!target) continue;
             newEdges.push({
-                id: `edge-${sortedBlocks[i].id}-${sortedBlocks[i + 1].id}`,
+                id: `edge-${sortedBlocks[i].id}-${target.id}`,
                 source: sortedBlocks[i].id,
-                target: sortedBlocks[i + 1].id,
+                target: target.id,
             });
         }
 
@@ -212,7 +215,9 @@ const SmartAlerts = () => {
                     data: {
                         label: type.split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                         blockType: type,
-                        config: symbolUsingTypes.includes(type) ? { symbol: defaultSymbol } : {}
+                        config: symbolUsingTypes.includes(type)
+                            ? { symbol: defaultSymbol }
+                            : (type === 'notification' ? { channel: 'telegram' } : {})
                     },
                 };
                 return nds.concat(newNode);
