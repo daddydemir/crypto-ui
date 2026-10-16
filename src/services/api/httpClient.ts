@@ -1,4 +1,5 @@
 import { API_BASE_URL, AUTH_BASE_URL, MOSAIC_BASE_URL } from './config';
+import { recordAuthDiagnostic } from '@/services/authDiagnostics';
 
 class HttpClient {
     private baseUrl: string;
@@ -26,15 +27,23 @@ class HttpClient {
             const response = await fetch(url, config);
 
             if (!response.ok) {
-                if (response.status === 401 && !endpoint.includes('/login')) {
-                    window.dispatchEvent(new CustomEvent('auth-401-unauthorized'));
-                }
                 const text = await response.text();
                 let errorData: { message?: string } | null = null;
                 try {
                     errorData = text ? JSON.parse(text) : null;
                 } catch {
                     errorData = null;
+                }
+                if (response.status === 401 && !endpoint.includes('/login')) {
+                    const reason = response.headers.get('X-Auth-Reason') || errorData?.message || 'unspecified';
+                    recordAuthDiagnostic({
+                        kind: 'unauthorized',
+                        method: config.method || 'GET',
+                        path: new URL(url, window.location.origin).pathname,
+                        status: response.status,
+                        reason,
+                    });
+                    window.dispatchEvent(new CustomEvent('auth-401-unauthorized', { detail: { reason } }));
                 }
                 const message = errorData?.message || text.trim() || `İstek başarısız oldu (${response.status})`;
                 const error = Object.assign(new Error(message), { status: response.status, data: errorData });

@@ -4,6 +4,7 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { deviceLinkService } from "@/services/deviceLinkService";
+import { clearAuthDiagnostics, copyAuthDiagnostics, getAuthDiagnostics, recordAuthDiagnostic } from "@/services/authDiagnostics";
 
 interface LoginResponse {
     username: string;
@@ -27,6 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [username, setUsername] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
+    const [diagnosticsCopied, setDiagnosticsCopied] = useState<boolean>(false);
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -34,6 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Load credentials from localStorage on mount
         const storedToken = localStorage.getItem("token");
         const storedUsername = localStorage.getItem("username");
+        recordAuthDiagnostic({ kind: "app-start", details: storedToken ? "stored-token-found" : "no-stored-token" });
         if (storedToken && storedUsername) {
             setToken(storedToken);
             setUsername(storedUsername);
@@ -42,7 +45,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     useEffect(() => {
-        const handleUnauthorized = () => {
+        const handleUnauthorized = (event: Event) => {
+            const reason = (event as CustomEvent<{ reason?: string }>).detail?.reason || "unspecified";
+            recordAuthDiagnostic({ kind: "auth-state-cleared", reason });
             // Reset local auth state
             localStorage.removeItem("token");
             localStorage.removeItem("username");
@@ -78,6 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 localStorage.setItem("username", data.username);
                 setToken(data.token);
                 setUsername(data.username);
+                recordAuthDiagnostic({ kind: "login-success", details: "password" });
                 return data;
             } else {
                 throw new Error("Invalid response format from login API");
@@ -94,10 +100,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem("username", data.username);
         setToken(data.token);
         setUsername(data.username);
+        recordAuthDiagnostic({ kind: "login-success", details: "device-code" });
         return data;
     };
 
     const logout = () => {
+        recordAuthDiagnostic({ kind: "manual-logout" });
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         setToken(null);
@@ -118,7 +126,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 confirmText={t("login.title")}
                 cancelText={t("common.cancel")}
                 variant="info"
-            />
+            >
+                <div className="mt-3 flex flex-wrap gap-2">
+                    <button type="button" onClick={async () => { await copyAuthDiagnostics(); setDiagnosticsCopied(true); }} className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
+                        {diagnosticsCopied ? t("login.diagnosticsCopied") : t("login.copyDiagnostics")}
+                    </button>
+                    <button type="button" onClick={() => { clearAuthDiagnostics(); setDiagnosticsCopied(false); recordAuthDiagnostic({ kind: "diagnostics-cleared" }); }} className="rounded-lg px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        {t("login.clearDiagnostics")}
+                    </button>
+                    <span className="self-center text-xs text-slate-500">{t("login.diagnosticCount", { count: getAuthDiagnostics().length })}</span>
+                </div>
+            </ConfirmDialog>
         </AuthContext.Provider>
     );
 };

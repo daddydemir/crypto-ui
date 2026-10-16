@@ -11,6 +11,7 @@ interface ConfirmDialogProps {
     confirmText?: string
     cancelText?: string
     variant?: "danger" | "warning" | "info"
+    children?: React.ReactNode
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -21,7 +22,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     message,
     confirmText,
     cancelText,
-    variant = "danger"
+    variant = "danger",
+    children
 }) => {
     const { t } = useTranslation()
 
@@ -71,6 +73,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                         </button>
                     </div>
                 </div>
+
+                {children && <div className="px-6 pb-5">{children}</div>}
 
                 <div className="flex gap-3 p-6 pt-0">
                     <button
