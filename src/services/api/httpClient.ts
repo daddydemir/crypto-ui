@@ -44,6 +44,14 @@ class HttpClient {
                         reason,
                     });
                     window.dispatchEvent(new CustomEvent('auth-401-unauthorized', { detail: { reason } }));
+                } else if (response.status >= 500) {
+                    recordAuthDiagnostic({
+                        kind: 'auth-service-unavailable',
+                        method: config.method || 'GET',
+                        path: new URL(url, window.location.origin).pathname,
+                        status: response.status,
+                        reason: response.headers.get('X-Auth-Reason') || errorData?.message || 'server_error',
+                    });
                 }
                 const message = errorData?.message || text.trim() || `İstek başarısız oldu (${response.status})`;
                 const error = Object.assign(new Error(message), { status: response.status, data: errorData });
